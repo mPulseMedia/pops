@@ -1,0 +1,444 @@
+body {
+  background: #3a3d41;
+  font-size: 32px;
+  line-height: 1.4;
+  padding-top: env(safe-area-inset-top);
+  overflow: hidden;
+}
+
+:root {
+  --card-base-width: 1200px;
+  --card-base-height: 675px;
+  --stack-base-height: 755px;
+}
+
+header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 24px;
+  background: #ffffff;
+  border-bottom: 1px solid #e0e0e0;
+  position: relative;
+  z-index: 1000;
+}
+
+.header-divider {
+  height: 1px;
+  background: #e0e0e0;
+  width: 100%;
+  margin: 0;
+}
+
+main {
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.fit-wrapper {
+  transform-origin: top center;
+  position: relative;
+  transition: transform 120ms ease-out;
+}
+
+.card-scene-wrap {
+  position: relative;
+}
+
+.decks-container {
+  position: relative;
+  width: max-content;
+}
+
+.deck {
+  position: relative;
+}
+
+body:not(.cards-mini) .deck {
+  display: none;
+}
+
+body:not(.cards-mini) .deck.is-active {
+  display: block;
+}
+
+body.cards-mini .deck {
+  display: block;
+  position: relative;
+}
+
+body.cards-mini .decks-container {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  align-items: flex-start;
+  width: max-content;
+  padding: 0 16px 0 48px;
+  margin: 12px auto 0;
+  box-sizing: border-box;
+}
+
+.mini-overlay-title {
+  display: none;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 0;
+  transform: translate(-50%, -50%);
+  align-items: center;
+  justify-content: center;
+  color: #000000;
+  font-size: var(--page-title-size, 42px);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: none;
+  text-align: center;
+  box-sizing: border-box;
+  font-family: "Patrick Hand", "Avenir Next", "Futura", "Gill Sans", "Helvetica Neue", Arial, sans-serif;
+  pointer-events: auto;
+  z-index: 200;
+  padding: 0 12px;
+  white-space: normal;
+}
+
+.mini-overlay-text {
+  display: block;
+  max-width: 100%;
+  white-space: normal;
+  text-align: center;
+  line-height: 1.1;
+}
+
+body.cards-mini .mini-overlay-title {
+  display: flex;
+}
+
+body.cards-mini .card-set-title {
+  visibility: visible;
+}
+
+.card-set-title {
+  color: #ffffff;
+  font-size: var(--page-title-size, 42px);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: none;
+  text-align: center;
+  font-family: "Patrick Hand", "Avenir Next", "Futura", "Gill Sans", "Helvetica Neue", Arial, sans-serif;
+  padding: 4px 8px 0;
+  transform: scale(var(--title-scale, 1));
+  transform-origin: top center;
+}
+
+.card-scene {
+  display: flex;
+  justify-content: center;
+  padding-top: 0;
+}
+
+.card-stack {
+  position: relative;
+  width: var(--card-base-width);
+  height: var(--stack-base-height);
+  margin: var(--stack-top-offset, 0px) 0 0;
+}
+
+body.cards-mini .card-stack {
+  transform: scale(0.4);
+  transform-origin: top left;
+  margin: 24px 0 0 0;
+  pointer-events: none;
+}
+
+body.layout-stabilizing .fit-wrapper {
+  transition: none;
+}
+
+body.cards-mini .card-stack .card,
+body.cards-mini .card-stack .tab {
+  pointer-events: auto;
+}
+
+.card-layer {
+  position: absolute;
+  left: var(--card-left);
+  top: var(--card-top);
+  z-index: var(--layer-z, 1);
+  pointer-events: none;
+  --text-left: 32px;
+  --text-right: 64px;
+  --text-title-top: -32px;
+  --text-list-top: 66px;
+}
+
+
+.tab {
+  position: absolute;
+  width: 235px;
+  height: 53px;
+  border-radius: 12px 12px 4px 4px;
+  clip-path: polygon(6% 0%, 94% 0%, 100% 100%, 0% 100%);
+  border-top: none;
+  transform: translateY(1px);
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  font-size: 18px;
+  font-weight: 400;
+  color: #2a2a2a;
+  text-transform: none;
+  letter-spacing: 0.02em;
+  text-align: center;
+  line-height: 1.05;
+  padding: 6px 10px 8px;
+  font-family: "Patrick Hand", "Avenir Next", "Futura", "Gill Sans", "Helvetica Neue", Arial, sans-serif;
+  left: var(--tab-offset-x);
+  top: var(--tab-offset-y);
+  pointer-events: auto;
+  cursor: pointer;
+  z-index: 2;
+}
+
+.card-blue-tab {
+  background: #c1d9ff;
+}
+
+.card-green-tab {
+  background: #bfe4c8;
+}
+
+.card-yellow-tab {
+  background: #f8e3e8;
+}
+
+.card-red-tab {
+  background: #fbf3df;
+}
+
+.card {
+  --line-gap: 34px;
+  --line-offset: 66px;
+  --baseline-shift: 12px;
+  position: relative;
+  width: calc(var(--card-base-width) - 108px);
+  height: var(--card-base-height);
+  border-radius: 10px;
+  border: none;
+  box-shadow: 0 -28px 56px rgba(0, 0, 0, 0.22);
+  padding: 46px 64px 68px;
+  font-family: "Bradley Hand", "Noteworthy", "Chalkboard SE", "Segoe Print", "Comic Sans MS", cursive;
+  background-color: var(--card-color, #f29aa9);
+  background-image: none;
+  overflow: visible;
+  pointer-events: auto;
+  cursor: pointer;
+  z-index: 1;
+}
+
+.card-layer:not(.is-front) .card,
+.card-layer:not(.is-front) .tab {
+  filter: saturate(0.7) brightness(0.86);
+}
+
+.card-layer:not(.is-front) .card-blue-primary,
+.card-layer:not(.is-front) .card-blue-tab {
+  filter: saturate(0.98) brightness(0.86);
+}
+
+.card-layer:not(.is-front) .card-green-primary,
+.card-layer:not(.is-front) .card-green-tab {
+  filter: saturate(0.9) brightness(0.74);
+}
+
+.tab {
+  filter: drop-shadow(0 -18px 36px rgba(0, 0, 0, 0.2));
+}
+
+.card-lines {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 0;
+}
+
+.card-lines .line {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 0;
+  border-top: 1px solid transparent;
+}
+
+.card-lines .red {
+  border-top-color: #c96b6b;
+}
+
+.card-lines .blue {
+  border-top-color: rgba(140, 165, 210, 0.45);
+}
+
+.card > *:not(.card-lines) {
+  position: relative;
+  z-index: 1;
+}
+
+.card-red-primary {
+  --card-color: #fbf4e3;
+}
+
+.card-yellow-primary {
+  --card-color: #f8e3e8;
+}
+
+.card-green-primary {
+  --card-color: #bfe4c8;
+}
+
+.card-blue-primary {
+  --card-color: #c1d9ff;
+}
+
+
+.card-text {
+  position: absolute;
+  left: var(--text-left, 32px);
+  right: var(--text-right, 64px);
+  top: 0;
+  font-family: "Patrick Hand", "Avenir Next", "Futura", "Gill Sans", "Helvetica Neue", Arial, sans-serif;
+  color: #2a2a2a;
+  pointer-events: none;
+}
+
+.card-text-title {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: var(--text-title-top, -10px);
+  width: 100%;
+  text-align: center;
+  font-size: 28px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: none;
+  font-family: "Courier New", Courier, monospace;
+}
+
+.card-text-list {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: var(--text-list-top, 120px);
+  font-size: 28px;
+  font-weight: 400;
+  display: grid;
+  grid-template-columns: 32px 1fr;
+  column-gap: 12px;
+  align-items: start;
+  padding-left: 0px;
+  font-family: "Courier New", Courier, monospace;
+}
+
+.card-text-list.compact {
+  font-size: 22px;
+}
+
+.card-text-list.compact .card-text-item {
+  line-height: 28px;
+  gap: 10px;
+}
+
+.line-number-column {
+  display: flex;
+  flex-direction: column;
+  transform: translate(-40px, -2px);
+}
+
+.line-text-column {
+  display: flex;
+  flex-direction: column;
+}
+
+.card-text-item {
+  line-height: var(--line-gap);
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 0;
+}
+
+.card-text-item.level-2 {
+  padding-left: 56px;
+}
+
+.card-text-item.level-3 {
+  padding-left: 104px;
+}
+
+.card-text-item.section {
+  margin-top: 0;
+}
+
+.card-text-item.line-break {
+  min-height: var(--line-gap);
+}
+
+.card-text-item.line-break .bullet-marker {
+  display: none;
+}
+
+.alpha-marker {
+  color: #a6a6a6;
+}
+
+.line-number {
+  color: #000000;
+  font-variant-numeric: tabular-nums;
+  font-size: 0.7em;
+  text-align: left;
+  margin-right: 0;
+}
+
+.bullet-marker {
+  color: #2a2a2a;
+  margin-right: 12px;
+}
+
+.line-number-row {
+  height: var(--line-gap);
+  line-height: var(--line-gap);
+  display: flex;
+  align-items: center;
+}
+
+.card-text-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: #4a7fe6;
+  box-shadow:
+    inset -2px 2px 3px rgba(255, 255, 255, 0.8),
+    inset 2px -2px 4px rgba(0, 0, 0, 0.38),
+    0 1px 2px rgba(0, 0, 0, 0.18);
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  pointer-events: auto;
+  transform: translateY(-3px);
+}
+
+.card-text-link:hover {
+  box-shadow:
+    inset -3px 3px 4px rgba(255, 255, 255, 0.9),
+    inset 2px -2px 4px rgba(0, 0, 0, 0.42),
+    0 0 6px rgba(120, 160, 220, 0.35);
+}
+
+
+

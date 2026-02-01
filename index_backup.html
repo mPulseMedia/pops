@@ -1,0 +1,545 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Notes – What we know…</title>
+    <link rel="stylesheet" href="index.css" />
+    <link rel="stylesheet" href="shared.css" />
+  </head>
+  <body>
+    <header>
+      <h1 class="page-title">Notes – What we know…</h1>
+      <div class="controls">
+        <button id="expandAll">+</button>
+        <button id="collapseAll">-</button>
+        <a class="nav-link" href="index_card.html">Index card</a>
+        <a class="nav-link" href="script_01.html">Script</a>
+      </div>
+    </header>
+
+    <main>
+      <section class="outline shared-outline" id="outline"></section>
+    </main>
+    <div class="lightbox" id="lightbox">
+      <img alt="" src="" />
+    </div>
+
+    <script src="shared.js"></script>
+    <script>
+      const outline = document.getElementById("outline");
+      const expandAllBtn = document.getElementById("expandAll");
+      const collapseAllBtn = document.getElementById("collapseAll");
+      const lightbox = document.getElementById("lightbox");
+      const lightboxImg = lightbox.querySelector("img");
+      const LIGHTBOX_STATE_KEY = "outline-lightbox-state";
+
+      function labelFor(level, index) {
+        const mod = level % 4;
+        if (mod === 0) return `${index + 1}.`;
+        if (mod === 1) return `${String.fromCharCode(65 + index)}.`;
+        if (mod === 2) return `${index + 1}.`;
+        return `${String.fromCharCode(97 + index)}.`;
+      }
+      function normalizeLabels(node, level = 0) {
+        if (!node || !node.c) return;
+        node.c.forEach((child, index) => {
+          child.l = labelFor(level, index);
+          normalizeLabels(child, level + 1);
+        });
+      }
+      const data = {
+        t: "Notes",
+        hidden: true,
+        c: [
+          {
+            l: "1.",
+            t: "Facing pages",
+            c: [
+              { l: "A.", t: "Preview", link: "facing_sheet.html", linkInline: true, c: [] },
+              { l: "B.", t: "Playbill", i: "playbill.png", c: [] },
+            ],
+          },
+          {
+            l: "2.",
+            t: "Title",
+            c: [
+              { l: "A.", t: "Half a Chair’s Worth", c: [] },
+              {
+                l: "B.",
+                t: "Old titles",
+                c: [{ l: "1.", t: '"What We Know, How Do We Know It"', c: [] }],
+              },
+            ],
+          },
+          {
+            l: "3.",
+            t: "What is it",
+            s: [756],
+            c: [
+              { l: "A.", t: "Amusing dialog on a heavy subject", s: [756], c: [] },
+              { l: "B.", t: "Message: Know thy self", c: [] },
+            ],
+          },
+          {
+            l: "4.",
+            t: "Characters",
+            s: [49, 61],
+            c: [
+              { l: "A.", t: "Characters", i: "vision.png", c: [] },
+              {
+                l: "B.",
+                t: "George Weatherby",
+                s: [61, 403, 1496],
+                c: [{ l: "1.", t: "Bad barber", s: [640, 785], c: [] }],
+              },
+              {
+                l: "C.",
+                t: "Aubrey Frick",
+                s: [55, 653],
+                c: [{ l: "1.", t: "Has Deep cut in conscience", s: [675], c: [] }],
+              },
+              {
+                l: "D.",
+                t: "Commonalities",
+                c: [
+                  {
+                    l: "1.",
+                    t: "Assistant professors of mathematics (cover for math).",
+                    n: true,
+                    s: [1544, 1557],
+                    c: [],
+                  },
+                  { l: "2.", t: "Floridian", s: [114], c: [] },
+                  { l: "3.", t: "40 year olds", s: [545], c: [] },
+                  { l: "4.", t: "Don’t speak Spanish", s: [277], c: [] },
+                  { l: "5.", t: "Likely not Cuban.", n: true, s: [72, 88], c: [] },
+                  { l: "6.", t: "White vs Indian debate (undecided).", n: true, s: [567], c: [] },
+                  { l: "7.", t: "Has Bad haircut", s: [653, 785], c: [] },
+                  {
+                    l: "8.",
+                    t: "They will misinform each other, lie, and posture while deciding.",
+                    n: true,
+                    s: [434, 453],
+                    c: [],
+                  },
+                ],
+              },
+              {
+                l: "E.",
+                t: "Differences",
+                c: [
+                  { l: "1.", t: "Practical / Poetic", c: [] },
+                  {
+                    l: "2.",
+                    t: "Nobody cares anyway / By the time we publish this book, people won’t be reading books anymore.",
+                    c: [],
+                  },
+                ],
+              },
+              {
+                l: "F.",
+                t: "Other characters",
+                s: [329],
+                c: [
+                  { l: "1.", t: "Nobody shows up for a haircut", s: [329], c: [] },
+                  { l: "2.", t: "Aubrey has a child who may or may not appear", c: [] },
+                ],
+              },
+            ],
+          },
+          {
+            l: "5.",
+            t: "Setting",
+            s: [100, 1502],
+            c: [
+              { l: "A.", t: "Cuba, before Castro died", s: [1502], c: [] },
+              {
+                l: "B.",
+                t: "One Barbershop chair",
+                s: [100, 134],
+                c: [{ l: "1.", t: "Half a chair’s worth.", n: true, s: [1037], c: [] }],
+              },
+              {
+                l: "C.",
+                t: "Missed getting back on cruise ship.",
+                s: [152, 243],
+                c: [
+                  { l: "1.", t: "7 years", s: [1804], c: [] },
+                  {
+                    l: "2.",
+                    t: "Cruise ship flag is Uganda (ridiculous detail).",
+                    n: true,
+                    s: [1641],
+                    c: [],
+                  },
+                  {
+                    l: "3.",
+                    t: "They’ve been on the cruise for seven years (a surprise).",
+                    n: true,
+                    s: [1804],
+                    c: [],
+                  },
+                ],
+              },
+            ],
+          },
+          {
+            l: "6.",
+            t: "Setup",
+            s: [1111, 1144],
+            c: [
+              { l: "A.", t: "Aubrey has adult child, 20, that is visiting", s: [1111], c: [] },
+              { l: "B.", t: "So he’s preparing what wisdom he’s going to say", s: [1144], c: [] },
+              {
+                l: "C.",
+                t: "Issue",
+                s: [175],
+                c: [
+                  {
+                    l: "a.",
+                    t: "Missed the cruise or weren’t allowed back",
+                    s: [152, 166, 251],
+                    c: [{ l: "i.", t: "scene 1 end", c: [] }],
+                  },
+                  { l: "b.", t: "Got drunk / drugged / did something illegal", s: [257], c: [] },
+                  {
+                    l: "c.",
+                    t: "Issue may not be revealed early in the play.",
+                    n: true,
+                    s: [263],
+                    c: [],
+                  },
+                ],
+              },
+            ],
+          },
+          {
+            l: "7.",
+            t: "Story flow",
+            s: [181, 196],
+            c: [
+              { l: "A.", t: "Shape", i: "shape.png", c: [] },
+              {
+                l: "B.",
+                t: "Action rises to denouement, drops low, then spikes at the end.",
+                n: true,
+                s: [181, 196],
+                c: [],
+              },
+              { l: "C.", t: "Decide what the peak and trough are.", n: true, s: [209], c: [] },
+              { l: "G.", t: "First words are spoken by Aubrey.", n: true, s: [950], c: [] },
+              {
+                l: "H.",
+                t: "By end of Act 1, Scene 1 we must know who they are, age, height, etc.",
+                n: true,
+                s: [469, 482],
+                c: [],
+              },
+            ],
+          },
+        ],
+      };
+
+      const YOUTUBE_BASE_URL = "https://www.youtube.com/watch?v=qcr3OE5EIn0";
+
+      function openLightbox(src, alt) {
+        lightboxImg.src = src;
+        lightboxImg.alt = alt || "";
+        lightbox.classList.add("open");
+        localStorage.setItem(
+          LIGHTBOX_STATE_KEY,
+          JSON.stringify({ open: true, src, alt: alt || "" })
+        );
+      }
+
+      function closeLightbox() {
+        lightbox.classList.remove("open");
+        lightboxImg.src = "";
+        lightboxImg.alt = "";
+        localStorage.setItem(LIGHTBOX_STATE_KEY, JSON.stringify({ open: false }));
+      }
+
+      function appendThumbnail(container, node, beforeNode) {
+        if (!node.i) return;
+        const thumb = document.createElement("img");
+        thumb.className = "thumb";
+        thumb.src = node.i;
+        thumb.alt = node.t || "image";
+        thumb.addEventListener("click", (event) => {
+          event.stopPropagation();
+          openLightbox(node.i, node.t);
+        });
+        if (beforeNode) {
+          container.insertBefore(thumb, beforeNode);
+        } else {
+          container.appendChild(thumb);
+        }
+      }
+
+      function updateConnectors() {
+        outline.querySelectorAll("details").forEach((detail) => {
+          const summary = detail.querySelector("summary");
+          const marker = summary.querySelector(".marker");
+          if (!marker) return;
+          let next = detail.nextElementSibling;
+          while (next && !next.matches("details, .leaf-row")) {
+            next = next.nextElementSibling;
+          }
+          if (!next) {
+            marker.style.setProperty("--connector-length", "0px");
+            return;
+          }
+          const nextMarker = next.querySelector(".marker");
+          if (!nextMarker) {
+            marker.style.setProperty("--connector-length", "0px");
+            return;
+          }
+          const rect1 = marker.getBoundingClientRect();
+          const rect2 = nextMarker.getBoundingClientRect();
+          const center1 = rect1.top + rect1.height / 2;
+          const center2 = rect2.top + rect2.height / 2;
+          const length = Math.max(0, center2 - center1 - 54);
+          marker.style.setProperty("--connector-length", `${length}px`);
+        });
+      }
+
+      const OPEN_STATE_KEY = "outline-open-state";
+
+      function loadOpenState() {
+        try {
+          return JSON.parse(localStorage.getItem(OPEN_STATE_KEY)) || {};
+        } catch {
+          return {};
+        }
+      }
+
+      function saveOpenState(state) {
+        localStorage.setItem(OPEN_STATE_KEY, JSON.stringify(state));
+      }
+
+      function nodeKey(path) {
+        return path.join(".");
+      }
+
+      function renderNode(node, level, container, idx = 0, path = []) {
+        const nextPath = [...path, idx];
+        if (node.hidden) {
+          if (node.c && node.c.length) {
+            node.c.forEach((child, childIdx) =>
+              renderNode(child, level, container, childIdx, nextPath)
+            );
+          }
+          return;
+        }
+        if (node.c && node.c.length) {
+          const details = document.createElement("details");
+          const state = loadOpenState();
+          const key = nodeKey(nextPath);
+          details.open = Boolean(state[key]);
+          details.dataset.key = key;
+
+          const summary = document.createElement("summary");
+          summary.style.setProperty("--level", level);
+
+          const twist = document.createElement("span");
+          twist.className = "twist marker";
+          twist.textContent = "▸";
+
+          const text = document.createElement("span");
+          text.className = "text";
+          const label = document.createElement("span");
+          label.className = "label";
+          const labelText = node.l ?? labelFor(level, idx);
+          label.textContent = `${labelText} `;
+          const content = document.createElement(node.linkInline ? "a" : "span");
+          content.className = node.linkInline ? "inline-link" : "content";
+          if (node.linkInline) {
+            content.href = node.link;
+          }
+          content.textContent = node.t;
+          if (node.i && !node.linkInline) {
+            content.classList.add("inline-link");
+          }
+          text.appendChild(content);
+          appendThumbnail(text, node, content);
+
+          const times =
+            node.c && node.c.length
+              ? []
+              : Array.isArray(node.s)
+                ? node.s
+                : node.time != null
+                  ? [node.time]
+                  : [];
+          const linkWrap = document.createElement("div");
+          linkWrap.className = "time-links";
+          times.forEach((t) => {
+            const link = document.createElement("a");
+            link.className = "time-link";
+            const minutes = Math.floor(t / 60);
+            const seconds = t % 60;
+            link.href = `${YOUTUBE_BASE_URL}&t=${minutes}m${seconds}s`;
+            link.target = "yt-player";
+            link.rel = "noopener noreferrer";
+            linkWrap.appendChild(link);
+          });
+
+          if (times.length) {
+            text.appendChild(linkWrap);
+          }
+
+          if (details.open) {
+            twist.textContent = "▾";
+          }
+          details.addEventListener("toggle", () => {
+            twist.textContent = details.open ? "▾" : "▸";
+            const current = loadOpenState();
+            current[key] = details.open;
+            saveOpenState(current);
+            requestAnimationFrame(updateConnectors);
+          });
+          if (node.n) {
+            summary.classList.add("new-item");
+          }
+          summary.dataset.label = labelText;
+          summary.appendChild(twist);
+          summary.appendChild(label);
+          summary.appendChild(text);
+          details.appendChild(summary);
+
+          const children = document.createElement("div");
+          children.className = "children";
+          node.c.forEach((child, childIdx) =>
+            renderNode(child, level + 1, children, childIdx, nextPath)
+          );
+          details.appendChild(children);
+
+          container.appendChild(details);
+          return;
+        }
+
+        const row = document.createElement("div");
+        row.className = "leaf-row";
+        row.style.setProperty("--level", level);
+
+        const spacer = document.createElement("span");
+        spacer.className = "marker spacer";
+
+        const text = document.createElement("span");
+        text.className = "text";
+        const label = document.createElement("span");
+        label.className = "label";
+        const labelText = node.l ?? labelFor(level, idx);
+        label.textContent = `${labelText} `;
+        const content = document.createElement(node.linkInline ? "a" : "span");
+        content.className = node.linkInline ? "inline-link" : "content";
+        if (node.linkInline) {
+          content.href = node.link;
+        }
+        content.textContent = node.t;
+        if (node.i && !node.linkInline) {
+          content.classList.add("inline-link");
+        }
+        text.appendChild(content);
+        appendThumbnail(text, node, content);
+
+        const times = Array.isArray(node.s)
+          ? node.s
+          : node.time != null
+            ? [node.time]
+            : [];
+        const linkWrap = document.createElement("div");
+        linkWrap.className = "time-links";
+        times.forEach((t) => {
+          const link = document.createElement("a");
+          link.className = "time-link";
+          const minutes = Math.floor(t / 60);
+          const seconds = t % 60;
+          link.href = `${YOUTUBE_BASE_URL}&t=${minutes}m${seconds}s`;
+          link.target = "yt-player";
+          link.rel = "noopener noreferrer";
+          linkWrap.appendChild(link);
+        });
+
+        if (node.n) {
+          row.classList.add("new-item");
+        }
+        row.dataset.label = labelText;
+        row.appendChild(spacer);
+        row.appendChild(label);
+        if (times.length) {
+          text.appendChild(linkWrap);
+        }
+        row.appendChild(text);
+        container.appendChild(row);
+      }
+
+      function renderOutline() {
+        outline.innerHTML = "";
+        normalizeLabels(data, 0);
+        renderNode(data, 0, outline, 0);
+        requestAnimationFrame(updateConnectors);
+      }
+
+      function captureOpenStateFromDom() {
+        const state = loadOpenState();
+        outline.querySelectorAll("details").forEach((detail) => {
+          const key = detail.dataset.key;
+          if (!key) return;
+          state[key] = detail.open;
+        });
+        saveOpenState(state);
+      }
+
+      document.addEventListener("click", (event) => {
+        const link = event.target.closest(".time-link");
+        if (!link) return;
+        event.preventDefault();
+        const player = window.open(link.href, "yt-player");
+        if (player) {
+          player.blur();
+          window.focus();
+        }
+      });
+
+      lightbox.addEventListener("click", () => {
+        closeLightbox();
+      });
+
+      function restoreLightbox() {
+        try {
+          const state = JSON.parse(localStorage.getItem(LIGHTBOX_STATE_KEY));
+          if (state && state.open && state.src) {
+            openLightbox(state.src, state.alt);
+          }
+        } catch {
+          // ignore invalid state
+        }
+      }
+
+      expandAllBtn.addEventListener("click", () => {
+        outline.querySelectorAll("details").forEach((detail) => {
+          detail.open = true;
+        });
+      });
+      collapseAllBtn.addEventListener("click", () => {
+        outline.querySelectorAll("details").forEach((detail) => {
+          detail.open = false;
+        });
+      });
+
+      renderOutline();
+      window.addEventListener("resize", () => requestAnimationFrame(updateConnectors));
+      PopsShared.setupZoomPersistence({ key: "zoom-index" });
+      PopsShared.setupAutoReload({
+        intervalMs: 4000,
+        scrollKey: "scroll-index",
+        beforeReload: () => {
+          captureOpenStateFromDom();
+        },
+      });
+      restoreLightbox();
+    </script>
+  </body>
+</html>

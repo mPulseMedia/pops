@@ -1,0 +1,136 @@
+:root {
+  --left-pad: 24px;
+  --num-col: 1.6em;
+  --num-gap: 3px;
+}
+body {
+  font-size: 40px;
+  line-height: 1.5;
+}
+header {
+  background: #ffffff;
+  padding: 16px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  border-bottom: 1px solid #e0e0e0;
+}
+.outline-nav {
+  background: #ffffff;
+  padding: 16px 24px;
+}
+h1 {
+  margin: 0 0 8px 0;
+  font-size: 48px;
+  font-weight: 600;
+}
+.notes-link {
+  flex: 0 0 auto;
+}
+.outline {
+  display: block;
+  padding-left: calc(var(--left-pad) + 24px);
+}
+.outline-number,
+.scene-number {
+  display: inline-block;
+  width: var(--num-col);
+  text-align: left;
+  margin-right: var(--num-gap);
+}
+.outline.shared-outline a {
+  font-weight: 400;
+}
+main {
+  padding: 24px;
+  background: #f1f3f4;
+}
+.sheet {
+  max-width: calc(100% - 48px);
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+.scene {
+  background: #ffffff;
+  padding: 24px;
+  padding-left: var(--left-pad);
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  scroll-margin-top: 160px;
+}
+.scene h2 {
+  margin: 0 0 12px 0;
+  font-size: 36px;
+  font-weight: 600;
+  color: #8ab4f8;
+}
+.scene-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+.back-to-top {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 68px;
+  height: 68px;
+  border-radius: 6px;
+  border: 1px solid #dadce0;
+  background: #ffffff;
+  text-decoration: none;
+  color: #8ab4f8;
+  font-size: 72px;
+}
+.speaker {
+  font-weight: 700;
+  text-align: center;
+  text-transform: uppercase;
+  margin: 16px 0 6px 0;
+  letter-spacing: 0.04em;
+  font-family: "Courier New", Courier, monospace;
+}
+.speaker-line {
+  flex: 1;
+  text-align: center;
+  text-transform: uppercase;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  font-family: "Courier New", Courier, monospace;
+}
+.line {
+  margin: 0 0 12px 0;
+  padding: 0 16px;
+}
+.script-line {
+  display: flex;
+  gap: 12px;
+  padding: 0;
+  margin: 0 0 8px 0;
+  align-items: flex-start;
+}
+.line-no {
+  width: var(--num-col);
+  flex: 0 0 var(--num-col);
+  text-align: left;
+  color: #b0b6c0;
+  font-weight: 400;
+  font-size: inherit;
+  font-family: "Courier New", Courier, monospace;
+  margin-right: var(--num-gap);
+}
+.line-text {
+  flex: 1;
+  min-width: 0;
+  text-align: center;
+  font-family: "Courier New", Courier, monospace;
+}
+.stage {
+  font-style: italic;
+  text-align: center;
+  font-family: "Courier New", Courier, monospace;
+}

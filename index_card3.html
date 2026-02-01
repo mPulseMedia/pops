@@ -1,0 +1,947 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Decks</title>
+    <link rel="stylesheet" href="shared.css" />
+    <link rel="stylesheet" href="index_card.css" />
+    <style>
+      :root {
+        --deck-lift: 48px;
+        --deck-top-margin: 16px;
+        --deck-bottom-margin: 16px;
+        --safe-bottom: env(safe-area-inset-bottom);
+        --tab-height: 53px;
+        --expanded-gap: 12px;
+        --expanded-lift: 0px;
+        --expanded-top-row-lift: 40px;
+        --expanded-bottom-row-lift: 70px;
+        --expanded-buffer: 12px;
+        --deck-max-width: min(
+          96vw,
+          calc((100vh - var(--deck-top-margin) - var(--deck-bottom-margin) - var(--safe-bottom)) * 1.6)
+        );
+        --deck-max-height: calc(var(--deck-max-width) / 1.6);
+        --deck-width-base: calc(min(96vw, 1200px) * 0.6667);
+        --deck-height-base: calc(var(--deck-width-base) / 1.6);
+        --deck-width: var(--deck-width-base);
+        --deck-height: var(--deck-height-base);
+        --mini-scale: 0.56;
+        --mini-gap: 10px;
+        --mini-left: 32px;
+        --mini-top: calc(var(--deck-top-margin) - 8px);
+        --title-size: 42px;
+        --deck-content-width: var(--card-base-width);
+        --deck-content-height: calc(var(--stack-base-height) + var(--tab-height));
+      }
+
+      body {
+        margin: 0;
+        background: #3a3d41;
+        color: #ffffff;
+        font-family: "Patrick Hand", "Avenir Next", "Futura", "Gill Sans", "Helvetica Neue", Arial, sans-serif;
+        font-size: 32px;
+        line-height: 1.4;
+        overflow: hidden;
+      }
+
+      .page-title {
+        text-align: center;
+        font-size: var(--title-size);
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        padding: 8px 16px 0;
+        margin: 0;
+      }
+
+      .decks {
+        position: relative;
+        width: 100%;
+        height: calc(100vh - var(--deck-top-margin) - var(--deck-bottom-margin) - var(--safe-bottom));
+      }
+
+      .deck {
+        position: absolute;
+        width: var(--deck-width);
+        height: var(--deck-height);
+        cursor: pointer;
+        user-select: none;
+        display: block;
+        overflow: visible;
+        z-index: 2;
+      }
+
+      .deck-title {
+        position: absolute;
+        inset: 0;
+        display: none;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        font-size: var(--title-size);
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        line-height: 1.1;
+        padding: 0 12px;
+        white-space: normal;
+        color: #000000;
+        text-align: center;
+        box-sizing: border-box;
+        pointer-events: auto;
+        z-index: 3;
+      }
+
+      .deck-expand-toggle {
+        position: absolute;
+        top: -6px;
+        right: auto;
+        left: 0;
+        width: 40px;
+        height: 40px;
+        border-radius: 8px;
+        background: #000000;
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.35);
+        border: none;
+        padding: 0;
+        cursor: pointer;
+        z-index: 6;
+        display: none;
+      }
+
+      .deck-viewport {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        overflow: visible;
+      }
+
+      .mode-backdrop {
+        position: fixed;
+        inset: 0;
+        background: transparent;
+        z-index: 1;
+        display: none;
+      }
+
+      body.deck-mode .mode-backdrop {
+        display: block;
+      }
+
+      .deck-scale {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        width: var(--deck-content-width);
+        height: var(--deck-content-height);
+        transform: translate(-50%, -50%) scale(var(--deck-scale, 1));
+        transform-origin: center;
+      }
+
+      .deck-stack-wrap {
+        position: absolute;
+        left: 0;
+        top: var(--tab-height);
+        width: var(--card-base-width);
+        height: var(--stack-base-height);
+      }
+
+      body.deck-mode .decks {
+        display: flex;
+        align-items: flex-start;
+        justify-content: center;
+        margin-top: calc(-1 * var(--deck-lift));
+      }
+
+      body.mini-mode {
+        overflow-y: auto;
+      }
+
+      body.deck-mode.deck-expanded {
+        overflow-y: hidden;
+        --deck-top-margin: 0px;
+      }
+
+      body.deck-mode .deck {
+        position: relative;
+        transform: none;
+        margin: 0 auto;
+      }
+
+      body.deck-mode .deck:not(.is-active) {
+        display: none;
+      }
+
+      body.deck-mode .deck-title {
+        display: none;
+      }
+
+      body.deck-mode .deck-expand-toggle {
+        display: block;
+      }
+
+      body.deck-mode .deck-scale {
+        left: 50%;
+        top: 0;
+        transform: translate(-50%, 0) scale(var(--deck-scale, 1));
+        transform-origin: top center;
+      }
+
+      body.deck-mode {
+        --deck-width: var(--deck-max-width);
+        --deck-height: var(--deck-max-height);
+      }
+
+      body.mini-mode .deck {
+        transform: none;
+      }
+
+      body.mini-mode .deck-title {
+        display: flex;
+        position: static !important;
+        inset: auto;
+        margin-top: 24px;
+        color: #ffffff;
+        align-self: center;
+      }
+
+      body.mini-mode {
+        --mini-height-limit: calc(100vh - var(--mini-top) - 24px);
+        --mini-height-base: calc(var(--deck-height-base) * 0.58);
+        --deck-height: min(var(--mini-height-base), var(--mini-height-limit));
+        --deck-width: calc(var(--deck-height) * 1.6);
+      }
+
+      body.mini-mode .decks {
+        display: grid;
+        grid-template-columns: repeat(
+          auto-fit,
+          minmax(var(--deck-width), 1fr)
+        );
+        gap: var(--mini-gap);
+        align-content: start;
+        align-items: start;
+        justify-content: start;
+        padding: var(--mini-top) var(--mini-left) 0;
+        box-sizing: border-box;
+      }
+
+      body.mini-mode .deck {
+        position: relative;
+        left: auto;
+        top: auto;
+        margin: 0;
+        justify-self: start;
+        display: flex !important;
+        flex-direction: column;
+        align-items: center;
+        width: var(--deck-width);
+        height: auto !important;
+      }
+
+      body.mini-mode .deck-viewport {
+        flex: 0 0 auto;
+        width: var(--deck-width);
+        height: var(--deck-height);
+      }
+
+      body.deck-mode .deck {
+        display: block;
+      }
+
+      body.deck-mode .deck.is-expanded .card-layer {
+        left: 0;
+        top: 0;
+        transform: translate(var(--expand-x), var(--expand-y)) scale(var(--expanded-scale, 0.5));
+        transform-origin: top left;
+      }
+
+      body.deck-mode .deck.is-expanded .deck-scale {
+        left: 0;
+        top: 0;
+        transform: scale(1);
+        transform-origin: top left;
+      }
+
+      body.deck-mode.deck-expanded .deck-scale {
+        top: calc(-1 * var(--deck-lift));
+      }
+
+
+      body.deck-mode .deck.is-expanded .card-layer .card,
+      body.deck-mode .deck.is-expanded .card-layer .tab {
+        filter: none;
+      }
+
+      body.deck-mode .deck.is-expanded .card-layer {
+        pointer-events: auto !important;
+      }
+
+      body.deck-mode .deck.is-expanded .card-layer .card,
+      body.deck-mode .deck.is-expanded .card-layer .tab {
+        pointer-events: auto !important;
+      }
+
+      body.deck-mode .deck.is-expanded .card-layer[data-color="red"] {
+        --expand-x: var(--expanded-offset-x);
+        --expand-y: calc(var(--expanded-offset-y) - var(--expanded-top-row-lift));
+      }
+
+      body.deck-mode .deck.is-expanded .card-layer[data-color="yellow"] {
+        --expand-x: calc(var(--expanded-offset-x) + var(--expanded-step-x));
+        --expand-y: calc(var(--expanded-offset-y) - var(--expanded-top-row-lift));
+      }
+
+      body.deck-mode .deck.is-expanded .card-layer[data-color="green"] {
+        --expand-x: var(--expanded-offset-x);
+        --expand-y: calc(var(--expanded-offset-y) + var(--expanded-step-y) - var(--expanded-bottom-row-lift));
+      }
+
+      body.deck-mode .deck.is-expanded .card-layer[data-color="blue"] {
+        --expand-x: calc(var(--expanded-offset-x) + var(--expanded-step-x));
+        --expand-y: calc(var(--expanded-offset-y) + var(--expanded-step-y) - var(--expanded-bottom-row-lift));
+      }
+
+    </style>
+  </head>
+  <body class="mini-mode">
+    <h1 class="page-title" id="pageTitle">All Projects</h1>
+    <div class="mode-backdrop" id="modeBackdrop" aria-hidden="true"></div>
+    <main class="decks" id="decksRoot" aria-label="Decks"></main>
+
+    <script src="shared.js"></script>
+    <script>
+      PopsShared.setupAutoReload({ intervalMs: 4000, scrollKey: "scroll-index-card3" });
+      (function () {
+        const LINES_TOTAL = 20;
+        const MODE_KEY = "index-card3-mode";
+        const ACTIVE_KEY = "index-card3-active";
+        const SELECT_KEY = "index-card3-selected";
+        const EXPANDED_KEY = "index-card3-expanded";
+        const pageTitle = document.getElementById("pageTitle");
+        const decksRoot = document.getElementById("decksRoot");
+        let lastMiniScroll = 0;
+
+        const layerLayouts = [
+          {
+            color: "red",
+            style:
+              "--card-left: 0px; --card-top: 0px; --tab-offset-x: 50px; --tab-offset-y: -52px; --layer-z: 90; --text-list-top: 22px;",
+          },
+          {
+            color: "yellow",
+            style:
+              "--card-left: 36px; --card-top: -17px; --tab-offset-x: 292px; --tab-offset-y: -52px; --layer-z: 70; --text-title-top: -32px; --text-list-top: 24px;",
+          },
+          {
+            color: "green",
+            style:
+              "--card-left: 72px; --card-top: -34px; --tab-offset-x: 534px; --tab-offset-y: -52px; --layer-z: 50; --text-title-top: -32px; --text-list-top: 24px;",
+          },
+          {
+            color: "blue",
+            style:
+              "--card-left: 108px; --card-top: -51px; --tab-offset-x: 776px; --tab-offset-y: -52px; --layer-z: 30; --text-title-top: -32px; --text-list-top: 24px;",
+          },
+        ];
+
+        const barbershopCards = [
+          {
+            tabLabel: "Basic<br />Information",
+            title: "Basic Information",
+            items: [
+              { text: "Title" },
+              { text: "\"Half a Chair's Worth\"", classes: ["level-2"] },
+              { text: "Old titles", classes: ["level-2"] },
+              { text: "\"What We Know, How Do We Know It\"", classes: ["level-3"] },
+              { text: "What is it", classes: ["section"] },
+              { text: "Amusing dialog on a heavy subject", classes: ["level-2"] },
+              { text: "Message", classes: ["section"] },
+              { text: "Know thy self", classes: ["level-2"] },
+            ],
+          },
+          {
+            tabLabel: "Main<br />Characters",
+            title: "Main Characters",
+            items: [
+              { text: "George Weatherby" },
+              {
+                text: "Poetic, \"by the time we published this book, people won't be reading books anymore.\"",
+                classes: ["level-2"],
+              },
+              { text: "Bad barber", classes: ["level-2"] },
+              { text: "Aubrey Frick", classes: ["section"] },
+              { text: "Practical, \"nobody cares anyway.\" Has Bad haircut.", classes: ["level-2"] },
+              { text: "Has Deep cut in conscience", classes: ["level-2"] },
+              { text: "Commonalities", classes: ["section"] },
+              { text: "Assistant professors of mathematics (cover for math).", classes: ["level-2"] },
+              { text: "Floridian", classes: ["level-2"] },
+              { text: "40 year olds", classes: ["level-2"] },
+              {
+                text: "Don't speak Spanish, likely not Cuban, white vs Indian debate (undecided).",
+                classes: ["level-2"],
+              },
+              { text: "Will misinformed and lie while deciding", classes: ["level-2"] },
+            ],
+          },
+          {
+            tabLabel: "Setting<br />&amp; Story",
+            title: "Setting & Story",
+            items: [
+              { text: "Setting" },
+              { text: "Cuba, before Castro died", classes: ["level-2"] },
+              { text: "One barbershop chair (half a chair's worth)", classes: ["level-2"] },
+              { text: "Missed cruise return; ship flagged Uganda; seven years", classes: ["level-2"] },
+              { text: "Setup", classes: ["section"] },
+              { text: "Aubrey's adult child (20) is visiting", classes: ["level-2"] },
+              { text: "He prepares the wisdom he'll say", classes: ["level-2"] },
+              {
+                text: "Issue (missed cruise or weren't allowed back; got drunk/drugged/illegal; may not be revealed early)",
+                classes: ["level-2"],
+              },
+              { text: "Story flow", classes: ["section"] },
+              { text: "Action rises, drops, then spikes at end", classes: ["level-2"] },
+              { text: "Decide peak and trough", classes: ["level-2"] },
+              { text: "By Act 1 Scene 1 end, we know who they are", classes: ["level-2"] },
+            ],
+          },
+          {
+            tabLabel: "Script<br />Snippets",
+            title: "Script Snippets",
+            items: [
+              { text: "In the chair, Aubrey checks the mirror and avoids eye contact" },
+              { text: "\"If I stare too long, I start to see the questions.\"", classes: ["level-2"] },
+              { text: "George polishes the clippers and stalls for time", classes: ["section"] },
+              { text: "\"A sharp edge helps, but it doesn't make a decision for you.\"", classes: ["level-2"] },
+              { text: "The shop goes quiet as the cruise story hangs in the air", classes: ["section"] },
+              { text: "\"Seven years is a long time to wait for a boat that won't return.\"", classes: ["level-2"] },
+            ],
+          },
+        ];
+
+        const emptyCards = layerLayouts.map(() => ({
+          tabLabel: "",
+          title: "",
+          items: [],
+        }));
+
+        const decksData = [
+          {
+            id: "barbershop",
+            title: "Barbershop Chair Play",
+            miniTitle: "Barbershop Chair Play",
+            isActive: true,
+            cards: barbershopCards,
+          },
+          {
+            id: "new",
+            title: "New Deck",
+            miniTitle: "New Deck",
+            isActive: false,
+            cards: emptyCards,
+          },
+          {
+            id: "third",
+            title: "Third Deck",
+            miniTitle: "Third Deck",
+            isActive: false,
+            cards: emptyCards,
+          },
+        ];
+
+        function createEl(tag, className, text) {
+          const el = document.createElement(tag);
+          if (className) {
+            el.className = className;
+          }
+          if (text != null) {
+            el.textContent = text;
+          }
+          return el;
+        }
+
+        function buildLines(container) {
+          const red = createEl("span", "line red");
+          red.style.top = "var(--line-offset)";
+          container.appendChild(red);
+          for (let i = 1; i < LINES_TOTAL; i += 1) {
+            const line = createEl("span", "line blue");
+            line.style.top = `calc(var(--line-offset) + var(--line-gap) * ${i})`;
+            container.appendChild(line);
+          }
+        }
+
+        function buildTextList(items) {
+          const list = createEl("div", "card-text-list");
+          items.forEach((item) => {
+            const entry = createEl("div", "card-text-item", item.text);
+            if (item.classes && item.classes.length) {
+              entry.classList.add(...item.classes);
+            }
+            list.appendChild(entry);
+          });
+          return list;
+        }
+
+        function buildCardLayer(layerConfig, cardData) {
+          const layer = createEl("div", "card-layer");
+          layer.dataset.color = layerConfig.color;
+          layer.setAttribute("style", layerConfig.style);
+
+          const tab = createEl("div", `tab card-${layerConfig.color}-tab tab-label`);
+          if (cardData.tabLabel) {
+            tab.innerHTML = cardData.tabLabel;
+          }
+
+          const card = createEl("div", `card card-${layerConfig.color}-primary`);
+          const lines = createEl("div", "card-lines");
+          lines.setAttribute("aria-hidden", "true");
+          buildLines(lines);
+
+          const text = createEl("div", "card-text");
+          const title = createEl("div", "card-text-title", cardData.title || "");
+          const list = buildTextList(cardData.items || []);
+
+          text.appendChild(title);
+          text.appendChild(list);
+          card.appendChild(lines);
+          card.appendChild(text);
+
+          layer.appendChild(tab);
+          layer.appendChild(card);
+          return layer;
+        }
+
+        function buildDeck(deckData) {
+          const deck = createEl("div", "deck");
+          if (deckData.isActive) {
+            deck.classList.add("is-active");
+          }
+          deck.dataset.deck = deckData.id;
+          deck.dataset.title = deckData.title;
+
+          const title = createEl("div", "deck-title", deckData.miniTitle);
+          title.setAttribute("aria-hidden", "true");
+          const expandToggle = createEl("button", "deck-expand-toggle");
+          expandToggle.type = "button";
+          expandToggle.setAttribute("aria-label", "Toggle expanded mode");
+
+          const viewport = createEl("div", "deck-viewport");
+          const scaleWrap = createEl("div", "deck-scale");
+          const stackWrap = createEl("div", "deck-stack-wrap");
+          const section = createEl("section", "card-scene");
+          section.setAttribute("aria-label", `${deckData.title} deck`);
+          const stack = createEl("div", "card-stack");
+
+          deckData.cards.forEach((card, index) => {
+            const layer = buildCardLayer(layerLayouts[index], card);
+            stack.appendChild(layer);
+          });
+
+          section.appendChild(stack);
+          stackWrap.appendChild(section);
+          scaleWrap.appendChild(stackWrap);
+          viewport.appendChild(scaleWrap);
+          deck.appendChild(viewport);
+          deck.appendChild(title);
+          deck.appendChild(expandToggle);
+          return deck;
+        }
+
+        decksData.forEach((deck) => {
+          decksRoot.appendChild(buildDeck(deck));
+        });
+
+        const decks = Array.from(document.querySelectorAll(".deck"));
+
+        function getActiveDeck() {
+          return decks.find((deck) => deck.classList.contains("is-active")) || decks[0];
+        }
+
+        function selectionKeyFor(deckName) {
+          return `${SELECT_KEY}-${deckName}`;
+        }
+
+        const slots = {
+          front: { cardTop: "0px", layerZ: 90 },
+          yellow: { cardTop: "-8px", layerZ: 70 },
+          green: { cardTop: "-16px", layerZ: 50 },
+          back: { cardTop: "-24px", layerZ: 30 },
+        };
+        const tabOffsetY = -52;
+
+        function buildLayerMap(deck) {
+          const layerMap = {};
+          deck.querySelectorAll(".card-layer").forEach((layer) => {
+            layerMap[layer.dataset.color] = layer;
+          });
+          return layerMap;
+        }
+
+        function applyLayer(layer, slot) {
+          if (!layer) return;
+          layer.style.setProperty("--card-top", slot.cardTop);
+          layer.style.setProperty("--layer-z", slot.layerZ);
+        }
+
+        function updateTabOffsets(layerMap, deck) {
+          const card = deck.querySelector(".card");
+          const cardWidth = card ? card.offsetWidth : window.innerWidth;
+          const tabWidth = 235;
+          const inset = Math.round(cardWidth * 0.04);
+          const available = Math.max(cardWidth - tabWidth - inset * 2, 0);
+          const colors = ["red", "yellow", "green", "blue"];
+          colors.forEach((color, index) => {
+            const layer = layerMap[color];
+            if (!layer) {
+              return;
+            }
+            const left = colors.length > 1 ? inset + (available * index) / (colors.length - 1) : inset;
+            layer.style.setProperty("--tab-offset-x", `${left}px`);
+          });
+        }
+
+        function updateAllTabOffsets() {
+          decks.forEach((deck) => {
+            updateTabOffsets(buildLayerMap(deck), deck);
+          });
+        }
+
+        function setOrder(order, deck) {
+          const layerMap = buildLayerMap(deck);
+          applyLayer(layerMap[order[0]], slots.front);
+          applyLayer(layerMap[order[1]], slots.yellow);
+          applyLayer(layerMap[order[2]], slots.green);
+          applyLayer(layerMap[order[3]], slots.back);
+          Object.values(layerMap).forEach((layer) => layer.classList.remove("is-front"));
+          if (layerMap[order[0]]) {
+            layerMap[order[0]].classList.add("is-front");
+          }
+          const cardStack = deck.querySelector(".card-stack");
+          if (cardStack) {
+            const minTop = Math.min(
+              parseFloat(slots.front.cardTop) + tabOffsetY,
+              parseFloat(slots.yellow.cardTop) + tabOffsetY,
+              parseFloat(slots.green.cardTop) + tabOffsetY,
+              parseFloat(slots.back.cardTop) + tabOffsetY
+            );
+            cardStack.style.setProperty("--stack-top-offset", `${-minTop}px`);
+          }
+          updateTabOffsets(layerMap, deck);
+        }
+
+        function applyLineNumbers() {
+          document.querySelectorAll(".deck").forEach((deck) => {
+            deck.querySelectorAll(".card-text-list").forEach((list) => {
+              const sectionItems = Array.from(list.querySelectorAll(".card-text-item.section"));
+              sectionItems.forEach((section) => {
+                const prev = section.previousElementSibling;
+                if (!prev || !prev.classList.contains("line-break")) {
+                  const breakItem = document.createElement("div");
+                  breakItem.className = "card-text-item line-break";
+                  list.insertBefore(breakItem, section);
+                }
+              });
+
+              const items = Array.from(list.querySelectorAll(".card-text-item"));
+              const card = list.closest(".card");
+              const maxLines = 18;
+              const lineCount =
+                Math.min(card?.querySelectorAll(".card-lines .line").length || items.length, maxLines);
+
+              const numberColumn = document.createElement("div");
+              numberColumn.className = "line-number-column";
+              for (let lineIndex = 1; lineIndex <= lineCount; lineIndex += 1) {
+                const row = document.createElement("div");
+                row.className = "line-number-row";
+                const number = document.createElement("span");
+                number.className = "line-number";
+                number.textContent = `${lineIndex}`;
+                number.setAttribute("aria-hidden", "true");
+                row.appendChild(number);
+                numberColumn.appendChild(row);
+              }
+
+              const textColumn = document.createElement("div");
+              textColumn.className = "line-text-column";
+              items.forEach((item) => {
+                item.querySelectorAll(".alpha-marker").forEach((node) => node.remove());
+                if (!item.classList.contains("line-break") && !item.querySelector(".bullet-marker")) {
+                  const bullet = document.createElement("span");
+                  bullet.className = "bullet-marker";
+                  bullet.textContent = "—";
+                  item.prepend(bullet);
+                }
+                textColumn.appendChild(item);
+              });
+
+              list.innerHTML = "";
+              list.appendChild(numberColumn);
+              list.appendChild(textColumn);
+            });
+          });
+        }
+
+        function readCssNumber(varName) {
+          const raw = getComputedStyle(document.documentElement).getPropertyValue(varName);
+          const value = Number.parseFloat(raw);
+          return Number.isFinite(value) ? value : 0;
+        }
+
+        function updateDeckScales() {
+          const baseWidth = readCssNumber("--card-base-width") || 1200;
+          const baseHeight = (readCssNumber("--stack-base-height") || 755) + readCssNumber("--tab-height");
+          const gap = readCssNumber("--expanded-gap") || 0;
+          const expandedLift = readCssNumber("--expanded-lift") || 0;
+          const topRowLift = readCssNumber("--expanded-top-row-lift") || 0;
+          const bottomRowLift = readCssNumber("--expanded-bottom-row-lift") || 0;
+          const buffer = readCssNumber("--expanded-buffer") || 0;
+          document.documentElement.style.setProperty("--deck-content-width", `${baseWidth}px`);
+          document.documentElement.style.setProperty("--deck-content-height", `${baseHeight}px`);
+
+          decks.forEach((deck) => {
+            const rect = deck.getBoundingClientRect();
+            if (rect.width === 0 || rect.height === 0) {
+              return;
+            }
+            const scale = Math.min(rect.width / baseWidth, rect.height / baseHeight);
+            deck.style.setProperty("--deck-scale", `${scale}`);
+            const widthScale = (rect.width - gap) / (baseWidth * 2);
+            const heightAvailable = rect.height - gap - topRowLift + bottomRowLift - buffer;
+            const heightScale = heightAvailable / (baseHeight * 2);
+            const expandedScale = Math.min(widthScale, heightScale);
+            deck.style.setProperty("--expanded-scale", `${expandedScale}`);
+            const stepX = baseWidth * expandedScale + gap;
+            const stepY = baseHeight * expandedScale + gap;
+            const totalW = baseWidth * expandedScale * 2 + gap;
+            const offsetX = Math.max((rect.width - totalW) / 2, 0);
+            const offsetY = deck.classList.contains("is-expanded") ? -expandedLift : 0;
+            deck.style.setProperty("--expanded-step-x", `${stepX}px`);
+            deck.style.setProperty("--expanded-step-y", `${stepY}px`);
+            deck.style.setProperty("--expanded-offset-x", `${offsetX}px`);
+            deck.style.setProperty("--expanded-offset-y", `${offsetY}px`);
+          });
+        }
+
+        const orderMap = {
+          red: ["red", "yellow", "green", "blue"],
+          yellow: ["yellow", "red", "green", "blue"],
+          green: ["green", "red", "yellow", "blue"],
+          blue: ["blue", "red", "yellow", "green"],
+        };
+
+        function promote(color, deckOverride) {
+          const deck = deckOverride || getActiveDeck();
+          const order = orderMap[color];
+          if (order) {
+            setOrder(order, deck);
+            localStorage.setItem(selectionKeyFor(deck.dataset.deck), color);
+          }
+        }
+
+        function setActiveDeck(id) {
+          decks.forEach((deck) => {
+            deck.classList.toggle("is-active", deck.dataset.deck === id);
+          });
+          localStorage.setItem(ACTIVE_KEY, id);
+          updateDeckScales();
+        }
+
+        function setExpanded(isExpanded) {
+          const active = getActiveDeck();
+          decks.forEach((deck) => deck.classList.remove("is-expanded"));
+          if (isExpanded && active) {
+            active.classList.add("is-expanded");
+          }
+          localStorage.setItem(EXPANDED_KEY, isExpanded ? "1" : "0");
+          document.body.classList.toggle("deck-expanded", isExpanded);
+        }
+
+        function applyMode(mode) {
+          document.body.classList.toggle("mini-mode", mode === "mini");
+          document.body.classList.toggle("deck-mode", mode === "deck");
+          if (mode !== "deck") {
+            document.body.classList.remove("deck-expanded");
+          }
+          const title = mode === "mini" ? "All Projects" : getActiveDeck().dataset.title;
+          pageTitle.textContent = title;
+          document.title = title;
+          updateDeckScales();
+          requestAnimationFrame(() => {
+            updateAllTabOffsets();
+          });
+          if (mode === "deck") {
+            window.scrollTo(0, 0);
+            const savedExpanded = localStorage.getItem(EXPANDED_KEY) === "1";
+            setExpanded(savedExpanded);
+          }
+        }
+
+        function setMode(mode) {
+          if (mode === "deck") {
+            lastMiniScroll = window.scrollY;
+          }
+          localStorage.setItem(MODE_KEY, mode);
+          applyMode(mode);
+          if (mode !== "deck") {
+            setExpanded(false);
+          }
+          if (mode === "deck") {
+            window.scrollTo(0, 0);
+          } else {
+            requestAnimationFrame(() => {
+              window.scrollTo(0, lastMiniScroll);
+            });
+          }
+        }
+
+        decks.forEach((deck) => {
+          const toggle = deck.querySelector(".deck-expand-toggle");
+          if (toggle) {
+            toggle.addEventListener("click", (event) => {
+              event.stopPropagation();
+              if (!document.body.classList.contains("deck-mode")) {
+                return;
+              }
+              const nextExpanded = !deck.classList.contains("is-expanded");
+              setExpanded(nextExpanded);
+            });
+          }
+          const deckTitle = deck.querySelector(".deck-title");
+          if (deckTitle) {
+            deckTitle.addEventListener("click", (event) => {
+              if (document.body.classList.contains("deck-mode")) {
+                event.stopPropagation();
+                setMode("mini");
+                return;
+              }
+              event.stopPropagation();
+              setActiveDeck(deck.dataset.deck);
+              setMode("deck");
+            });
+          }
+          deck.querySelectorAll(".card-layer").forEach((layer) => {
+            const handleExpandPick = (event) => {
+              if (!document.body.classList.contains("deck-mode")) {
+                return;
+              }
+              if (!deck.classList.contains("is-expanded")) {
+                return;
+              }
+              event.stopPropagation();
+              const color = layer.dataset.color;
+              if (color) {
+                setExpanded(false);
+                promote(color, deck);
+              }
+            };
+            layer.addEventListener("click", handleExpandPick);
+            layer
+              .querySelectorAll(".card, .tab")
+              .forEach((el) => el.addEventListener("click", handleExpandPick));
+          });
+          ["red", "yellow", "green", "blue"].forEach((color) => {
+            deck
+              .querySelectorAll(
+                `.card-layer[data-color='${color}'] .card, .card-layer[data-color='${color}'] .tab`
+              )
+              .forEach((el) => {
+                el.addEventListener("click", (event) => {
+                  event.stopPropagation();
+                  if (document.body.classList.contains("mini-mode")) {
+                    setActiveDeck(deck.dataset.deck);
+                    setMode("deck");
+                  }
+                  promote(color, deck);
+                });
+              });
+          });
+
+          deck.addEventListener("click", () => {
+            setActiveDeck(deck.dataset.deck);
+            setMode("deck");
+          });
+        });
+
+        pageTitle.addEventListener("click", () => {
+          if (document.body.classList.contains("deck-mode")) {
+            setMode("mini");
+          }
+        });
+
+        document.addEventListener("click", (event) => {
+          const rect = pageTitle.getBoundingClientRect();
+          const pad = 24;
+          const x = event.clientX;
+          const y = event.clientY;
+          const inside =
+            x >= rect.left - pad &&
+            x <= rect.right + pad &&
+            y >= rect.top - pad &&
+            y <= rect.bottom + pad;
+          if (inside) {
+            if (document.body.classList.contains("deck-mode")) {
+              setMode("mini");
+            }
+          }
+        });
+
+        const modeBackdrop = document.getElementById("modeBackdrop");
+        if (modeBackdrop) {
+          modeBackdrop.addEventListener("click", () => {
+            if (document.body.classList.contains("deck-mode")) {
+              setMode("mini");
+            }
+          });
+          modeBackdrop.addEventListener("touchend", () => {
+            if (document.body.classList.contains("deck-mode")) {
+              setMode("mini");
+            }
+          });
+        }
+
+        const savedActive = localStorage.getItem(ACTIVE_KEY);
+        if (savedActive) {
+          setActiveDeck(savedActive);
+        }
+
+        const savedMode = localStorage.getItem(MODE_KEY) || "mini";
+        applyMode(savedMode);
+        if (savedMode === "mini") {
+          requestAnimationFrame(() => {
+            window.scrollTo(0, lastMiniScroll);
+          });
+        } else {
+          window.scrollTo(0, 0);
+        }
+
+        applyLineNumbers();
+        updateAllTabOffsets();
+        updateDeckScales();
+        requestAnimationFrame(() => {
+          updateDeckScales();
+          updateAllTabOffsets();
+        });
+
+        decks.forEach((deck) => {
+          const saved = localStorage.getItem(selectionKeyFor(deck.dataset.deck));
+          if (saved && orderMap[saved]) {
+            setOrder(orderMap[saved], deck);
+          } else {
+            setOrder(orderMap.red, deck);
+          }
+        });
+
+        let resizeFrame = null;
+        window.addEventListener("resize", () => {
+          if (resizeFrame) return;
+          resizeFrame = requestAnimationFrame(() => {
+            resizeFrame = null;
+            updateDeckScales();
+            updateAllTabOffsets();
+          });
+        });
+      })();
+    </script>
+  </body>
+</html>

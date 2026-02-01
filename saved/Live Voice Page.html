@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<!-- saved from url=(0035)https://mpulsemedia.github.io/pops/ -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Live Voice Page</title>
+    <link rel="stylesheet" href="./Live Voice Page_files/styles.css">
+  <link type="text/css" rel="stylesheet" id="dark-mode-custom-link"><link type="text/css" rel="stylesheet" id="dark-mode-general-link"><style lang="en" type="text/css" id="dark-mode-custom-style"></style><style lang="en" type="text/css" id="dark-mode-native-style"></style><style lang="en" type="text/css" id="dark-mode-native-sheet"></style></head>
+  <body data-new-gr-c-s-check-loaded="14.1270.0" data-gr-ext-installed="">
+    <div class="app">
+      <header class="top-bar">
+        <div class="brand">
+          <div class="title">Dad's Live Page</div>
+          <div class="subtitle">Speak to update. No scrolling needed.</div>
+        </div>
+        <div class="status">
+          <span class="status-dot active" id="statusDot"></span>
+          <span id="statusText">Listening</span>
+        </div>
+      </header>
+
+      <section class="controls">
+        <button id="toggleListen" class="primary">Stop Listening</button>
+        <button id="clearTranscript">Clear Transcript</button>
+        <button id="refreshNow">Reload Now</button>
+        <div class="mic-hint" id="micHint">Mic active. Speak now.</div>
+        <div class="save-hint">
+          Save tip: press Cmd+S and save to `saved/index.html`.
+        </div>
+        <div class="diagnostics" id="diagnostics">URL: https://mpulsemedia.github.io/pops/
+Secure: yes
+Auto reload: on (2000ms)
+Mic permission: granted</div>
+      </section>
+
+      <main class="content">
+        <section class="steps">
+          <div class="section-title">Do This (Simple)</div>
+          <div class="step-block">
+            <div class="step-title">One-time setup (already done)</div>
+            <div class="step">
+              1. Open Terminal (Cmd + Space → type Terminal → Enter)
+            </div>
+            <div class="step">2. Paste and press Enter:</div>
+            <pre class="step-code">cd /Users/pauldsmith/Desktop/pops</pre>
+            <div class="step">3. Paste and press Enter:</div>
+            <pre class="step-code">ls scripts/post-commit-ai.sh</pre>
+            <div class="step-note">
+              If it prints a file path, setup is done.
+            </div>
+          </div>
+
+          <div class="step-block">
+            <div class="step-title">Every time you want it to trigger</div>
+            <div class="step">1. Make changes in Cursor</div>
+            <div class="step">2. Click Commit in Cursor</div>
+            <div class="step-note">
+              Log file: /Users/pauldsmith/Desktop/pops/saved/commit-log.txt
+            </div>
+          </div>
+
+          <div class="step-block">
+            <div class="step-title">Optional: send to AI after commit</div>
+            <div class="step">1. Open Terminal</div>
+            <div class="step">2. Paste and press Enter:</div>
+            <pre class="step-code">export AI_WEBHOOK_URL="https://your-webhook-url"</pre>
+            <div class="step">3. Commit in Cursor</div>
+          </div>
+        </section>
+        <section class="transcript">
+          <div class="section-title">Live Transcript</div>
+          <div class="transcript-body">
+            <div id="transcriptList" class="transcript-list"><div class="transcript-entry" data-timestamp="2026-01-27T07:53:08.796Z"><div class="transcript-time">11:53 PM</div><div>as you did with no other text on the screen</div></div><div class="transcript-entry" data-timestamp="2026-01-27T07:53:04.496Z"><div class="transcript-time">11:53 PM</div><div>start with it</div></div><div class="transcript-entry" data-timestamp="2026-01-27T07:53:02.585Z"><div class="transcript-time">11:53 PM</div><div>I want you to</div></div><div class="transcript-entry" data-timestamp="2026-01-27T07:52:59.010Z"><div class="transcript-time">11:52 PM</div><div>okay only need you to left a line the live transcript line</div></div><div class="transcript-entry" data-timestamp="2026-01-27T07:52:51.405Z"><div class="transcript-time">11:52 PM</div><div>what happens oh my gosh you're being such a ding dong buddy</div></div><div class="transcript-entry" data-timestamp="2026-01-27T07:52:44.389Z"><div class="transcript-time">11:52 PM</div><div>okay hey so we're alive transcript thing</div></div></div>
+            <div id="interim" class="interim"></div>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <script src="./Live Voice Page_files/config.js"></script>
+    <script src="./Live Voice Page_files/app.js"></script>
+  
+
+</body><grammarly-desktop-integration data-grammarly-shadow-root="true"><template shadowrootmode="open"><style>
+      div.grammarly-desktop-integration {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        margin: -1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        white-space: nowrap;
+        border: 0;
+        -moz-user-select: none;
+        -webkit-user-select: none;
+        -ms-user-select:none;
+        user-select:none;
+      }
+
+      div.grammarly-desktop-integration:before {
+        content: attr(data-content);
+      }
+    </style><div aria-label="grammarly-integration" role="group" tabindex="-1" class="grammarly-desktop-integration" data-content="{&quot;mode&quot;:&quot;full&quot;,&quot;isActive&quot;:true,&quot;isUserDisabled&quot;:false}"></div></template></grammarly-desktop-integration></html>
