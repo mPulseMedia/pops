@@ -392,6 +392,18 @@ body.cards-mini .card-stack .tab {
   display: none;
 }
 
+.card-text-item-text {
+  flex: 1;
+  min-width: 0;
+  pointer-events: auto;
+}
+
+.card-text-item-text[contenteditable="true"] {
+  outline: none;
+  cursor: text;
+  caret-color: currentColor;
+}
+
 .alpha-marker {
   color: #a6a6a6;
 }
@@ -492,6 +504,42 @@ body {
   letter-spacing: 0.08em;
   padding: 8px 16px 0;
   margin: 0;
+}
+
+.export-row {
+  text-align: center;
+  margin: 0 0 0.5rem;
+  font-size: 0.9rem;
+  color: var(--text-muted, #666);
+}
+
+.export-deck-data {
+  background: none;
+  border: none;
+  padding: 0;
+  font: inherit;
+  color: inherit;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.export-deck-data:hover {
+  color: var(--text, #111);
+}
+
+.reload-deck-data {
+  background: none;
+  border: none;
+  padding: 0;
+  font: inherit;
+  color: inherit;
+  text-decoration: underline;
+  cursor: pointer;
+  margin-left: 0.25rem;
+}
+
+.reload-deck-data:hover {
+  color: var(--text, #111);
 }
 
 .decks {

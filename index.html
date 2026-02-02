@@ -9,6 +9,7 @@
   </head>
   <body class="mini-mode">
     <h1 class="page-title" id="pageTitle">All Projects</h1>
+    <p class="export-row"><button type="button" class="export-deck-data" id="exportDeckDataBtn">Export deck data</button> — download <code>index.txt</code>; save it into your repo to lock in edits. <button type="button" class="reload-deck-data" id="reloadDeckDataBtn">Reload data from index.txt</button> <button type="button" class="load-deck-data-file" id="loadDeckDataFileBtn">Load from file…</button> <input type="file" id="loadDeckDataFileInput" accept=".txt,.json,application/json" hidden /> <span class="deck-data-source" id="deckDataSource"></span> The page loads deck data from <code>index.txt</code> when served over HTTP; otherwise use Reload or Load from file.</p>
     <div class="mode-backdrop" id="modeBackdrop" aria-hidden="true"></div>
     <div class="image-lightbox" id="imageLightbox" aria-hidden="true">
       <img alt="" src="" />
@@ -25,6 +26,9 @@
         const SELECT_KEY = "index-card3-selected";
         const EXPANDED_KEY = "index-card3-expanded";
         const IMAGE_LIGHTBOX_KEY = "index-card3-image-lightbox";
+        const CARD_EDITS_KEY = "index-card3-card-edits";
+        const ACTIVE_EDIT_KEY = "index-card3-active-edit";
+        const DATA_URL = "index.txt";
         const pageTitle = document.getElementById("pageTitle");
         const decksRoot = document.getElementById("decksRoot");
         const imageLightbox = document.getElementById("imageLightbox");
@@ -61,8 +65,11 @@
           },
         ];
 
-        /* Half a Chair's Worth: index 0 = yellow (leftmost), index 1 = red, then green, blue */
-        const barbershopCards = [
+        let decksData;
+        let decks;
+
+        /* Fallback when index.txt is missing or invalid. Half a Chair's Worth: index 0 = yellow (leftmost), 1 = red, then green, blue */
+        const defaultBarbershopCards = [
           {
             tabLabel: "Basic<br />Information",
             title: "Basic Information",
@@ -150,8 +157,8 @@
           items: [],
         }));
 
-        /* Away We Go deck: index 0 = yellow card, index 1 = red, index 2 = green, index 3 = blue */
-        const awayWeGoCards = layerLayouts.map((layout, index) => {
+        /* Away We Go deck: index 0 = yellow, 1 = red, 2 = green, 3 = blue. Fallback when index.txt missing. */
+        const defaultAwayWeGoCards = layerLayouts.map((layout, index) => {
           if (index === YELLOW_CARD_INDEX) {
             return {
               tabLabel: "Herodotus",
@@ -191,29 +198,88 @@
           return { tabLabel: "", title: "", items: [] };
         });
 
-        const decksData = [
-          {
-            id: "barbershop",
-            title: "Half a Chair's Worth",
-            miniTitle: "Half a Chair's Worth",
-            isActive: true,
-            cards: barbershopCards,
-          },
-          {
-            id: "new",
-            title: "Away We Go",
-            miniTitle: "Away We Go",
-            isActive: false,
-            cards: awayWeGoCards,
-          },
-          {
-            id: "third",
-            title: "3",
-            miniTitle: "", /* no name: All Projects shows only "3)" */
-            isActive: false,
-            cards: emptyCards,
-          },
-        ];
+        function loadDecksFromData(barbershopCards, awayWeGoCards, fromFile) {
+          if (fromFile) {
+            localStorage.removeItem(CARD_EDITS_KEY);
+            localStorage.removeItem(ACTIVE_EDIT_KEY);
+          }
+          while (decksRoot.firstChild) {
+            decksRoot.removeChild(decksRoot.firstChild);
+          }
+          decksData = [
+            { id: "barbershop", title: "Half a Chair's Worth", miniTitle: "Half a Chair's Worth", isActive: true, cards: barbershopCards },
+            { id: "new", title: "Away We Go", miniTitle: "Away We Go", isActive: false, cards: awayWeGoCards },
+            { id: "third", title: "3", miniTitle: "", isActive: false, cards: emptyCards },
+          ];
+          decksData.forEach((deck, index) => {
+            decksRoot.appendChild(buildDeck(deck, index));
+          });
+          decks = Array.from(document.querySelectorAll(".deck"));
+          runDeckInit();
+        }
+
+        function setDeckDataSource(message) {
+          const el = document.getElementById("deckDataSource");
+          if (el) el.textContent = message ? ` ${message}` : "";
+        }
+
+        function loadDeckData() {
+          const url = new URL(DATA_URL + "?t=" + Date.now(), location.href).href;
+          fetch(url, { cache: "no-store" })
+            .then((r) => (r.ok ? r.json() : Promise.reject()))
+            .then((data) => {
+              if (data && Array.isArray(data.barbershopCards) && Array.isArray(data.awayWeGoCards)) {
+                loadDecksFromData(data.barbershopCards, data.awayWeGoCards, true);
+                setDeckDataSource("(loaded from index.txt)");
+              } else {
+                loadDecksFromData(defaultBarbershopCards, defaultAwayWeGoCards, false);
+                setDeckDataSource("(using built-in data; serve over HTTP or use Load from file)");
+              }
+            })
+            .catch(() => {
+              loadDecksFromData(defaultBarbershopCards, defaultAwayWeGoCards, false);
+              setDeckDataSource("(using built-in data; serve over HTTP or use Load from file)");
+            });
+        }
+
+        function reloadDeckDataFromFile() {
+          const url = new URL(DATA_URL + "?t=" + Date.now(), location.href).href;
+          fetch(url, { cache: "no-store" })
+            .then((r) => (r.ok ? r.json() : Promise.reject()))
+            .then((data) => {
+              if (data && Array.isArray(data.barbershopCards) && Array.isArray(data.awayWeGoCards)) {
+                loadDecksFromData(data.barbershopCards, data.awayWeGoCards, true);
+                setDeckDataSource("(loaded from index.txt)");
+              } else {
+                loadDecksFromData(defaultBarbershopCards, defaultAwayWeGoCards, false);
+                setDeckDataSource("(reload failed; using built-in data)");
+              }
+            })
+            .catch(() => {
+              loadDecksFromData(defaultBarbershopCards, defaultAwayWeGoCards, false);
+              setDeckDataSource("(reload failed, e.g. file:// — use Load from file)");
+            });
+        }
+
+        function loadDeckDataFromFileInput(file) {
+          if (!file) return;
+          const reader = new FileReader();
+          reader.onload = () => {
+            try {
+              const data = JSON.parse(reader.result);
+              if (data && Array.isArray(data.barbershopCards) && Array.isArray(data.awayWeGoCards)) {
+                loadDecksFromData(data.barbershopCards, data.awayWeGoCards, true);
+                setDeckDataSource("(loaded from file)");
+              } else {
+                setDeckDataSource("(invalid format: need barbershopCards and awayWeGoCards)");
+              }
+            } catch (_) {
+              setDeckDataSource("(invalid JSON)");
+            }
+          };
+          reader.onerror = () => setDeckDataSource("(could not read file)");
+          reader.readAsText(file);
+        }
 
         function createEl(tag, className, text) {
           const el = document.createElement(tag);
@@ -237,19 +303,121 @@
           }
         }
 
-        function buildTextList(items) {
+        function getCardEdits() {
+          try {
+            const raw = localStorage.getItem(CARD_EDITS_KEY);
+            return raw ? JSON.parse(raw) : {};
+          } catch (_) {
+            return {};
+          }
+        }
+        function getEditedText(deckId, cardIndex, itemIndex) {
+          const key = `${deckId}-${cardIndex}-${itemIndex}`;
+          return getCardEdits()[key];
+        }
+        function saveEditedText(deckId, cardIndex, itemIndex, text) {
+          const edits = getCardEdits();
+          edits[`${deckId}-${cardIndex}-${itemIndex}`] = text;
+          localStorage.setItem(CARD_EDITS_KEY, JSON.stringify(edits));
+        }
+        function saveActiveEditState(deckId, cardIndex, itemIndex, selStart, selEnd) {
+          try {
+            localStorage.setItem(ACTIVE_EDIT_KEY, JSON.stringify({
+              deckId,
+              cardIndex,
+              itemIndex,
+              selectionStart: selStart,
+              selectionEnd: selEnd,
+            }));
+          } catch (_) {}
+        }
+        function clearActiveEditState() {
+          localStorage.removeItem(ACTIVE_EDIT_KEY);
+        }
+
+        /** Save current selection/cursor when still in edit mode (e.g. before reload without blur). */
+        function saveCurrentEditStateIfActive() {
+          const el = document.activeElement;
+          if (!el || !el.classList || !el.classList.contains("card-text-item-text") || el.contentEditable !== "true") {
+            return;
+          }
+          const item = el.closest(".card-text-item");
+          if (!item || !item.dataset.deckId) return;
+          const deckId = item.dataset.deckId;
+          const cardIndex = parseInt(item.dataset.cardIndex, 10);
+          const itemIndex = parseInt(item.dataset.itemIndex, 10);
+          const len = el.textContent.length;
+          let start = len;
+          let end = len;
+          const sel = window.getSelection();
+          if (sel.rangeCount && el.contains(sel.anchorNode)) {
+            try {
+              const range = sel.getRangeAt(0);
+              start = range.startContainer === el || range.startContainer.parentNode === el ? range.startOffset : len;
+              end = range.endContainer === el || range.endContainer.parentNode === el ? range.endOffset : len;
+              start = Math.min(start, len);
+              end = Math.min(end, len);
+            } catch (_) {}
+          }
+          saveActiveEditState(deckId, cardIndex, itemIndex, start, end);
+        }
+
+        /** Build deck data with all localStorage edits applied, for export as index.txt. */
+        function getExportDeckData() {
+          if (!decksData || decksData.length < 2) return null;
+          const edits = getCardEdits();
+          function applyEditsToCards(deckId, cards) {
+            const out = JSON.parse(JSON.stringify(cards));
+            out.forEach((card, cardIndex) => {
+              (card.items || []).forEach((item, itemIndex) => {
+                const key = `${deckId}-${cardIndex}-${itemIndex}`;
+                if (edits[key] != null) {
+                  item.text = edits[key];
+                }
+              });
+            });
+            return out;
+          }
+          return {
+            barbershopCards: applyEditsToCards("barbershop", decksData[0].cards),
+            awayWeGoCards: applyEditsToCards("new", decksData[1].cards),
+          };
+        }
+
+        function exportDeckDataToFile() {
+          const data = getExportDeckData();
+          if (!data) return;
+          const json = JSON.stringify(data, null, 2);
+          const blob = new Blob([json], { type: "application/json" });
+          const a = document.createElement("a");
+          a.href = URL.createObjectURL(blob);
+          a.download = "index.txt";
+          a.click();
+          URL.revokeObjectURL(a.href);
+        }
+
+        function buildTextList(items, deckId, cardIndex) {
           const list = createEl("div", "card-text-list");
-          items.forEach((item) => {
-            const entry = createEl("div", "card-text-item", item.text);
+          items.forEach((item, itemIndex) => {
+            const entry = document.createElement("div");
+            entry.className = "card-text-item";
             if (item.classes && item.classes.length) {
               entry.classList.add(...item.classes);
             }
+            entry.dataset.deckId = deckId;
+            entry.dataset.cardIndex = String(cardIndex);
+            entry.dataset.itemIndex = String(itemIndex);
+            const textSpan = document.createElement("span");
+            textSpan.className = "card-text-item-text";
+            const savedText = getEditedText(deckId, cardIndex, itemIndex);
+            textSpan.textContent = savedText != null ? savedText : (item.text != null ? item.text : item.html != null ? item.html : "");
+            entry.appendChild(textSpan);
             list.appendChild(entry);
           });
           return list;
         }
 
-        function buildCardLayer(layerConfig, cardData) {
+        function buildCardLayer(layerConfig, cardData, deckId, cardIndex) {
           const layer = createEl("div", "card-layer");
           layer.dataset.color = layerConfig.color;
           layer.setAttribute("style", layerConfig.style);
@@ -266,7 +434,7 @@
 
           const text = createEl("div", "card-text");
           const title = createEl("div", "card-text-title", cardData.title || "");
-          const list = buildTextList(cardData.items || []);
+          const list = buildTextList(cardData.items || [], deckId, cardIndex);
 
           text.appendChild(title);
           if (cardData.image) {
@@ -332,8 +500,8 @@
           section.setAttribute("aria-label", `${deckData.title} deck`);
           const stack = createEl("div", "card-stack");
 
-          deckData.cards.forEach((card, index) => {
-            const layer = buildCardLayer(layerLayouts[index], card);
+          deckData.cards.forEach((card, cardIndex) => {
+            const layer = buildCardLayer(layerLayouts[cardIndex], card, deckData.id, cardIndex);
             stack.appendChild(layer);
           });
 
@@ -346,12 +514,6 @@
           deck.appendChild(expandToggle);
           return deck;
         }
-
-        decksData.forEach((deck, index) => {
-          decksRoot.appendChild(buildDeck(deck, index));
-        });
-
-        const decks = Array.from(document.querySelectorAll(".deck"));
 
         function getActiveDeck() {
           return decks.find((deck) => deck.classList.contains("is-active")) || decks[0];
@@ -510,6 +672,132 @@
               list.appendChild(textColumn);
             });
           });
+        }
+
+        function setupCardTextEditing() {
+          document.querySelectorAll(".card-text-item:not(.line-break) .card-text-item-text").forEach((textSpan) => {
+            if (textSpan._editBound) return;
+            textSpan._editBound = true;
+            const item = textSpan.closest(".card-text-item");
+            const deckId = item.dataset.deckId;
+            const cardIndex = parseInt(item.dataset.cardIndex, 10);
+            const itemIndex = parseInt(item.dataset.itemIndex, 10);
+
+            textSpan.addEventListener("dblclick", (e) => {
+              e.stopPropagation();
+              e.preventDefault();
+              textSpan.contentEditable = "true";
+              textSpan.focus();
+              const x = e.clientX;
+              const y = e.clientY;
+              if (document.caretRangeFromPoint) {
+                const range = document.caretRangeFromPoint(x, y);
+                if (range) {
+                  const sel = window.getSelection();
+                  sel.removeAllRanges();
+                  sel.addRange(range);
+                }
+              }
+              saveActiveEditState(deckId, cardIndex, itemIndex, textSpan.textContent.length, textSpan.textContent.length);
+            });
+
+            function commitToDeckAndStorage(deckId, cardIndex, itemIndex, text) {
+              const deckData = decksData.find((d) => d.id === deckId);
+              if (deckData && deckData.cards && deckData.cards[cardIndex] && deckData.cards[cardIndex].items && deckData.cards[cardIndex].items[itemIndex]) {
+                deckData.cards[cardIndex].items[itemIndex].text = text;
+              }
+              saveEditedText(deckId, cardIndex, itemIndex, text);
+            }
+
+            textSpan.addEventListener("blur", () => {
+              if (textSpan.contentEditable !== "true") return;
+              /* Save current selection/cursor so we can re-select after reload */
+              const sel = window.getSelection();
+              if (sel.rangeCount && textSpan.contains(sel.anchorNode)) {
+                try {
+                  const range = sel.getRangeAt(0);
+                  const len = textSpan.textContent.length;
+                  const start = range.startContainer === textSpan || range.startContainer.parentNode === textSpan
+                    ? range.startOffset
+                    : len;
+                  const end = range.endContainer === textSpan || range.endContainer.parentNode === textSpan
+                    ? range.endOffset
+                    : len;
+                  saveActiveEditState(deckId, cardIndex, itemIndex, Math.min(start, len), Math.min(end, len));
+                } catch (_) {}
+              } else {
+                /* No selection in this span; save cursor at end so we can still restore this line */
+                const len = textSpan.textContent.length;
+                saveActiveEditState(deckId, cardIndex, itemIndex, len, len);
+              }
+              textSpan.contentEditable = "false";
+              const newText = textSpan.textContent.replace(/\s+$/g, "").replace(/^\s+/, "");
+              textSpan.textContent = newText;
+              commitToDeckAndStorage(deckId, cardIndex, itemIndex, newText);
+            });
+
+            textSpan.addEventListener("keydown", (e) => {
+              if (textSpan.contentEditable !== "true") return;
+              if (e.key === "Enter") {
+                e.preventDefault();
+                textSpan.blur();
+              }
+            });
+
+            textSpan.addEventListener("input", () => {
+              if (textSpan.contentEditable !== "true") return;
+              const currentText = textSpan.textContent;
+              commitToDeckAndStorage(deckId, cardIndex, itemIndex, currentText);
+              const sel = window.getSelection();
+              if (sel.rangeCount && textSpan.contains(sel.anchorNode)) {
+                try {
+                  const range = sel.getRangeAt(0);
+                  const len = textSpan.textContent.length;
+                  const start = range.startContainer === textSpan || range.startContainer.parentNode === textSpan
+                    ? range.startOffset
+                    : len;
+                  const end = range.endContainer === textSpan || range.endContainer.parentNode === textSpan
+                    ? range.endOffset
+                    : len;
+                  saveActiveEditState(deckId, cardIndex, itemIndex, Math.min(start, len), Math.min(end, len));
+                } catch (_) {}
+              }
+            });
+          });
+
+          try {
+            const active = localStorage.getItem(ACTIVE_EDIT_KEY);
+            if (active) {
+              const { deckId, cardIndex, itemIndex, selectionStart, selectionEnd } = JSON.parse(active);
+              const item = document.querySelector(
+                `.card-text-item[data-deck-id="${deckId}"][data-card-index="${cardIndex}"][data-item-index="${itemIndex}"]`
+              );
+              if (item) {
+                const textSpan = item.querySelector(".card-text-item-text");
+                if (textSpan) {
+                  if (!textSpan.firstChild) {
+                    textSpan.appendChild(document.createTextNode(textSpan.textContent || ""));
+                  }
+                  textSpan.contentEditable = "true";
+                  textSpan.focus();
+                  if (typeof selectionStart === "number" && typeof selectionEnd === "number" && textSpan.firstChild) {
+                    try {
+                      const len = textSpan.textContent.length;
+                      const s = Math.min(selectionStart, len);
+                      const e = Math.min(selectionEnd, len);
+                      const sel = window.getSelection();
+                      const range = document.createRange();
+                      range.setStart(textSpan.firstChild, s);
+                      range.setEnd(textSpan.firstChild, e);
+                      sel.removeAllRanges();
+                      sel.addRange(range);
+                    } catch (_) {}
+                  }
+                }
+              }
+              clearActiveEditState();
+            }
+          } catch (_) {}
         }
 
         function readCssNumber(varName) {
@@ -754,8 +1042,9 @@
           });
         }
 
-        decks.forEach((deck) => {
-          const toggle = deck.querySelector(".deck-expand-toggle");
+        function runDeckInit() {
+          decks.forEach((deck) => {
+            const toggle = deck.querySelector(".deck-expand-toggle");
           if (toggle) {
             toggle.addEventListener("click", (event) => {
               event.stopPropagation();
@@ -839,6 +1128,25 @@
           }
         });
 
+        const exportDeckDataBtn = document.getElementById("exportDeckDataBtn");
+        if (exportDeckDataBtn) {
+          exportDeckDataBtn.addEventListener("click", exportDeckDataToFile);
+        }
+        const reloadDeckDataBtn = document.getElementById("reloadDeckDataBtn");
+        if (reloadDeckDataBtn) {
+          reloadDeckDataBtn.addEventListener("click", reloadDeckDataFromFile);
+        }
+        const loadDeckDataFileBtn = document.getElementById("loadDeckDataFileBtn");
+        const loadDeckDataFileInput = document.getElementById("loadDeckDataFileInput");
+        if (loadDeckDataFileBtn && loadDeckDataFileInput) {
+          loadDeckDataFileBtn.addEventListener("click", () => loadDeckDataFileInput.click());
+          loadDeckDataFileInput.addEventListener("change", () => {
+            const file = loadDeckDataFileInput.files && loadDeckDataFileInput.files[0];
+            loadDeckDataFromFileInput(file);
+            loadDeckDataFileInput.value = "";
+          });
+        }
+
         document.addEventListener("click", (event) => {
           const rect = pageTitle.getBoundingClientRect();
           const pad = 24;
@@ -901,6 +1209,11 @@
         }
 
         applyLineNumbers();
+        setupCardTextEditing();
+        /* Save selection when still in edit mode so reload can restore it (no blur) */
+        window.addEventListener("pagehide", saveCurrentEditStateIfActive);
+        window.addEventListener("beforeunload", saveCurrentEditStateIfActive);
+        document.addEventListener("selectionchange", saveCurrentEditStateIfActive);
         updateAllTabOffsets();
         updateDeckScales();
         requestAnimationFrame(() => {
@@ -926,6 +1239,9 @@
             updateAllTabOffsets();
           });
         });
+        }
+
+        loadDeckData();
       })();
     </script>
   </body>

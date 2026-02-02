@@ -1,0 +1,349 @@
+{
+  "barbershopCards": [
+    {
+      "tabLabel": "Basic<br />Information",
+      "title": "Basic Information",
+      "image": "png/half a chairs worth.png",
+      "imageAlt": "Half a Chair's Worth",
+      "items": [
+        {
+          "text": "Title"
+        },
+        {
+          "text": "\"Half a Chair's Worth\"",
+          "classes": [
+            "level-2"
+          ]
+        },
+        {
+          "text": "Old titles",
+          "classes": [
+            "level-2"
+          ]
+        },
+        {
+          "text": "\"What We Know, How Do We Know It\"",
+          "classes": [
+            "level-3"
+          ]
+        },
+        {
+          "text": "What is it",
+          "classes": [
+            "section"
+          ]
+        },
+        {
+          "text": "Amusing dialog on a heavy subject",
+          "classes": [
+            "level-2"
+          ]
+        },
+        {
+          "text": "Message",
+          "classes": [
+            "section"
+          ]
+        },
+        {
+          "text": "Know thy self",
+          "classes": [
+            "level-2"
+          ]
+        }
+      ]
+    },
+    {
+      "tabLabel": "Main<br />Characters",
+      "title": "Main Characters",
+      "image": "png/vision.png",
+      "imageAlt": "Vision",
+      "imageClass": "card-text-image-small card-text-image-narrow",
+      "items": [
+        {
+          "text": "George Weatherby"
+        },
+        {
+          "text": "Poetic, \"by the time we published this book, people won't be reading books anymore.\"",
+          "classes": [
+            "level-2"
+          ]
+        },
+        {
+          "text": "Bad barber",
+          "classes": [
+            "level-2"
+          ]
+        },
+        {
+          "text": "Aubrey Frick",
+          "classes": [
+            "section"
+          ]
+        },
+        {
+          "text": "Practical, \"nobody cares anyway.\" Has Bad haircut.",
+          "classes": [
+            "level-2"
+          ]
+        },
+        {
+          "text": "Has Deep cut in conscience",
+          "classes": [
+            "level-2"
+          ]
+        },
+        {
+          "text": "Commonalities",
+          "classes": [
+            "section"
+          ]
+        },
+        {
+          "text": "Assistant professors of mathematics (cover for math).",
+          "classes": [
+            "level-2"
+          ]
+        },
+        {
+          "text": "Floridian",
+          "classes": [
+            "level-2"
+          ]
+        },
+        {
+          "text": "40 year olds",
+          "classes": [
+            "level-2"
+          ]
+        },
+        {
+          "text": "Don't speak Spanish, likely not Cuban, white vs Indian debate (undecided).",
+          "classes": [
+            "level-2"
+          ]
+        },
+        {
+          "text": "Will misinformed and lie while deciding",
+          "classes": [
+            "level-2"
+          ]
+        }
+      ]
+    },
+    {
+      "tabLabel": "Setting<br />&amp; Story",
+      "title": "Setting & Story",
+      "image": "png/shape.png",
+      "imageAlt": "Story shape",
+      "imageClass": "card-text-image-small card-text-image-narrow",
+      "items": [
+        {
+          "text": "Setting"
+        },
+        {
+          "text": "Cuba, before Castro died",
+          "classes": [
+            "level-2"
+          ]
+        },
+        {
+          "text": "One barbershop chair (half a chair's worth)",
+          "classes": [
+            "level-2"
+          ]
+        },
+        {
+          "text": "Missed cruise return; ship flagged Uganda; seven years",
+          "classes": [
+            "level-2"
+          ]
+        },
+        {
+          "text": "Setup",
+          "classes": [
+            "section"
+          ]
+        },
+        {
+          "text": "Aubrey's adult child (20) is visiting",
+          "classes": [
+            "level-2"
+          ]
+        },
+        {
+          "text": "He prepares the wisdom he'll say",
+          "classes": [
+            "level-2"
+          ]
+        },
+        {
+          "text": "Issue (missed cruise or weren't allowed back; got drunk/drugged/illegal; may not be revealed early)",
+          "classes": [
+            "level-2"
+          ]
+        },
+        {
+          "text": "Story flow",
+          "classes": [
+            "section"
+          ]
+        },
+        {
+          "text": "Action rises, drops, then spikes at end",
+          "classes": [
+            "level-2"
+          ]
+        },
+        {
+          "text": "Decide peak and trough",
+          "classes": [
+            "level-2"
+          ]
+        },
+        {
+          "text": "By Act 1 Scene 1 end, we know who they are",
+          "classes": [
+            "level-2"
+          ]
+        }
+      ]
+    },
+    {
+      "tabLabel": "Script<br />Snippets",
+      "title": "Script Snippets",
+      "items": [
+        {
+          "text": "In the chair, Aubrey checks the mirror and avoids eye contact"
+        },
+        {
+          "text": "\"If I stare too long, I start to see the questions.\"",
+          "classes": [
+            "level-2"
+          ]
+        },
+        {
+          "text": "George polishes the clippers and stalls for time",
+          "classes": [
+            "section"
+          ]
+        },
+        {
+          "text": "\"A sharp edge helps, but it doesn't make a decision for you.\"",
+          "classes": [
+            "level-2"
+          ]
+        },
+        {
+          "text": "The shop goes quiet as the cruise story hangs in the air",
+          "classes": [
+            "section"
+          ]
+        },
+        {
+          "text": "\"Seven years is a long time to wait for a boat that won't return.\"",
+          "classes": [
+            "level-2"
+          ]
+        }
+      ]
+    }
+  ],
+  "awayWeGoCards": [
+    {
+      "tabLabel": "Herodotus",
+      "title": "Herodotus",
+      "items": [
+        {
+          "text": "The BIG xxxx Greek historian Herodotus believed that we are what we do, not what we say.",
+          "classes": [
+            "level-2"
+          ]
+        },
+        {
+          "text": "AAA According to him, our worth does not rely upon our appearance or the wardrobe we carry.",
+          "classes": [
+            "level-2"
+          ]
+        },
+        {
+          "text": "Furthermore, our evaluation of moral behavior sometimes lies outside the scope of due diligence.",
+          "classes": [
+            "level-2"
+          ]
+        },
+        {
+          "text": "The inevitability of conflict was evident from the start.",
+          "classes": [
+            "level-2"
+          ]
+        }
+      ]
+    },
+    {
+      "tabLabel": "Example",
+      "title": "Example",
+      "items": [
+        {
+          "text": "A story comes to mind from my operations days at AT&T in which I ran into a clash of cultures that caused confusion daily.",
+          "classes": [
+            "level-2"
+          ]
+        },
+        {
+          "text": "For example, a driver was sent to our location in West Virginia in a super-long limousine, inappropriate in scruffy West Virginia.",
+          "classes": [
+            "level-2"
+          ]
+        },
+        {
+          "text": "I could not convince the driver that money was not the sole criteria for evaluation.",
+          "classes": [
+            "level-2"
+          ]
+        },
+        {
+          "text": "\"It's free. They give you the limo for free!\"",
+          "classes": [
+            "level-2"
+          ]
+        },
+        {
+          "text": "Again and again, she demonstrated that money was the only criteria she considered.",
+          "classes": [
+            "level-2"
+          ]
+        }
+      ]
+    },
+    {
+      "tabLabel": "Conflicts",
+      "title": "Conflicts",
+      "items": [
+        {
+          "text": "Conflicts are inevitable; we all have to navigate backgrounds and situations in the early part of our career.",
+          "classes": [
+            "level-2"
+          ]
+        },
+        {
+          "text": "There are differences in the meaning of words, phrases, and gestures.",
+          "classes": [
+            "level-2"
+          ]
+        },
+        {
+          "text": "It takes repetition to wipe out the past!",
+          "classes": [
+            "level-2"
+          ]
+        }
+      ]
+    },
+    {
+      "tabLabel": "",
+      "title": "",
+      "items": []
+    }
+  ]
+}
