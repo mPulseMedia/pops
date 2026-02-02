@@ -1,0 +1,368 @@
+@import "index_card.css";
+
+:root {
+  --deck-lift: 48px;
+  --deck-top-margin: 16px;
+  --deck-bottom-margin: 16px;
+  --safe-bottom: env(safe-area-inset-bottom);
+  --tab-height: 53px;
+  --expanded-gap: 12px;
+  --expanded-lift: 0px;
+  --expanded-top-row-lift: 40px;
+  --expanded-bottom-row-lift: 70px;
+  --expanded-buffer: 12px;
+  --deck-max-width: min(
+    96vw,
+    calc((100vh - var(--deck-top-margin) - var(--deck-bottom-margin) - var(--safe-bottom)) * 1.6)
+  );
+  --deck-max-height: calc(var(--deck-max-width) / 1.6);
+  --deck-width-base: calc(min(96vw, 1200px) * 0.6667);
+  --deck-height-base: calc(var(--deck-width-base) / 1.6);
+  --deck-width: var(--deck-width-base);
+  --deck-height: var(--deck-height-base);
+  --mini-scale: 0.56;
+  --mini-gap: 10px;
+  --mini-left: 32px;
+  --mini-top: calc(var(--deck-top-margin) - 8px);
+  --title-size: 42px;
+  --deck-content-width: var(--card-base-width);
+  --deck-content-height: calc(var(--stack-base-height) + var(--tab-height));
+}
+
+body {
+  margin: 0;
+  background: #3a3d41;
+  color: #ffffff;
+  font-family: "Patrick Hand", "Avenir Next", "Futura", "Gill Sans", "Helvetica Neue", Arial, sans-serif;
+  font-size: 32px;
+  line-height: 1.4;
+  overflow: hidden;
+}
+
+.page-title {
+  text-align: center;
+  font-size: var(--title-size);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  padding: 8px 16px 0;
+  margin: 0;
+}
+
+.decks {
+  position: relative;
+  width: 100%;
+  height: calc(100vh - var(--deck-top-margin) - var(--deck-bottom-margin) - var(--safe-bottom));
+}
+
+.deck {
+  position: absolute;
+  width: var(--deck-width);
+  height: var(--deck-height);
+  cursor: pointer;
+  user-select: none;
+  display: block;
+  overflow: visible;
+  z-index: 2;
+}
+
+.deck-title {
+  position: absolute;
+  inset: 0;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  font-size: var(--title-size);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  line-height: 1.1;
+  padding: 0 12px;
+  white-space: normal;
+  color: #000000;
+  text-align: center;
+  box-sizing: border-box;
+  pointer-events: auto;
+  z-index: 3;
+}
+
+.deck-expand-toggle {
+  position: absolute;
+  top: -6px;
+  right: auto;
+  left: 0;
+  width: 40px;
+  height: 40px;
+  border-radius: 8px;
+  background: #000000;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.35);
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  z-index: 6;
+  display: none;
+}
+
+.deck-viewport {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.mode-backdrop {
+  position: fixed;
+  inset: 0;
+  background: transparent;
+  z-index: 1;
+  display: none;
+}
+
+body.deck-mode .mode-backdrop {
+  display: block;
+}
+
+.deck-scale {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: var(--deck-content-width);
+  height: var(--deck-content-height);
+  transform: translate(-50%, -50%) scale(var(--deck-scale, 1));
+  transform-origin: center;
+}
+
+.deck-stack-wrap {
+  position: absolute;
+  left: 0;
+  top: var(--tab-height);
+  width: var(--card-base-width);
+  height: var(--stack-base-height);
+}
+
+body.deck-mode .decks {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  margin-top: calc(-1 * var(--deck-lift));
+}
+
+body.mini-mode {
+  overflow-y: auto;
+}
+
+body.deck-mode.deck-expanded {
+  overflow-y: hidden;
+  --deck-top-margin: 0px;
+}
+
+body.deck-mode .deck {
+  position: relative;
+  transform: none;
+  margin: 0 auto;
+}
+
+body.deck-mode .deck:not(.is-active) {
+  display: none;
+}
+
+body.deck-mode .deck-title {
+  display: none;
+}
+
+body.deck-mode .deck-expand-toggle {
+  display: block;
+}
+
+body.deck-mode .deck-scale {
+  left: 50%;
+  top: 0;
+  transform: translate(-50%, 0) scale(var(--deck-scale, 1));
+  transform-origin: top center;
+}
+
+body.deck-mode {
+  --deck-width: var(--deck-max-width);
+  --deck-height: var(--deck-max-height);
+}
+
+body.mini-mode .deck {
+  transform: none;
+}
+
+body.mini-mode .deck-title {
+  display: flex;
+  position: static !important;
+  inset: auto;
+  margin-top: 24px;
+  color: #ffffff;
+  align-self: center;
+}
+
+body.mini-mode {
+  --mini-height-limit: calc(100vh - var(--mini-top) - 24px);
+  --mini-height-base: calc(var(--deck-height-base) * 0.58);
+  --deck-height: min(var(--mini-height-base), var(--mini-height-limit));
+  --deck-width: calc(var(--deck-height) * 1.6);
+}
+
+body.mini-mode .decks {
+  display: grid;
+  grid-template-columns: repeat(
+    auto-fit,
+    minmax(var(--deck-width), 1fr)
+  );
+  gap: var(--mini-gap);
+  align-content: start;
+  align-items: start;
+  justify-content: start;
+  padding: var(--mini-top) var(--mini-left) 0;
+  box-sizing: border-box;
+}
+
+body.mini-mode .deck {
+  position: relative;
+  left: auto;
+  top: auto;
+  margin: 0;
+  justify-self: start;
+  display: flex !important;
+  flex-direction: column;
+  align-items: center;
+  width: var(--deck-width);
+  height: auto !important;
+}
+
+body.mini-mode .deck-viewport {
+  flex: 0 0 auto;
+  width: var(--deck-width);
+  height: var(--deck-height);
+}
+
+.deck.is-animating {
+  transition: transform 520ms ease;
+  will-change: transform;
+}
+
+body.deck-mode .deck {
+  display: block;
+}
+
+body.deck-mode.expand-animating .deck .card-layer,
+body.deck-mode.expand-collapsing .deck .card-layer {
+  transition: transform 260ms ease;
+}
+
+body.deck-mode .deck.is-expanded .card-layer {
+  transform: translate(
+      calc(var(--expand-x) - var(--card-left)),
+      calc(var(--expand-y) - var(--card-top))
+    )
+    scale(var(--expanded-scale, 0.5));
+  transform-origin: top left;
+}
+
+body.deck-mode .deck.is-expanded .deck-scale {
+  left: 0;
+  top: 0;
+  transform: scale(1);
+  transform-origin: top left;
+}
+
+body.deck-mode.deck-expanded .deck-scale {
+  top: calc(-1 * var(--deck-lift));
+}
+
+body.deck-mode .deck.is-expanded .card-layer .card,
+body.deck-mode .deck.is-expanded .card-layer .tab {
+  filter: none;
+}
+
+body.deck-mode .deck.is-expanded .card-layer {
+  pointer-events: auto !important;
+}
+
+body.deck-mode .deck.is-expanded .card-layer .card,
+body.deck-mode .deck.is-expanded .card-layer .tab {
+  pointer-events: auto !important;
+}
+
+body.deck-mode .deck.is-expanded .card-layer[data-color="red"] {
+  --expand-x: var(--expanded-offset-x);
+  --expand-y: calc(var(--expanded-offset-y) - var(--expanded-top-row-lift));
+  --expand-delay: 0ms;
+}
+
+body.deck-mode .deck.is-expanded .card-layer[data-color="yellow"] {
+  --expand-x: calc(var(--expanded-offset-x) + var(--expanded-step-x));
+  --expand-y: calc(var(--expanded-offset-y) - var(--expanded-top-row-lift));
+  --expand-delay: 30ms;
+}
+
+body.deck-mode .deck.is-expanded .card-layer[data-color="green"] {
+  --expand-x: var(--expanded-offset-x);
+  --expand-y: calc(var(--expanded-offset-y) + var(--expanded-step-y) - var(--expanded-bottom-row-lift));
+  --expand-delay: 60ms;
+}
+
+body.deck-mode .deck.is-expanded .card-layer[data-color="blue"] {
+  --expand-x: calc(var(--expanded-offset-x) + var(--expanded-step-x));
+  --expand-y: calc(var(--expanded-offset-y) + var(--expanded-step-y) - var(--expanded-bottom-row-lift));
+  --expand-delay: 90ms;
+}
+
+body.deck-mode.expand-animating .deck .card-layer,
+body.deck-mode.expand-collapsing .deck .card-layer {
+  transition: transform 520ms cubic-bezier(0.22, 1, 0.36, 1);
+  transition-delay: var(--expand-delay, 0ms);
+  will-change: transform;
+}
+
+.card-text-image {
+  float: right;
+  width: 33%;
+  max-width: 240px;
+  height: auto;
+  margin: 8px 0 8px 16px;
+  border-radius: 8px;
+  cursor: zoom-in;
+  pointer-events: auto;
+}
+
+.card-text-image-small {
+  width: 27%;
+  max-width: 180px;
+  margin-top: 8px;
+}
+
+.card-text.has-image .card-text-list {
+  right: 38%;
+}
+
+.card-text.has-image .card-text-image-narrow + .card-text-list,
+.card-text.has-image .card-text-image-narrow ~ .card-text-list {
+  right: 21%;
+}
+
+.image-lightbox {
+  position: fixed;
+  inset: 0;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.8);
+  z-index: 10000;
+  padding: 24px;
+}
+
+.image-lightbox.open {
+  display: flex;
+}
+
+.image-lightbox img {
+  max-width: 92vw;
+  max-height: 92vh;
+  width: auto;
+  height: auto;
+  border-radius: 12px;
+  box-shadow: 0 18px 48px rgba(0, 0, 0, 0.6);
+}

@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Decks</title>
-    <link rel="stylesheet" href="shared.css" />
+    <link rel="stylesheet" href="old/shared.css" />
     <link rel="stylesheet" href="index.css" />
   </head>
   <body class="mini-mode">
@@ -15,7 +15,7 @@
     </div>
     <main class="decks" id="decksRoot" aria-label="Decks"></main>
 
-    <script src="shared.js"></script>
+    <script src="old/shared.js"></script>
     <script>
       PopsShared.setupAutoReload({ intervalMs: 4000, scrollKey: "scroll-index-card3" });
       (function () {
@@ -31,29 +31,37 @@
         const imageLightboxImg = imageLightbox ? imageLightbox.querySelector("img") : null;
         let lastMiniScroll = 0;
 
+        /* Leftmost card is ALWAYS index 0 (yellow). Do not overwrite --card-left anywhere. */
+        const LEFTMOST_CARD_INDEX = 0;
+        const YELLOW_CARD_INDEX = LEFTMOST_CARD_INDEX;
+        const RED_CARD_INDEX = 1;
+        const GREEN_CARD_INDEX = 2;
+        const BLUE_CARD_INDEX = 3;
+
         const layerLayouts = [
           {
-            color: "red",
+            color: "yellow", /* ALWAYS leftmost: --card-left 0px must stay fixed */
             style:
               "--card-left: 0px; --card-top: 0px; --tab-offset-x: 50px; --tab-offset-y: -52px; --layer-z: 90; --text-list-top: 22px;",
           },
           {
-            color: "yellow",
+            color: "red", /* second from left */
             style:
               "--card-left: 36px; --card-top: -17px; --tab-offset-x: 292px; --tab-offset-y: -52px; --layer-z: 70; --text-title-top: -32px; --text-list-top: 24px;",
           },
           {
-            color: "green",
+            color: "green", /* third from left */
             style:
               "--card-left: 72px; --card-top: -34px; --tab-offset-x: 534px; --tab-offset-y: -52px; --layer-z: 50; --text-title-top: -32px; --text-list-top: 24px;",
           },
           {
-            color: "blue",
+            color: "blue", /* rightmost */
             style:
               "--card-left: 108px; --card-top: -51px; --tab-offset-x: 776px; --tab-offset-y: -52px; --layer-z: 30; --text-title-top: -32px; --text-list-top: 24px;",
           },
         ];
 
+        /* Half a Chair's Worth: index 0 = yellow (leftmost), index 1 = red, then green, blue */
         const barbershopCards = [
           {
             tabLabel: "Basic<br />Information",
@@ -142,8 +150,9 @@
           items: [],
         }));
 
+        /* Away We Go deck: index 0 = yellow card, index 1 = red, index 2 = green, index 3 = blue */
         const awayWeGoCards = layerLayouts.map((layout, index) => {
-          if (index === 0) {
+          if (index === YELLOW_CARD_INDEX) {
             return {
               tabLabel: "Herodotus",
               title: "Herodotus",
@@ -155,7 +164,7 @@
               ],
             };
           }
-          if (index === 1) {
+          if (index === RED_CARD_INDEX) {
             return {
               tabLabel: "Example",
               title: "Example",
@@ -168,7 +177,7 @@
               ],
             };
           }
-          if (index === 2) {
+          if (index === GREEN_CARD_INDEX) {
             return {
               tabLabel: "Conflicts",
               title: "Conflicts",
@@ -200,7 +209,7 @@
           {
             id: "third",
             title: "3",
-            miniTitle: "3",
+            miniTitle: "", /* no name: All Projects shows only "3)" */
             isActive: false,
             cards: emptyCards,
           },
@@ -301,15 +310,16 @@
           localStorage.setItem(IMAGE_LIGHTBOX_KEY, JSON.stringify({ open: false }));
         }
 
-        function buildDeck(deckData) {
+        function buildDeck(deckData, index) {
           const deck = createEl("div", "deck");
           if (deckData.isActive) {
             deck.classList.add("is-active");
           }
           deck.dataset.deck = deckData.id;
-          deck.dataset.title = deckData.title;
+          deck.dataset.title = deckData.title || deckData.miniTitle || String(index + 1);
 
-          const title = createEl("div", "deck-title", deckData.miniTitle);
+          const titleText = `${index + 1})${deckData.miniTitle ? " " + deckData.miniTitle : ""}`;
+          const title = createEl("div", "deck-title", titleText);
           title.setAttribute("aria-hidden", "true");
           const expandToggle = createEl("button", "deck-expand-toggle");
           expandToggle.type = "button";
@@ -337,8 +347,8 @@
           return deck;
         }
 
-        decksData.forEach((deck) => {
-          decksRoot.appendChild(buildDeck(deck));
+        decksData.forEach((deck, index) => {
+          decksRoot.appendChild(buildDeck(deck, index));
         });
 
         const decks = Array.from(document.querySelectorAll(".deck"));
@@ -351,6 +361,7 @@
           return `${SELECT_KEY}-${deckName}`;
         }
 
+        /* Slots set top + z only. Horizontal position is fixed: yellow always leftmost (0px), then red, green, blue. */
         const slots = {
           front: { cardTop: "0px", layerZ: 90 },
           yellow: { cardTop: "-8px", layerZ: 70 },
@@ -371,6 +382,7 @@
           if (!layer) return;
           layer.style.setProperty("--card-top", slot.cardTop);
           layer.style.setProperty("--layer-z", slot.layerZ);
+          /* Do not set --card-left here: leftmost (yellow) must always stay at 0px */
         }
 
         function updateTabOffsets(layerMap, deck) {
@@ -379,13 +391,13 @@
           const tabWidth = 235;
           const inset = Math.round(cardWidth * 0.04);
           const available = Math.max(cardWidth - tabWidth - inset * 2, 0);
-          const colors = ["red", "yellow", "green", "blue"];
+          /* Order: yellow leftmost, then red, green, blue — tabs distributed evenly */
+          const colors = ["yellow", "red", "green", "blue"];
+          const n = colors.length;
           colors.forEach((color, index) => {
             const layer = layerMap[color];
-            if (!layer) {
-              return;
-            }
-            const left = colors.length > 1 ? inset + (available * index) / (colors.length - 1) : inset;
+            if (!layer) return;
+            const left = n > 1 ? inset + (available * index) / (n - 1) : inset;
             layer.style.setProperty("--tab-offset-x", `${left}px`);
           });
         }
@@ -399,7 +411,7 @@
         function setOrder(order, deck) {
           const layerMap = buildLayerMap(deck);
           applyLayer(layerMap[order[0]], slots.front);
-          applyLayer(layerMap[order[1]], slots.yellow);
+          applyLayer(layerMap[order[1]], slots.yellow); /* second position in fan */
           applyLayer(layerMap[order[2]], slots.green);
           applyLayer(layerMap[order[3]], slots.back);
           Object.values(layerMap).forEach((layer) => layer.classList.remove("is-front"));
@@ -453,12 +465,41 @@
 
               const textColumn = document.createElement("div");
               textColumn.className = "line-text-column";
+              const toRoman = (n) => {
+                if (n < 1 || n > 20) return String(n);
+                const map = [[10, "x"], [9, "ix"], [5, "v"], [4, "iv"], [1, "i"]];
+                let s = "";
+                for (const [val, sym] of map) {
+                  while (n >= val) {
+                    s += sym;
+                    n -= val;
+                  }
+                }
+                return s;
+              };
+              let topNum = 0;
+              let level2Num = 0;
+              let level3Num = 0;
               items.forEach((item) => {
                 item.querySelectorAll(".alpha-marker").forEach((node) => node.remove());
                 if (!item.classList.contains("line-break") && !item.querySelector(".bullet-marker")) {
+                  let label;
+                  if (item.classList.contains("level-3")) {
+                    level3Num += 1;
+                    label = toRoman(level3Num) + ")";
+                  } else if (item.classList.contains("level-2")) {
+                    level2Num += 1;
+                    level3Num = 0;
+                    label = String.fromCharCode(64 + level2Num) + ")";
+                  } else {
+                    topNum += 1;
+                    level2Num = 0;
+                    level3Num = 0;
+                    label = `${topNum})`;
+                  }
                   const bullet = document.createElement("span");
                   bullet.className = "bullet-marker";
-                  bullet.textContent = "—";
+                  bullet.textContent = label;
                   item.prepend(bullet);
                 }
                 textColumn.appendChild(item);
@@ -512,9 +553,10 @@
           });
         }
 
+        /* Order = [leftmost, …, rightmost]. Default: yellow (card 1) leftmost, blue rightmost. */
         const orderMap = {
-          red: ["red", "yellow", "green", "blue"],
           yellow: ["yellow", "red", "green", "blue"],
+          red: ["red", "yellow", "green", "blue"],
           green: ["green", "red", "yellow", "blue"],
           blue: ["blue", "red", "yellow", "green"],
         };
@@ -607,6 +649,21 @@
             const savedExpanded = localStorage.getItem(EXPANDED_KEY) === "1";
             setExpanded(savedExpanded, false);
           }
+        }
+
+        const colorToIndex = { yellow: YELLOW_CARD_INDEX, red: RED_CARD_INDEX, green: GREEN_CARD_INDEX, blue: BLUE_CARD_INDEX };
+
+        function getFrontCardData() {
+          const active = getActiveDeck();
+          if (!active) return null;
+          const deckId = active.dataset.deck;
+          const deckData = decksData.find((d) => d.id === deckId);
+          if (!deckData || !deckData.cards) return null;
+          const saved = localStorage.getItem(selectionKeyFor(deckId));
+          const order = orderMap[saved] || orderMap.yellow;
+          const frontIndex = colorToIndex[order[0]];
+          if (frontIndex === undefined) return null;
+          return deckData.cards[frontIndex] || null;
         }
 
         function setMode(mode) {
@@ -753,7 +810,7 @@
               .querySelectorAll(".card, .tab")
               .forEach((el) => el.addEventListener("click", handleExpandPick));
           });
-          ["red", "yellow", "green", "blue"].forEach((color) => {
+          ["yellow", "red", "green", "blue"].forEach((color) => {
             deck
               .querySelectorAll(
                 `.card-layer[data-color='${color}'] .card, .card-layer[data-color='${color}'] .tab`
@@ -856,7 +913,7 @@
           if (saved && orderMap[saved]) {
             setOrder(orderMap[saved], deck);
           } else {
-            setOrder(orderMap.red, deck);
+            setOrder(orderMap.yellow, deck);
           }
         });
 
