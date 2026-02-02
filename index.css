@@ -228,7 +228,7 @@ body.cards-mini .card-stack .tab {
   height: var(--card-base-height);
   border-radius: 10px;
   border: none;
-  box-shadow: 0 -28px 56px rgba(0, 0, 0, 0.22);
+  box-shadow: 12px -28px 56px rgba(0, 0, 0, 0.22);
   padding: 46px 64px 68px;
   font-family: "Bradley Hand", "Noteworthy", "Chalkboard SE", "Segoe Print", "Comic Sans MS", cursive;
   background-color: var(--card-color, #f29aa9);
@@ -255,7 +255,7 @@ body.cards-mini .card-stack .tab {
 }
 
 .tab {
-  filter: drop-shadow(0 -18px 36px rgba(0, 0, 0, 0.2));
+  filter: drop-shadow(12px -18px 36px rgba(0, 0, 0, 0.2));
 }
 
 .card-lines {
@@ -497,49 +497,107 @@ body {
   overflow: hidden;
 }
 
+.title-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin: 0 0 0.5rem;
+  padding: 0 16px;
+  position: relative;
+  z-index: 10;
+}
+
 .page-title {
-  text-align: center;
   font-size: var(--title-size);
   font-weight: 700;
   letter-spacing: 0.08em;
-  padding: 8px 16px 0;
+  padding: 8px 16px;
   margin: 0;
 }
 
-.export-row {
-  text-align: center;
-  margin: 0 0 0.5rem;
-  font-size: 0.9rem;
+.title-row-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  border: 2px solid currentColor;
+  border-radius: 4px;
+  background: transparent;
   color: var(--text-muted, #666);
+  cursor: pointer;
+  font-size: 1.25rem;
+  line-height: 1;
 }
 
-.export-deck-data {
-  background: none;
-  border: none;
+.title-row-btn:hover {
+  color: var(--text, #111);
+  background: rgba(0, 0, 0, 0.06);
+}
+
+.title-row-btn-icon {
+  display: block;
+}
+
+/* All projects mode: show export/reload, hide back/expand */
+body.mini-mode .title-row-btn.export-deck-data,
+body.mini-mode .title-row-btn.reload-deck-data {
+  display: inline-flex;
+}
+body.mini-mode .title-row-back,
+body.mini-mode .title-row-expand {
+  display: none;
+}
+
+/* Deck mode: hide export/reload, show back + title + expand, space between */
+body.deck-mode .title-row-btn.export-deck-data,
+body.deck-mode .title-row-btn.reload-deck-data {
+  display: none;
+}
+body.deck-mode .title-row-back,
+body.deck-mode .title-row-expand {
+  display: inline-flex;
+}
+body.deck-mode .title-row {
+  justify-content: space-between;
+}
+
+.title-row-back {
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
   padding: 0;
-  font: inherit;
-  color: inherit;
-  text-decoration: underline;
+  border: 2px solid currentColor;
+  border-radius: 4px;
+  background: transparent;
+  color: var(--text-muted, #666);
+  font-size: 1.25rem;
+  line-height: 1;
   cursor: pointer;
 }
-
-.export-deck-data:hover {
+.title-row-back:hover {
   color: var(--text, #111);
+  background: rgba(0, 0, 0, 0.06);
 }
 
-.reload-deck-data {
-  background: none;
-  border: none;
+.title-row-expand {
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
   padding: 0;
-  font: inherit;
-  color: inherit;
-  text-decoration: underline;
+  border: 2px solid currentColor;
+  border-radius: 4px;
+  background: transparent;
+  color: var(--text-muted, #666);
   cursor: pointer;
-  margin-left: 0.25rem;
 }
-
-.reload-deck-data:hover {
+.title-row-expand:hover {
   color: var(--text, #111);
+  background: rgba(0, 0, 0, 0.06);
 }
 
 .decks {
@@ -577,23 +635,6 @@ body {
   box-sizing: border-box;
   pointer-events: auto;
   z-index: 3;
-}
-
-.deck-expand-toggle {
-  position: absolute;
-  top: -6px;
-  right: auto;
-  left: 0;
-  width: 40px;
-  height: 40px;
-  border-radius: 8px;
-  background: #000000;
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.35);
-  border: none;
-  padding: 0;
-  cursor: pointer;
-  z-index: 6;
-  display: none;
 }
 
 .deck-viewport {
@@ -661,10 +702,6 @@ body.deck-mode .deck:not(.is-active) {
 
 body.deck-mode .deck-title {
   display: none;
-}
-
-body.deck-mode .deck-expand-toggle {
-  display: block;
 }
 
 body.deck-mode .deck-scale {

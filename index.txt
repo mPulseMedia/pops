@@ -255,13 +255,13 @@
       "title": "Herodotus",
       "items": [
         {
-          "text": "The BIG xxxx Greek historian Herodotus believed that we are what we do, not what we say.",
+          "text": "The Greek historian Herodotus believed that we are what we do, not what we say.",
           "classes": [
             "level-2"
           ]
         },
         {
-          "text": "AAA According to him, our worth does not rely upon our appearance or the wardrobe we carry.",
+          "text": "According to him, our worth does not rely upon our appearance or the wardrobe we carry.",
           "classes": [
             "level-2"
           ]
