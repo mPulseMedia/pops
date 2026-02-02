@@ -163,6 +163,12 @@
           items: [],
         }));
 
+        /* Deck 3 Comebacks: yellow card = Too cheap with "how's your mother" */
+        const comebacksCards = [
+          { tabLabel: "Too cheap", title: "Too cheap", items: [{ text: "how's your mother" }] },
+          ...layerLayouts.slice(1).map(() => ({ tabLabel: "", title: "", items: [] })),
+        ];
+
         /* Away We Go deck: index 0 = yellow, 1 = red, 2 = green, 3 = blue. Fallback when index.txt missing. */
         const defaultAwayWeGoCards = layerLayouts.map((layout, index) => {
           if (index === YELLOW_CARD_INDEX) {
@@ -204,7 +210,35 @@
           return { tabLabel: "", title: "", items: [] };
         });
 
-        function loadDecksFromData(barbershopCards, awayWeGoCards, fromFile) {
+        const defaultDecksData = [
+          { id: "barbershop", title: "Half a Chair's Worth", miniTitle: "Half a Chair's Worth", isActive: true, cards: defaultBarbershopCards },
+          { id: "new", title: "Away We Go", miniTitle: "Away We Go", isActive: false, cards: defaultAwayWeGoCards },
+          { id: "third", title: "Comebacks", miniTitle: "Comebacks", isActive: false, cards: comebacksCards },
+        ];
+
+        function normalizeToDecksData(data) {
+          if (data && Array.isArray(data.decks) && data.decks.length > 0) {
+            return data.decks.map((d, i) => ({
+              id: d.id != null ? d.id : "deck-" + i,
+              title: d.title != null ? d.title : "",
+              miniTitle: d.miniTitle != null ? d.miniTitle : (d.title != null ? d.title : ""),
+              isActive: i === 0,
+              cards: Array.isArray(d.cards) ? d.cards : [],
+            }));
+          }
+          if (data && Array.isArray(data.barbershopCards) && Array.isArray(data.awayWeGoCards)) {
+            return [
+              { id: "barbershop", title: "Half a Chair's Worth", miniTitle: "Half a Chair's Worth", isActive: true, cards: data.barbershopCards },
+              { id: "new", title: "Away We Go", miniTitle: "Away We Go", isActive: false, cards: data.awayWeGoCards },
+              { id: "third", title: "Comebacks", miniTitle: "Comebacks", isActive: false, cards: (data.comebacksCards && Array.isArray(data.comebacksCards)) ? data.comebacksCards : comebacksCards },
+            ];
+          }
+          return null;
+        }
+
+        function loadDecksFromData(data, fromFile) {
+          const list = normalizeToDecksData(data);
+          decksData = list != null ? list : defaultDecksData;
           if (fromFile) {
             localStorage.removeItem(CARD_EDITS_KEY);
             localStorage.removeItem(ACTIVE_EDIT_KEY);
@@ -212,11 +246,6 @@
           while (decksRoot.firstChild) {
             decksRoot.removeChild(decksRoot.firstChild);
           }
-          decksData = [
-            { id: "barbershop", title: "Half a Chair's Worth", miniTitle: "Half a Chair's Worth", isActive: true, cards: barbershopCards },
-            { id: "new", title: "Away We Go", miniTitle: "Away We Go", isActive: false, cards: awayWeGoCards },
-            { id: "third", title: "3", miniTitle: "", isActive: false, cards: emptyCards },
-          ];
           decksData.forEach((deck, index) => {
             decksRoot.appendChild(buildDeck(deck, index));
           });
@@ -234,16 +263,16 @@
           fetch(url, { cache: "no-store" })
             .then((r) => (r.ok ? r.json() : Promise.reject()))
             .then((data) => {
-              if (data && Array.isArray(data.barbershopCards) && Array.isArray(data.awayWeGoCards)) {
-                loadDecksFromData(data.barbershopCards, data.awayWeGoCards, true);
+              if (normalizeToDecksData(data) != null) {
+                loadDecksFromData(data, true);
                 setDeckDataSource("(loaded from index.txt)");
               } else {
-                loadDecksFromData(defaultBarbershopCards, defaultAwayWeGoCards, false);
+                loadDecksFromData(null, false);
                 setDeckDataSource("(using built-in data; serve over HTTP or use Load from file)");
               }
             })
             .catch(() => {
-              loadDecksFromData(defaultBarbershopCards, defaultAwayWeGoCards, false);
+              loadDecksFromData(null, false);
               setDeckDataSource("(using built-in data; serve over HTTP or use Load from file)");
             });
         }
@@ -253,16 +282,16 @@
           fetch(url, { cache: "no-store" })
             .then((r) => (r.ok ? r.json() : Promise.reject()))
             .then((data) => {
-              if (data && Array.isArray(data.barbershopCards) && Array.isArray(data.awayWeGoCards)) {
-                loadDecksFromData(data.barbershopCards, data.awayWeGoCards, true);
+              if (normalizeToDecksData(data) != null) {
+                loadDecksFromData(data, true);
                 setDeckDataSource("(loaded from index.txt)");
               } else {
-                loadDecksFromData(defaultBarbershopCards, defaultAwayWeGoCards, false);
+                loadDecksFromData(null, false);
                 setDeckDataSource("(reload failed; using built-in data)");
               }
             })
             .catch(() => {
-              loadDecksFromData(defaultBarbershopCards, defaultAwayWeGoCards, false);
+              loadDecksFromData(null, false);
               setDeckDataSource("(reload failed, e.g. file:// — use Load from file)");
             });
         }
@@ -273,11 +302,11 @@
           reader.onload = () => {
             try {
               const data = JSON.parse(reader.result);
-              if (data && Array.isArray(data.barbershopCards) && Array.isArray(data.awayWeGoCards)) {
-                loadDecksFromData(data.barbershopCards, data.awayWeGoCards, true);
+              if (normalizeToDecksData(data) != null) {
+                loadDecksFromData(data, true);
                 setDeckDataSource("(loaded from file)");
               } else {
-                setDeckDataSource("(invalid format: need barbershopCards and awayWeGoCards)");
+                setDeckDataSource("(invalid format: need decks array or barbershopCards + awayWeGoCards)");
               }
             } catch (_) {
               setDeckDataSource("(invalid JSON)");
@@ -326,12 +355,51 @@
           edits[`${deckId}-${cardIndex}-${itemIndex}`] = text;
           localStorage.setItem(CARD_EDITS_KEY, JSON.stringify(edits));
         }
+        function getEditedTabLabel(deckId, cardIndex) {
+          return getCardEdits()[`${deckId}-${cardIndex}-tabLabel`];
+        }
+        function saveEditedTabLabel(deckId, cardIndex, text) {
+          const edits = getCardEdits();
+          edits[`${deckId}-${cardIndex}-tabLabel`] = text;
+          localStorage.setItem(CARD_EDITS_KEY, JSON.stringify(edits));
+        }
+        function getEditedCardTitle(deckId, cardIndex) {
+          return getCardEdits()[`${deckId}-${cardIndex}-cardTitle`];
+        }
+        function saveEditedCardTitle(deckId, cardIndex, text) {
+          const edits = getCardEdits();
+          edits[`${deckId}-${cardIndex}-cardTitle`] = text;
+          localStorage.setItem(CARD_EDITS_KEY, JSON.stringify(edits));
+        }
         function saveActiveEditState(deckId, cardIndex, itemIndex, selStart, selEnd) {
           try {
             localStorage.setItem(ACTIVE_EDIT_KEY, JSON.stringify({
+              type: "item",
               deckId,
               cardIndex,
               itemIndex,
+              selectionStart: selStart,
+              selectionEnd: selEnd,
+            }));
+          } catch (_) {}
+        }
+        function saveActiveEditStateTab(deckId, cardIndex, selStart, selEnd) {
+          try {
+            localStorage.setItem(ACTIVE_EDIT_KEY, JSON.stringify({
+              type: "tab",
+              deckId,
+              cardIndex,
+              selectionStart: selStart,
+              selectionEnd: selEnd,
+            }));
+          } catch (_) {}
+        }
+        function saveActiveEditStateCardTitle(deckId, cardIndex, selStart, selEnd) {
+          try {
+            localStorage.setItem(ACTIVE_EDIT_KEY, JSON.stringify({
+              type: "cardTitle",
+              deckId,
+              cardIndex,
               selectionStart: selStart,
               selectionEnd: selEnd,
             }));
@@ -344,37 +412,39 @@
         /** Save current selection/cursor when still in edit mode (e.g. before reload without blur). */
         function saveCurrentEditStateIfActive() {
           const el = document.activeElement;
-          if (!el || !el.classList || !el.classList.contains("card-text-item-text") || el.contentEditable !== "true") {
+          if (!el || el.contentEditable !== "true") return;
+          const { start, end } = getSelectionOffsets(el);
+
+          if (el.classList && el.classList.contains("card-text-item-text")) {
+            const item = el.closest(".card-text-item");
+            if (!item || !item.dataset.deckId) return;
+            const deckId = item.dataset.deckId;
+            const cardIndex = parseInt(item.dataset.cardIndex, 10);
+            const itemIndex = parseInt(item.dataset.itemIndex, 10);
+            saveActiveEditState(deckId, cardIndex, itemIndex, start, end);
             return;
           }
-          const item = el.closest(".card-text-item");
-          if (!item || !item.dataset.deckId) return;
-          const deckId = item.dataset.deckId;
-          const cardIndex = parseInt(item.dataset.cardIndex, 10);
-          const itemIndex = parseInt(item.dataset.itemIndex, 10);
-          const len = el.textContent.length;
-          let start = len;
-          let end = len;
-          const sel = window.getSelection();
-          if (sel.rangeCount && el.contains(sel.anchorNode)) {
-            try {
-              const range = sel.getRangeAt(0);
-              start = range.startContainer === el || range.startContainer.parentNode === el ? range.startOffset : len;
-              end = range.endContainer === el || range.endContainer.parentNode === el ? range.endOffset : len;
-              start = Math.min(start, len);
-              end = Math.min(end, len);
-            } catch (_) {}
+          if (el.classList && el.classList.contains("card-tab-editable") && el.dataset.deckId) {
+            saveActiveEditStateTab(el.dataset.deckId, parseInt(el.dataset.cardIndex, 10), start, end);
+            return;
           }
-          saveActiveEditState(deckId, cardIndex, itemIndex, start, end);
+          if (el.classList && el.classList.contains("card-title-editable") && el.dataset.deckId) {
+            saveActiveEditStateCardTitle(el.dataset.deckId, parseInt(el.dataset.cardIndex, 10), start, end);
+            return;
+          }
         }
 
         /** Build deck data with all localStorage edits applied, for export as index.txt. */
         function getExportDeckData() {
-          if (!decksData || decksData.length < 2) return null;
+          if (!decksData || decksData.length < 1) return null;
           const edits = getCardEdits();
           function applyEditsToCards(deckId, cards) {
             const out = JSON.parse(JSON.stringify(cards));
             out.forEach((card, cardIndex) => {
+              const tabKey = `${deckId}-${cardIndex}-tabLabel`;
+              const titleKey = `${deckId}-${cardIndex}-cardTitle`;
+              if (edits[tabKey] != null) card.tabLabel = edits[tabKey];
+              if (edits[titleKey] != null) card.title = edits[titleKey];
               (card.items || []).forEach((item, itemIndex) => {
                 const key = `${deckId}-${cardIndex}-${itemIndex}`;
                 if (edits[key] != null) {
@@ -385,8 +455,12 @@
             return out;
           }
           return {
-            barbershopCards: applyEditsToCards("barbershop", decksData[0].cards),
-            awayWeGoCards: applyEditsToCards("new", decksData[1].cards),
+            decks: decksData.map((d) => ({
+              id: d.id,
+              title: d.title,
+              miniTitle: d.miniTitle,
+              cards: applyEditsToCards(d.id, d.cards),
+            })),
           };
         }
 
@@ -428,10 +502,11 @@
           layer.dataset.color = layerConfig.color;
           layer.setAttribute("style", layerConfig.style);
 
-          const tab = createEl("div", `tab card-${layerConfig.color}-tab tab-label`);
-          if (cardData.tabLabel) {
-            tab.innerHTML = cardData.tabLabel;
-          }
+          const tab = createEl("div", `tab card-${layerConfig.color}-tab tab-label card-tab-editable`);
+          tab.dataset.deckId = deckId;
+          tab.dataset.cardIndex = String(cardIndex);
+          const tabContent = getEditedTabLabel(deckId, cardIndex) ?? cardData.tabLabel ?? "";
+          if (tabContent) tab.innerHTML = tabContent;
 
           const card = createEl("div", `card card-${layerConfig.color}-primary`);
           const lines = createEl("div", "card-lines");
@@ -439,7 +514,10 @@
           buildLines(lines);
 
           const text = createEl("div", "card-text");
-          const title = createEl("div", "card-text-title", cardData.title || "");
+          const titleContent = getEditedCardTitle(deckId, cardIndex) ?? cardData.title ?? "";
+          const title = createEl("div", "card-text-title card-title-editable", titleContent);
+          title.dataset.deckId = deckId;
+          title.dataset.cardIndex = String(cardIndex);
           const list = buildTextList(cardData.items || [], deckId, cardIndex);
 
           text.appendChild(title);
@@ -770,37 +848,202 @@
           try {
             const active = localStorage.getItem(ACTIVE_EDIT_KEY);
             if (active) {
-              const { deckId, cardIndex, itemIndex, selectionStart, selectionEnd } = JSON.parse(active);
-              const item = document.querySelector(
-                `.card-text-item[data-deck-id="${deckId}"][data-card-index="${cardIndex}"][data-item-index="${itemIndex}"]`
-              );
-              if (item) {
-                const textSpan = item.querySelector(".card-text-item-text");
-                if (textSpan) {
-                  if (!textSpan.firstChild) {
-                    textSpan.appendChild(document.createTextNode(textSpan.textContent || ""));
+              const parsed = JSON.parse(active);
+              const type = parsed.type || "item";
+              const deckId = parsed.deckId;
+              const selectionStart = parsed.selectionStart;
+              const selectionEnd = parsed.selectionEnd;
+
+              function restoreSelection(el, s, e) {
+                if (typeof s !== "number" || typeof e !== "number" || !el) return;
+                if (!el.firstChild) el.appendChild(document.createTextNode(el.textContent || ""));
+                try {
+                  const len = el.textContent.length;
+                  const start = Math.min(s, len);
+                  const end = Math.min(e, len);
+                  const sel = window.getSelection();
+                  const range = document.createRange();
+                  range.setStart(el.firstChild, start);
+                  range.setEnd(el.firstChild, end);
+                  sel.removeAllRanges();
+                  sel.addRange(range);
+                } catch (_) {}
+              }
+
+              if (type === "item") {
+                const itemIndex = parsed.itemIndex;
+                const cardIndex = parsed.cardIndex;
+                const item = document.querySelector(
+                  `.card-text-item[data-deck-id="${deckId}"][data-card-index="${cardIndex}"][data-item-index="${itemIndex}"]`
+                );
+                if (item) {
+                  const textSpan = item.querySelector(".card-text-item-text");
+                  if (textSpan) {
+                    if (!textSpan.firstChild) textSpan.appendChild(document.createTextNode(textSpan.textContent || ""));
+                    textSpan.contentEditable = "true";
+                    textSpan.focus();
+                    restoreSelection(textSpan, selectionStart, selectionEnd);
                   }
-                  textSpan.contentEditable = "true";
-                  textSpan.focus();
-                  if (typeof selectionStart === "number" && typeof selectionEnd === "number" && textSpan.firstChild) {
-                    try {
-                      const len = textSpan.textContent.length;
-                      const s = Math.min(selectionStart, len);
-                      const e = Math.min(selectionEnd, len);
-                      const sel = window.getSelection();
-                      const range = document.createRange();
-                      range.setStart(textSpan.firstChild, s);
-                      range.setEnd(textSpan.firstChild, e);
-                      sel.removeAllRanges();
-                      sel.addRange(range);
-                    } catch (_) {}
-                  }
+                }
+              } else if (type === "tab") {
+                const cardIndex = parsed.cardIndex;
+                const tab = document.querySelector(
+                  `.tab-label.card-tab-editable[data-deck-id="${deckId}"][data-card-index="${cardIndex}"]`
+                );
+                if (tab) {
+                  if (!tab.firstChild) tab.appendChild(document.createTextNode(tab.textContent || ""));
+                  tab.contentEditable = "true";
+                  tab.focus();
+                  restoreSelection(tab, selectionStart, selectionEnd);
+                }
+              } else if (type === "cardTitle") {
+                const cardIndex = parsed.cardIndex;
+                const title = document.querySelector(
+                  `.card-text-title.card-title-editable[data-deck-id="${deckId}"][data-card-index="${cardIndex}"]`
+                );
+                if (title) {
+                  if (!title.firstChild) title.appendChild(document.createTextNode(title.textContent || ""));
+                  title.contentEditable = "true";
+                  title.focus();
+                  restoreSelection(title, selectionStart, selectionEnd);
                 }
               }
               clearActiveEditState();
             }
           } catch (_) {}
         }
+
+        function getSelectionOffsets(el) {
+          const len = el.textContent.length;
+          let start = len, end = len;
+          const sel = window.getSelection();
+          if (sel.rangeCount && el.contains(sel.anchorNode)) {
+            try {
+              const range = sel.getRangeAt(0);
+              start = range.startContainer === el || range.startContainer.parentNode === el ? range.startOffset : len;
+              end = range.endContainer === el || range.endContainer.parentNode === el ? range.endOffset : len;
+              start = Math.min(start, len);
+              end = Math.min(end, len);
+            } catch (_) {}
+          }
+          return { start, end };
+        }
+
+        function setupCardTabAndTitleEditing() {
+          document.querySelectorAll(".tab-label.card-tab-editable").forEach((tab) => {
+            if (tab._editBound) return;
+            tab._editBound = true;
+            const deckId = tab.dataset.deckId;
+            const cardIndex = parseInt(tab.dataset.cardIndex, 10);
+
+            tab.addEventListener("dblclick", (e) => {
+              e.stopPropagation();
+              e.preventDefault();
+              tab.textContent = tab.textContent || "";
+              if (!tab.firstChild) tab.appendChild(document.createTextNode(""));
+              tab.contentEditable = "true";
+              tab.focus();
+              const { start, end } = getSelectionOffsets(tab);
+              saveActiveEditStateTab(deckId, cardIndex, start, end);
+            });
+
+            tab.addEventListener("blur", () => {
+              if (tab.contentEditable !== "true") return;
+              const { start, end } = getSelectionOffsets(tab);
+              saveActiveEditStateTab(deckId, cardIndex, start, end);
+              tab.contentEditable = "false";
+              const text = tab.textContent.replace(/\s+$/g, "").replace(/^\s+/, "");
+              tab.textContent = text;
+              saveEditedTabLabel(deckId, cardIndex, text);
+            });
+
+            tab.addEventListener("input", () => {
+              if (tab.contentEditable !== "true") return;
+              const { start, end } = getSelectionOffsets(tab);
+              saveActiveEditStateTab(deckId, cardIndex, start, end);
+            });
+
+            tab.addEventListener("keydown", (e) => {
+              if (tab.contentEditable !== "true") return;
+              if (e.key === "Enter") { e.preventDefault(); tab.blur(); }
+            });
+
+            tab.addEventListener("mouseup", () => {
+              if (tab.contentEditable !== "true") return;
+              requestAnimationFrame(() => {
+                const { start, end } = getSelectionOffsets(tab);
+                saveActiveEditStateTab(deckId, cardIndex, start, end);
+              });
+            });
+
+            tab.addEventListener("click", () => {
+              if (tab.contentEditable !== "true") return;
+              requestAnimationFrame(() => {
+                const { start, end } = getSelectionOffsets(tab);
+                saveActiveEditStateTab(deckId, cardIndex, start, end);
+              });
+            });
+          });
+
+          document.querySelectorAll(".card-text-title.card-title-editable").forEach((title) => {
+            if (title._editBound) return;
+            title._editBound = true;
+            const deckId = title.dataset.deckId;
+            const cardIndex = parseInt(title.dataset.cardIndex, 10);
+
+            title.addEventListener("dblclick", (e) => {
+              e.stopPropagation();
+              e.preventDefault();
+              if (!title.firstChild) title.appendChild(document.createTextNode(title.textContent || ""));
+              title.contentEditable = "true";
+              title.focus();
+              const { start, end } = getSelectionOffsets(title);
+              saveActiveEditStateCardTitle(deckId, cardIndex, start, end);
+            });
+
+            title.addEventListener("blur", () => {
+              if (title.contentEditable !== "true") return;
+              const { start, end } = getSelectionOffsets(title);
+              saveActiveEditStateCardTitle(deckId, cardIndex, start, end);
+              title.contentEditable = "false";
+              const text = title.textContent.replace(/\s+$/g, "").replace(/^\s+/, "");
+              title.textContent = text;
+              saveEditedCardTitle(deckId, cardIndex, text);
+              const deckData = decksData.find((d) => d.id === deckId);
+              if (deckData && deckData.cards && deckData.cards[cardIndex]) {
+                deckData.cards[cardIndex].title = text;
+              }
+            });
+
+            title.addEventListener("input", () => {
+              if (title.contentEditable !== "true") return;
+              const { start, end } = getSelectionOffsets(title);
+              saveActiveEditStateCardTitle(deckId, cardIndex, start, end);
+            });
+
+            title.addEventListener("keydown", (e) => {
+              if (title.contentEditable !== "true") return;
+              if (e.key === "Enter") { e.preventDefault(); title.blur(); }
+            });
+
+            title.addEventListener("mouseup", () => {
+              if (title.contentEditable !== "true") return;
+              requestAnimationFrame(() => {
+                const { start, end } = getSelectionOffsets(title);
+                saveActiveEditStateCardTitle(deckId, cardIndex, start, end);
+              });
+            });
+
+            title.addEventListener("click", () => {
+              if (title.contentEditable !== "true") return;
+              requestAnimationFrame(() => {
+                const { start, end } = getSelectionOffsets(title);
+                saveActiveEditStateCardTitle(deckId, cardIndex, start, end);
+              });
+            });
+          });
+        }
+
 
         function readCssNumber(varName) {
           const raw = getComputedStyle(document.documentElement).getPropertyValue(varName);
@@ -1216,6 +1459,7 @@
 
         applyLineNumbers();
         setupCardTextEditing();
+        setupCardTabAndTitleEditing();
         /* Save selection when still in edit mode so reload can restore it (no blur) */
         window.addEventListener("pagehide", saveCurrentEditStateIfActive);
         window.addEventListener("beforeunload", saveCurrentEditStateIfActive);

@@ -898,3 +898,11 @@ body.deck-mode.expand-collapsing .deck .card-layer {
   box-shadow: 0 18px 48px rgba(0, 0, 0, 0.6);
 }
 
+.card-tab-editable,
+.card-title-editable {
+  cursor: text;
+}
+
+.card-text-title.card-title-editable {
+  pointer-events: auto;
+}
