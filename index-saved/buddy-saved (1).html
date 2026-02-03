@@ -1,0 +1,325 @@
+<html lang="en"><head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Buddy – LLM &amp; transcription</title>
+    <link rel="stylesheet" href="buddy.css">
+  <script>window.__SAVED_STATE__={"llmContent":"<p>I understand that you want to create a new version of <code>buddy.html</code> with modifications based on your inputs. I'll provide you with the HTML changes needed so that when the page is saved, the modifications will be included in the document object model (DOM). Please specify the changes you would like to make to the HTML structure or content, so I can assist you better.</p>","transcript":"I would like to have  things that  I say here  create a new version  of buddy.html  that can be  saved  to overwrite buddy.html the page I am  period  to respond with  modifications to my  HTML  so  you can make directly to the Dom  such that when the page is saved the Dom will be saved with those modifications  and if that same  takes place to the very location of the page itself well then that page when we go  for discover it's new form"};</script></head>
+  <body>
+    <main class="buddy-main" id="llm-content" aria-label="LLM output"><p>I understand that you want to create a new version of <code>buddy.html</code> with modifications based on your inputs. I'll provide you with the HTML changes needed so that when the page is saved, the modifications will be included in the document object model (DOM). Please specify the changes you would like to make to the HTML structure or content, so I can assist you better.</p></main>
+
+    <a href="index.html" class="page-link-box" title="Decks">D</a>
+
+    <div id="speech-llm-chrome" class="speech-llm-chrome" aria-label="Speech and LLM controls">
+      <div class="speech-llm-row speech-response-row">
+        <label class="speech-label">LLM response</label>
+        <div id="llmResponseChrome" class="speech-response" aria-live="polite"><p>I understand that you want to create a new version of <code>buddy.html</code> with modifications based on your inputs. I'll provide you with the HTML changes needed so that when the page is saved, the modifications will be included in the document object model (DOM). Please specify the changes you would like to make to the HTML structure or content, so I can assist you better.</p></div>
+      </div>
+      <div class="speech-llm-row">
+        <label for="speechTranscript" class="speech-label">Transcription</label>
+        <div id="speechTranscript" class="speech-transcript" aria-live="polite" role="status" title="Click Listen to start">I would like to have  things that  I say here  create a new version  of buddy.html  that can be  saved  to overwrite buddy.html the page I am  period  to respond with  modifications to my  HTML  so  you can make directly to the Dom  such that when the page is saved the Dom will be saved with those modifications  and if that same  takes place to the very location of the page itself well then that page when we go  for discover it's new form</div>
+      </div>
+      <div class="speech-llm-row">
+        <button type="button" id="speechListenBtn" class="speech-btn">Listen</button>
+        <button type="button" id="speechSendBtn" class="speech-btn">Send to LLM</button>
+        <button type="button" id="undoBtn" class="speech-btn">Undo</button>
+        <button type="button" id="redoBtn" class="speech-btn" disabled="">Redo</button>
+        <button type="button" id="savePageBtn" class="speech-btn">Save page</button>
+      </div>
+      <div class="speech-llm-row speech-proof-row">
+        <span class="speech-proof-label">Proof:</span>
+        <div id="llmProof" class="speech-proof" aria-live="polite">Sent at 11:38:58 PM → Response at 11:39:01 PM (386 chars). You said: "I would like to have  things that  I say here  create a new …"</div>
+      </div>
+      <div class="speech-llm-row speech-settings">
+        <label for="llmApiUrl">API URL</label>
+        <input type="text" id="llmApiUrl" class="speech-input" placeholder="https://api.openai.com/v1">
+        <label for="llmApiKey">API Key</label>
+        <input type="password" id="llmApiKey" class="speech-input" placeholder="sk-..." autocomplete="off">
+      </div>
+    </div>
+
+    <script>
+      (function () {
+        const llmContentEl = document.getElementById("llm-content");
+        const llmResponseChromeEl = document.getElementById("llmResponseChrome");
+        const llmProofEl = document.getElementById("llmProof");
+        const speechTranscriptEl = document.getElementById("speechTranscript");
+        const speechListenBtn = document.getElementById("speechListenBtn");
+        const speechSendBtn = document.getElementById("speechSendBtn");
+        const undoBtn = document.getElementById("undoBtn");
+        const redoBtn = document.getElementById("redoBtn");
+        const savePageBtn = document.getElementById("savePageBtn");
+
+        function setLlmContent(html) {
+          if (llmContentEl) llmContentEl.innerHTML = html;
+          if (llmResponseChromeEl) llmResponseChromeEl.innerHTML = html;
+        }
+
+        let undoStack = [];
+        let redoStack = [];
+        let currentTranscript = "";
+
+        function setTranscript(msg) {
+          if (speechTranscriptEl) speechTranscriptEl.textContent = msg;
+        }
+
+        function pushUndo() {
+          if (llmContentEl) undoStack.push(llmContentEl.innerHTML);
+        }
+        function pushRedo() {
+          if (llmContentEl) redoStack.push(llmContentEl.innerHTML);
+        }
+        function canUndo() { return undoStack.length > 0; }
+        function canRedo() { return redoStack.length > 0; }
+        function doUndo() {
+          if (!canUndo() || !llmContentEl) return;
+          pushRedo();
+          setLlmContent(undoStack.pop());
+          if (speechSendBtn) speechSendBtn.disabled = !currentTranscript.trim();
+          if (redoBtn) redoBtn.disabled = !canRedo();
+          if (undoBtn) undoBtn.disabled = !canUndo();
+        }
+        function doRedo() {
+          if (!canRedo() || !llmContentEl) return;
+          pushUndo();
+          setLlmContent(redoStack.pop());
+          if (redoBtn) redoBtn.disabled = !canRedo();
+          if (undoBtn) undoBtn.disabled = !canUndo();
+        }
+        function updateUndoRedoButtons() {
+          if (undoBtn) undoBtn.disabled = !canUndo();
+          if (redoBtn) redoBtn.disabled = !canRedo();
+        }
+
+        let recognition = null;
+        let isListening = false;
+        let restartTimeout = null;
+        let countdownInterval = null;
+
+        function startListening() {
+          if (isListening) {
+            stopListening();
+            return;
+          }
+          if (speechListenBtn) {
+            speechListenBtn.textContent = "Stop";
+            speechListenBtn.disabled = true;
+          }
+          setTranscript("Starting…");
+          const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+          if (!SpeechRecognition) {
+            setTranscript("Speech recognition not supported. Try Chrome or Edge.");
+            if (speechListenBtn) { speechListenBtn.textContent = "Listen"; speechListenBtn.disabled = false; }
+            return;
+          }
+          isListening = true;
+          if (speechListenBtn) speechListenBtn.disabled = false;
+
+          function startRecognition() {
+            if (!isListening) return;
+            try {
+              recognition = new SpeechRecognition();
+              recognition.continuous = true;
+              recognition.interimResults = true;
+              recognition.lang = "en-US";
+              recognition.onresult = (e) => {
+                let interim = "";
+                for (let i = e.resultIndex; i < e.results.length; i++) {
+                  const transcript = e.results[i][0].transcript;
+                  if (!e.results[i].isFinal) interim += transcript;
+                }
+                currentTranscript = Array.from(e.results).filter((r) => r.isFinal).map((r) => r[0].transcript).join(" ") + interim;
+                setTranscript(currentTranscript || "Listening…");
+                if (speechSendBtn) speechSendBtn.disabled = !currentTranscript.trim();
+              };
+              recognition.onend = () => {
+                if (!isListening) return;
+                recognition = null;
+                setTranscript(currentTranscript || "Listening… (reconnecting…)");
+                if (restartTimeout) clearTimeout(restartTimeout);
+                restartTimeout = setTimeout(startRecognition, 300);
+              };
+              recognition.onerror = (e) => {
+                if (e.error === "not-allowed" || e.error === "service-not-allowed") {
+                  isListening = false;
+                  if (speechListenBtn) speechListenBtn.textContent = "Listen";
+                  setTranscript(currentTranscript || "Microphone denied.");
+                  return;
+                }
+                if (e.error === "aborted") return;
+                setTranscript(currentTranscript || "Error: " + (e.error || "unknown"));
+              };
+              recognition.start();
+            } catch (err) {
+              setTranscript("Error: " + (err.message || String(err)));
+              isListening = false;
+              if (speechListenBtn) speechListenBtn.textContent = "Listen";
+            }
+          }
+          currentTranscript = "";
+          startRecognition();
+          if (countdownInterval) clearInterval(countdownInterval);
+          let countdownLeft = 3;
+          setTranscript("3…");
+          countdownInterval = setInterval(() => {
+            if (!isListening) {
+              clearInterval(countdownInterval);
+              countdownInterval = null;
+              return;
+            }
+            if (currentTranscript.trim()) {
+              setTranscript(currentTranscript);
+              clearInterval(countdownInterval);
+              countdownInterval = null;
+              return;
+            }
+            countdownLeft -= 1;
+            if (countdownLeft > 0) {
+              setTranscript(countdownLeft + "…");
+            } else {
+              setTranscript("Listening…");
+              clearInterval(countdownInterval);
+              countdownInterval = null;
+            }
+          }, 1000);
+        }
+
+        function stopListening() {
+          isListening = false;
+          if (countdownInterval) {
+            clearInterval(countdownInterval);
+            countdownInterval = null;
+          }
+          if (restartTimeout) {
+            clearTimeout(restartTimeout);
+            restartTimeout = null;
+          }
+          if (recognition) {
+            try { recognition.stop(); } catch (_) {}
+            recognition = null;
+          }
+          if (speechListenBtn) speechListenBtn.textContent = "Listen";
+          setTranscript(currentTranscript || "Click Listen to start");
+          if (speechSendBtn) speechSendBtn.disabled = !currentTranscript.trim();
+        }
+
+        if (speechListenBtn) {
+          speechListenBtn.addEventListener("click", (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            startListening();
+          });
+        }
+        if (speechTranscriptEl) {
+          speechTranscriptEl.addEventListener("click", () => {
+            if (!speechTranscriptEl.textContent || speechTranscriptEl.textContent === "Click Listen to start") {
+              speechTranscriptEl.textContent = "Click the Listen button to start voice input.";
+            }
+          });
+        }
+
+        function setProof(msg) {
+          if (llmProofEl) llmProofEl.textContent = msg;
+        }
+
+        if (speechSendBtn) {
+          speechSendBtn.onclick = async () => {
+            const apiUrl = (document.getElementById("llmApiUrl") || {}).value || "https://api.openai.com/v1";
+            const apiKey = (document.getElementById("llmApiKey") || {}).value || "";
+            if (!currentTranscript.trim()) return;
+            if (!apiKey) {
+              setLlmContent((llmContentEl ? llmContentEl.innerHTML : "") + "<p>Set API URL and API Key, then try again.</p>");
+              return;
+            }
+            const sentText = currentTranscript.trim();
+            const sendTime = new Date().toLocaleTimeString();
+            setProof("Sending: \"" + sentText.slice(0, 80) + (sentText.length > 80 ? "…" : "") + "\" …");
+            pushUndo();
+            redoStack = [];
+            const context = llmContentEl ? llmContentEl.innerHTML : "";
+            speechSendBtn.disabled = true;
+            try {
+              const res = await fetch(apiUrl.replace(/\/$/, "") + "/chat/completions", {
+                method: "POST",
+                headers: { "Content-Type": "application/json", "Authorization": "Bearer " + apiKey },
+                body: JSON.stringify({
+                  model: "gpt-4o-mini",
+                  messages: [
+                    {
+                      role: "system",
+                      content: "You are a helpful assistant. You receive the user's speech transcript and the current HTML of #llm-content. Return ONLY valid HTML to replace that div. No explanations or markdown fences."
+                    },
+                    { role: "user", content: "Current #llm-content HTML:\n" + (context || "(empty)") + "\n\nUser said: " + currentTranscript }
+                  ],
+                  max_tokens: 4096
+                })
+              });
+              const receivedTime = new Date().toLocaleTimeString();
+              if (!res.ok) {
+                const err = await res.text();
+                setProof("Sent at " + sendTime + " → Error " + res.status + " at " + receivedTime);
+                setLlmContent((llmContentEl ? llmContentEl.innerHTML : "") + "<p>API error: " + err + "</p>");
+                return;
+              }
+              const data = await res.json();
+              const html = (data.choices && data.choices[0] && data.choices[0].message && data.choices[0].message.content) ? data.choices[0].message.content.trim() : "";
+              const clean = html.replace(/^```html?\s*/i, "").replace(/\s*```\s*$/i, "");
+              setProof("Sent at " + sendTime + " → Response at " + receivedTime + " (" + clean.length + " chars). You said: \"" + sentText.slice(0, 60) + (sentText.length > 60 ? "…" : "") + "\"");
+              setLlmContent(clean);
+            } catch (e) {
+              setProof("Sent at " + sendTime + " → Failed: " + (e.message || String(e)));
+              setLlmContent((llmContentEl ? llmContentEl.innerHTML : "") + "<p>Error: " + (e.message || String(e)) + "</p>");
+            } finally {
+              speechSendBtn.disabled = !currentTranscript.trim();
+              updateUndoRedoButtons();
+            }
+          };
+        }
+
+        if (undoBtn) undoBtn.onclick = doUndo;
+        if (redoBtn) redoBtn.onclick = doRedo;
+        if (undoBtn) undoBtn.disabled = true;
+        if (redoBtn) redoBtn.disabled = true;
+
+        if (savePageBtn) {
+          savePageBtn.onclick = () => {
+            let llmHtml = llmContentEl ? llmContentEl.innerHTML : "";
+            llmHtml = llmHtml.replace(new RegExp("</scr" + "ipt", "gi"), "<\\/script");
+            const transcriptText = (speechTranscriptEl && speechTranscriptEl.textContent) ? speechTranscriptEl.textContent : "";
+            const state = { llmContent: llmHtml, transcript: transcriptText };
+            const html = document.documentElement.outerHTML;
+            const inject = "<script>window.__SAVED_STATE__=" + JSON.stringify(state) + ";<\/script>";
+            const withState = html.replace("</head>", inject + "</head>");
+            const blob = new Blob([withState], { type: "text/html;charset=utf-8" });
+            const a = document.createElement("a");
+            a.href = URL.createObjectURL(blob);
+            a.download = "buddy-saved.html";
+            a.click();
+            URL.revokeObjectURL(a.href);
+          };
+        }
+
+        if (llmContentEl) pushUndo();
+        updateUndoRedoButtons();
+
+        if (window.__SAVED_STATE__) {
+          const state = window.__SAVED_STATE__;
+          window.__SAVED_STATE__ = null;
+          if (llmContentEl && state.llmContent != null) {
+            const endScript = "</scr" + "ipt>";
+            const restored = state.llmContent.replace(new RegExp("<\\\\/script", "gi"), endScript);
+            setLlmContent(restored);
+            undoStack = [restored];
+            redoStack = [];
+          }
+          if (speechTranscriptEl && state.transcript != null && state.transcript !== "Click Listen to start") {
+            speechTranscriptEl.textContent = state.transcript;
+            currentTranscript = state.transcript;
+            if (speechSendBtn) speechSendBtn.disabled = !state.transcript.trim();
+          }
+          updateUndoRedoButtons();
+        }
+      })();
+    </script>
+  
+
+</body></html>

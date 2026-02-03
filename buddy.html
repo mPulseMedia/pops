@@ -1,0 +1,452 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Buddy – Chat</title>
+    <link rel="stylesheet" href="buddy.css" />
+  </head>
+  <body>
+    <div class="chat-container">
+      <div class="chat-messages" id="chatMessages" aria-label="Chat messages"></div>
+      <div class="chat-input-bar">
+        <div class="chat-actions">
+          <button type="button" id="speechListenBtn" class="chat-btn">Listen</button>
+          <button type="button" id="speechSendBtn" class="chat-btn primary" disabled>Send</button>
+          <button type="button" id="savePageBtn" class="chat-btn">Save</button>
+        </div>
+        <div id="llmProof" class="chat-proof" aria-live="polite">—</div>
+        <div class="chat-settings">
+          <label for="llmApiUrl">API</label>
+          <input type="text" id="llmApiUrl" class="chat-input" placeholder="https://api.openai.com/v1" />
+          <label for="llmApiKey">Key</label>
+          <input type="password" id="llmApiKey" class="chat-input" placeholder="sk-…" autocomplete="off" />
+        </div>
+      </div>
+    </div>
+
+    <a href="index.html" class="page-link-box" title="Decks">D</a>
+
+    <script>
+      (function () {
+        const CHAT_STORAGE_KEY = "buddy-chat";
+        const API_URL_KEY = "buddy-api-url";
+        const API_KEY_KEY = "buddy-api-key";
+        const chatMessagesEl = document.getElementById("chatMessages");
+        const llmProofEl = document.getElementById("llmProof");
+        const llmApiUrlEl = document.getElementById("llmApiUrl");
+        const llmApiKeyEl = document.getElementById("llmApiKey");
+        const speechListenBtn = document.getElementById("speechListenBtn");
+        const speechSendBtn = document.getElementById("speechSendBtn");
+        const savePageBtn = document.getElementById("savePageBtn");
+
+        let chatHistory = [];
+        let currentTranscript = "";
+
+        function setTranscript(msg) {
+          currentTranscript = msg || "";
+        }
+
+        function escapeHtml(s) {
+          const div = document.createElement("div");
+          div.textContent = s;
+          return div.innerHTML;
+        }
+
+        function renderChat() {
+          if (!chatMessagesEl) return;
+          chatMessagesEl.innerHTML = "";
+          if (chatHistory.length === 0) {
+            const empty = document.createElement("div");
+            empty.className = "chat-msg assistant";
+            empty.style.opacity = "0.6";
+            empty.textContent = "No messages yet. Click Listen, speak, then Send.";
+            chatMessagesEl.appendChild(empty);
+          }
+          chatHistory.forEach((item) => {
+            const wrap = document.createElement("div");
+            wrap.className = "chat-msg " + item.role;
+            if (item.role === "user") {
+              wrap.textContent = item.text;
+            } else {
+              wrap.innerHTML = item.html || escapeHtml(item.text || "");
+            }
+            chatMessagesEl.appendChild(wrap);
+          });
+          if (isListening && currentTranscript.trim()) {
+            const draft = document.createElement("div");
+            draft.className = "chat-msg user";
+            draft.textContent = currentTranscript;
+            draft.setAttribute("aria-live", "polite");
+            chatMessagesEl.appendChild(draft);
+          }
+          chatMessagesEl.scrollTop = chatMessagesEl.scrollHeight;
+        }
+
+        function saveChatToStorage() {
+          try {
+            localStorage.setItem(CHAT_STORAGE_KEY, JSON.stringify(chatHistory));
+          } catch (_) {}
+        }
+
+        function loadChatFromStorage() {
+          try {
+            const raw = localStorage.getItem(CHAT_STORAGE_KEY);
+            if (raw) {
+              const parsed = JSON.parse(raw);
+              if (Array.isArray(parsed)) chatHistory = parsed;
+            }
+          } catch (_) {}
+        }
+
+        let recognition = null;
+        let isListening = false;
+        let restartTimeout = null;
+        let countdownInterval = null;
+        let reloadIntervalId = null;
+
+        function startReloadInterval() {
+          if (reloadIntervalId) clearInterval(reloadIntervalId);
+          reloadIntervalId = setInterval(function () { location.reload(); }, 4000);
+        }
+
+        function startListening() {
+          if (isListening) {
+            stopListening();
+            return;
+          }
+          if (speechListenBtn) {
+            speechListenBtn.textContent = "Stop";
+            speechListenBtn.disabled = true;
+          }
+          setTranscript("Starting…");
+          const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+          if (!SpeechRecognition) {
+            setTranscript("Speech not supported. Use Chrome or Edge.");
+            if (speechListenBtn) { speechListenBtn.textContent = "Listen"; speechListenBtn.disabled = false; }
+            return;
+          }
+          isListening = true;
+          if (speechListenBtn) speechListenBtn.disabled = false;
+          if (reloadIntervalId) { clearInterval(reloadIntervalId); reloadIntervalId = null; }
+
+          function startRecognition() {
+            if (!isListening) return;
+            try {
+              recognition = new SpeechRecognition();
+              recognition.continuous = true;
+              recognition.interimResults = true;
+              recognition.lang = "en-US";
+              recognition.onresult = (e) => {
+                let interim = "";
+                for (let i = e.resultIndex; i < e.results.length; i++) {
+                  const transcript = e.results[i][0].transcript;
+                  if (!e.results[i].isFinal) interim += transcript;
+                }
+                currentTranscript = Array.from(e.results).filter((r) => r.isFinal).map((r) => r[0].transcript).join(" ") + interim;
+                setTranscript(currentTranscript || "Listening…");
+                if (speechSendBtn) speechSendBtn.disabled = !currentTranscript.trim();
+                renderChat();
+              };
+              recognition.onend = () => {
+                if (!isListening) return;
+                recognition = null;
+                setTranscript(currentTranscript || "Reconnecting…");
+                if (restartTimeout) clearTimeout(restartTimeout);
+                restartTimeout = setTimeout(startRecognition, 300);
+              };
+              recognition.onerror = (e) => {
+                if (e.error === "not-allowed" || e.error === "service-not-allowed") {
+                  isListening = false;
+                  if (speechListenBtn) speechListenBtn.textContent = "Listen";
+                  setTranscript(currentTranscript || "Microphone denied.");
+                  startReloadInterval();
+                  return;
+                }
+                if (e.error === "aborted") return;
+                setTranscript(currentTranscript || "Error: " + (e.error || "unknown"));
+              };
+              recognition.start();
+            } catch (err) {
+              setTranscript("Error: " + (err.message || String(err)));
+              isListening = false;
+              if (speechListenBtn) speechListenBtn.textContent = "Listen";
+              startReloadInterval();
+            }
+          }
+          currentTranscript = "";
+          startRecognition();
+          if (countdownInterval) clearInterval(countdownInterval);
+          let countdownLeft = 3;
+          setTranscript("3…");
+          countdownInterval = setInterval(() => {
+            if (!isListening) {
+              clearInterval(countdownInterval);
+              countdownInterval = null;
+              return;
+            }
+            if (currentTranscript.trim()) {
+              setTranscript(currentTranscript);
+              clearInterval(countdownInterval);
+              countdownInterval = null;
+              return;
+            }
+            countdownLeft -= 1;
+            if (countdownLeft > 0) setTranscript(countdownLeft + "…");
+            else {
+              setTranscript("Listening…");
+              clearInterval(countdownInterval);
+              countdownInterval = null;
+            }
+          }, 1000);
+        }
+
+        function stopListening() {
+          isListening = false;
+          if (countdownInterval) { clearInterval(countdownInterval); countdownInterval = null; }
+          if (restartTimeout) { clearTimeout(restartTimeout); restartTimeout = null; }
+          if (recognition) { try { recognition.stop(); } catch (_) {} recognition = null; }
+          if (speechListenBtn) speechListenBtn.textContent = "Listen";
+          setTranscript(currentTranscript || "Click Listen, then speak…");
+          if (speechSendBtn) speechSendBtn.disabled = !currentTranscript.trim();
+          startReloadInterval();
+          renderChat();
+        }
+
+        if (speechListenBtn) {
+          speechListenBtn.addEventListener("click", (e) => { e.preventDefault(); startListening(); });
+        }
+
+        function setProof(msg) {
+          if (llmProofEl) llmProofEl.textContent = msg;
+        }
+
+        /** Apply surgical DOM/CSS patches from LLM. Reduces errors vs full-page replacement. */
+        function applyDomPatch(patchJson) {
+          let ok = false;
+          try {
+            const obj = typeof patchJson === "string" ? JSON.parse(patchJson) : patchJson;
+            const patches = obj.patches || (Array.isArray(obj) ? obj : [obj]);
+            const cssParts = [];
+            for (const p of patches) {
+              if (p.type === "style" && p.selector && p.style && typeof p.style === "object") {
+                const el = document.querySelector(p.selector);
+                if (el && el.style) {
+                  for (const [k, v] of Object.entries(p.style)) if (v != null) el.style.setProperty(k, String(v));
+                  ok = true;
+                }
+              } else if (p.type === "css" && p.css) {
+                cssParts.push(p.css.trim());
+                ok = true;
+              }
+            }
+            if (cssParts.length) {
+              let styleEl = document.getElementById("buddy-dom-patch");
+              if (!styleEl) {
+                styleEl = document.createElement("style");
+                styleEl.id = "buddy-dom-patch";
+                (document.head || document.documentElement).appendChild(styleEl);
+              }
+              styleEl.textContent = (styleEl.textContent ? styleEl.textContent + "\n" : "") + cssParts.join("\n");
+            }
+          } catch (e) {
+            console.warn("applyDomPatch failed", e);
+          }
+          return ok;
+        }
+
+        if (speechSendBtn) {
+          speechSendBtn.onclick = async () => {
+            const apiUrl = (document.getElementById("llmApiUrl") || {}).value || "https://api.openai.com/v1";
+            const apiKey = (document.getElementById("llmApiKey") || {}).value || "";
+            const sentText = currentTranscript.trim();
+            if (!sentText) return;
+            if (!apiKey) {
+              chatHistory.push({ role: "user", text: sentText });
+              chatHistory.push({ role: "assistant", text: "Set API URL and Key in settings, then try again." });
+              renderChat();
+              currentTranscript = "";
+              setTranscript("");
+              if (speechSendBtn) speechSendBtn.disabled = true;
+              saveChatToStorage();
+              return;
+            }
+            setProof("Sending…");
+            chatHistory.push({ role: "user", text: sentText });
+            renderChat();
+            currentTranscript = "";
+            setTranscript("");
+            if (speechSendBtn) speechSendBtn.disabled = true;
+
+            const buildMessages = (currentRequest) => {
+              const stateToPreserve = { chatHistory: chatHistory, transcript: currentTranscript || "" };
+              const stateJson = JSON.stringify(stateToPreserve).replace(/</g, "\\u003c").replace(/\u2028/g, "\\u2028").replace(/\u2029/g, "\\u2029");
+              const pageStructure =
+                "PAGE STRUCTURE (keep these when using full-page-html): body > .chat-container > .chat-messages#chatMessages (scrollable message list) > .chat-msg.user / .chat-msg.assistant (each message). Then .chat-input-bar with .chat-actions (buttons: speechListenBtn Listen, speechSendBtn Send, savePageBtn Save), #llmProof, .chat-settings (inputs llmApiUrl, llmApiKey). Plus <a class=\"page-link-box\" href=\"index.html\">. Script must: restore chatHistory and transcript from window.__SAVED_STATE__; renderChat() into #chatMessages; speech recognition; Send calls LLM API and handles dom-patch + full-page-html; Save injects __SAVED_STATE__ into downloaded HTML.";
+              const systemText =
+                "You are a helpful assistant for the Buddy page: a single-file chat app with speech (Listen/Send), LLM replies, and Save. Reply in plain text or simple HTML, or use the special formats below.\n\n" +
+                "WHAT THE PAGE DOES TO HELP YOU:\n" +
+                "- Dom-patch: your CSS/style patches are applied in place; the page never reloads and chat is never touched.\n" +
+                "- Full-page-html: the page only applies it if the document has <!DOCTYPE html> or <html>, id=\"chatMessages\", chatHistory in script, and a Save button. If something is missing, the page skips the replacement and shows a short message asking for a smaller change.\n" +
+                "- Safety net: if you output full-page-html but forget to include __SAVED_STATE__, the page will automatically inject the current chat history and transcript into <head> before applying your HTML. So the user never loses their conversation even if you omit the state.\n" +
+                "- You have 8192 tokens for your reply; use them if you need to output a full document.\n\n" +
+                pageStructure + "\n\n" +
+                "STYLE / LOOK REQUESTS (e.g. \"like Apple Messages\", \"iPhone style\", \"look like WhatsApp\"): the user wants THIS page restyled to match that look—same functionality, different appearance. Use full-page-html. Apply that visual style (bubbles, colors, fonts, spacing, input bar) to the structure above. Do not output a minimal demo; output the full working Buddy page with that style and the complete script. Preserve all IDs and behavior.\n\n" +
+                "PREFER DOM PATCH for single-property changes: one color, one font, one margin. Output ONLY:\n" +
+                "```dom-patch\n{\"patches\":[{\"type\":\"css\",\"css\":\"body { background: #c00 !important; }\"}]}\n```\n" +
+                "- type \"css\": \"selector { prop: value; }\" for global CSS.\n" +
+                "- type \"style\": \"selector\", \"style\": {\"property\": \"value\"} for one element.\n\n" +
+                "FULL-PAGE-HTML: use for a new look or full restructure (e.g. \"make it look like Apple Messages\"). Output the ENTIRE document. PRESERVE ALL BEHAVIOR (speech, LLM Send, applyDomPatch, full-page-html handling, Save). Include __SAVED_STATE__ in <head> (state in next message; safety net can inject if you omit). Keep the page structure above; only change CSS and markup for appearance.";
+              const messages = [
+                { role: "system", content: systemText },
+                { role: "user", content: "Current page state to embed in full-page-html (put in <head> as <script>window.__SAVED_STATE__=" + stateJson + ";<\/script>). Preserve it so the user does not lose their conversation." }
+              ];
+              chatHistory.forEach((item) => {
+                if (item.role === "user") messages.push({ role: "user", content: item.text });
+                else messages.push({ role: "assistant", content: (item.html || item.text || "").replace(/<[^>]+>/g, " ").trim() || item.text });
+              });
+              if (currentRequest && currentRequest.trim()) {
+                messages.push({ role: "user", content: "[This turn's request, from speech] " + currentRequest.trim() + " — Fulfill this now: if it's a style/look request, use full-page-html and apply that style to the Buddy page while keeping all behavior and structure." });
+              }
+              return messages;
+            };
+
+            try {
+              const res = await fetch(apiUrl.replace(/\/$/, "") + "/chat/completions", {
+                method: "POST",
+                headers: { "Content-Type": "application/json", "Authorization": "Bearer " + apiKey },
+                body: JSON.stringify({
+                  model: "gpt-4o",
+                  messages: buildMessages(sentText),
+                  max_tokens: 8192
+                })
+              });
+              const receivedTime = new Date().toLocaleTimeString();
+              if (!res.ok) {
+                const err = await res.text();
+                setProof("Error " + res.status + " at " + receivedTime);
+                chatHistory.push({ role: "assistant", text: "API error: " + err });
+                renderChat();
+                saveChatToStorage();
+                return;
+              }
+              const data = await res.json();
+              const content = (data.choices && data.choices[0] && data.choices[0].message && data.choices[0].message.content) ? data.choices[0].message.content.trim() : "";
+              // 1) Prefer dom-patch for small, surgical changes (fewer errors than full-page replace)
+              const domPatchMatch = content.match(/```dom-patch\s*([\s\S]*?)```/i);
+              if (domPatchMatch && domPatchMatch[1]) {
+                const patchApplied = applyDomPatch(domPatchMatch[1].trim());
+                const shortReply = patchApplied ? "Done. Page updated." : "Patch format invalid or no changes applied.";
+                chatHistory.push({ role: "assistant", html: "<p>" + escapeHtml(shortReply) + "</p>", text: shortReply });
+                setProof("Reply at " + receivedTime + " · Patch applied.");
+                renderChat();
+                saveChatToStorage();
+                return;
+              }
+              // 2) Full-page HTML only when valid and complete (avoid breaking the page)
+              const fullPageMatch = content.match(/```full-page-html\s*([\s\S]*?)```/i);
+              if (fullPageMatch && fullPageMatch[1]) {
+                let fullDoc = fullPageMatch[1].trim();
+                const hasDoctype = /<!DOCTYPE html>/i.test(fullDoc) || /<html[\s>]/i.test(fullDoc);
+                const hasChat = /id=["']chatMessages["']/.test(fullDoc) && /chatHistory/.test(fullDoc);
+                const hasSave = /Save/.test(fullDoc) && /<\/body>/i.test(fullDoc);
+                const hasState = /__SAVED_STATE__/.test(fullDoc);
+                if (hasDoctype && hasChat && hasSave) {
+                  if (!hasState && fullDoc.indexOf("</head>") !== -1) {
+                    const state = { chatHistory: chatHistory, transcript: currentTranscript || "" };
+                    const stateJson = JSON.stringify(state).replace(/</g, "\\u003c").replace(/\u2028/g, "\\u2028").replace(/\u2029/g, "\\u2029");
+                    fullDoc = fullDoc.replace("</head>", "<script>window.__SAVED_STATE__=" + stateJson + ";<\/script></head>");
+                  }
+                  document.open();
+                  document.write(fullDoc);
+                  document.close();
+                  return;
+                }
+                chatHistory.push({ role: "assistant", html: "<p>Full page replacement skipped—response was incomplete. Try asking for a smaller change (e.g. change background, change one label).</p>", text: "Full page replacement skipped—response was incomplete. Try a smaller change." });
+                setProof("Reply at " + receivedTime + " · Full replace skipped (incomplete)");
+                renderChat();
+                saveChatToStorage();
+                return;
+              }
+              // 3) Normal chat reply
+              const html = content.replace(/^```html?\s*/i, "").replace(/\s*```\s*$/i, "");
+              chatHistory.push({ role: "assistant", html: html, text: html.replace(/<[^>]+>/g, " ").trim() });
+              setProof("Reply at " + receivedTime + " · You said: \"" + sentText.slice(0, 50) + (sentText.length > 50 ? "…" : "") + "\"");
+              renderChat();
+              saveChatToStorage();
+            } catch (e) {
+              setProof("Failed: " + (e.message || String(e)));
+              chatHistory.push({ role: "assistant", text: "Error: " + (e.message || String(e)) });
+              renderChat();
+              saveChatToStorage();
+            } finally {
+              if (speechSendBtn) speechSendBtn.disabled = !currentTranscript.trim();
+            }
+          };
+        }
+
+        if (savePageBtn) {
+          savePageBtn.onclick = async () => {
+            // Save current DOM (initial load or script-modified) as the codified saved page
+            let html = document.documentElement.outerHTML;
+            // Remove any existing __SAVED_STATE__ so the saved file has exactly one, current state
+            html = html.replace(/<script>window\.__SAVED_STATE__=[\s\S]*?<\/script>\s*/gi, "");
+            const hasBuddyCssLink = /<link[^>]+href=["']?buddy\.css/i.test(html);
+            if (hasBuddyCssLink) {
+              let css = "";
+              try {
+                const res = await fetch("buddy.css");
+                if (res.ok) css = await res.text();
+              } catch (_) {}
+              if (css) {
+                const safeCss = css.replace(/<\/style/gi, "<\\/style");
+                html = html.replace(/<link[^>]+href=["']?buddy\.css[^"']*["']?[^>]*\s*\/?>/i, "<style>" + safeCss + "</style>");
+              }
+            }
+            const state = { chatHistory: chatHistory, transcript: currentTranscript || "" };
+            const stateJson = JSON.stringify(state).replace(/</g, "\\u003c").replace(/\u2028/g, "\\u2028").replace(/\u2029/g, "\\u2029");
+            const inject = "<script>window.__SAVED_STATE__=" + stateJson + ";<\/script>";
+            const withState = html.replace("</head>", inject + "</head>");
+            const blob = new Blob([withState], { type: "text/html;charset=utf-8" });
+            const a = document.createElement("a");
+            a.href = URL.createObjectURL(blob);
+            a.download = "buddy_01.html";
+            a.click();
+            URL.revokeObjectURL(a.href);
+          };
+        }
+
+        if (window.__SAVED_STATE__) {
+          const state = window.__SAVED_STATE__;
+          window.__SAVED_STATE__ = null;
+          if (state.chatHistory && Array.isArray(state.chatHistory)) {
+            chatHistory = state.chatHistory;
+            renderChat();
+          }
+          if (state.transcript != null && state.transcript !== "") {
+            currentTranscript = state.transcript;
+            if (speechSendBtn) speechSendBtn.disabled = !currentTranscript.trim();
+          }
+        } else {
+          loadChatFromStorage();
+          renderChat();
+        }
+        try {
+          if (llmApiUrlEl) {
+            const u = localStorage.getItem(API_URL_KEY);
+            if (u) llmApiUrlEl.value = u;
+            llmApiUrlEl.addEventListener("change", () => { try { localStorage.setItem(API_URL_KEY, llmApiUrlEl.value); } catch (_) {} });
+            llmApiUrlEl.addEventListener("blur", () => { try { localStorage.setItem(API_URL_KEY, llmApiUrlEl.value); } catch (_) {} });
+          }
+          if (llmApiKeyEl) {
+            const k = localStorage.getItem(API_KEY_KEY);
+            if (k) llmApiKeyEl.value = k;
+            llmApiKeyEl.addEventListener("change", () => { try { localStorage.setItem(API_KEY_KEY, llmApiKeyEl.value); } catch (_) {} });
+            llmApiKeyEl.addEventListener("blur", () => { try { localStorage.setItem(API_KEY_KEY, llmApiKeyEl.value); } catch (_) {} });
+          }
+        } catch (_) {}
+        startReloadInterval();
+      })();
+    </script>
+  </body>
+</html>

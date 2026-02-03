@@ -27,6 +27,7 @@
   function setupAutoReload(options = {}) {
     const intervalMs = options.intervalMs ?? 4000;
     const beforeReload = options.beforeReload;
+    const canReload = options.canReload;
     const scrollKey = options.scrollKey || "scroll-pos";
     const host = window.location.hostname;
     const protocol = window.location.protocol;
@@ -38,6 +39,9 @@
       return;
     }
     setInterval(() => {
+      if (typeof canReload === "function" && !canReload()) {
+        return;
+      }
       if (typeof beforeReload === "function") {
         beforeReload();
       }

@@ -3,7 +3,9 @@ body {
   font-size: 32px;
   line-height: 1.4;
   padding-top: env(safe-area-inset-top);
-  overflow: hidden;
+  padding-bottom: 80px;
+  overflow-x: hidden;
+  overflow-y: auto;
 }
 
 :root {
@@ -56,11 +58,12 @@ main {
   position: relative;
 }
 
-body:not(.cards-mini) .deck {
+/* mini-mode uses .cards-mini so all three decks are visible in All Projects */
+body:not(.cards-mini):not(.mini-mode) .deck {
   display: none;
 }
 
-body:not(.cards-mini) .deck.is-active {
+body:not(.cards-mini):not(.mini-mode) .deck.is-active {
   display: block;
 }
 
@@ -542,6 +545,7 @@ body {
 }
 
 /* All projects mode: show export/reload, hide back/expand */
+body.mini-mode .title-row-btn.load-deck-data,
 body.mini-mode .title-row-btn.export-deck-data,
 body.mini-mode .title-row-btn.reload-deck-data {
   display: inline-flex;
@@ -552,6 +556,7 @@ body.mini-mode .title-row-expand {
 }
 
 /* Deck mode: hide export/reload, show back + title + expand, space between */
+body.deck-mode .title-row-btn.load-deck-data,
 body.deck-mode .title-row-btn.export-deck-data,
 body.deck-mode .title-row-btn.reload-deck-data {
   display: none;
@@ -603,7 +608,9 @@ body.deck-mode .title-row {
 .decks {
   position: relative;
   width: 100%;
+  min-height: 280px;
   height: calc(100vh - var(--deck-top-margin) - var(--deck-bottom-margin) - var(--safe-bottom));
+  flex-shrink: 0;
 }
 
 .deck {
@@ -905,4 +912,30 @@ body.deck-mode.expand-collapsing .deck .card-layer {
 
 .card-text-title.card-title-editable {
   pointer-events: auto;
+}
+
+/* Bottom-right link to Buddy page */
+.page-link-box {
+  position: fixed;
+  bottom: 16px;
+  right: 16px;
+  z-index: 1001;
+  width: 48px;
+  height: 48px;
+  border: 2px solid #555;
+  border-radius: 8px;
+  background: #333;
+  color: #e0e0e0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  font-weight: 700;
+  font-size: 18px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+}
+
+.page-link-box:hover {
+  background: #444;
+  color: #fff;
 }

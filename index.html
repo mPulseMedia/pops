@@ -7,10 +7,11 @@
     <link rel="stylesheet" href="old/shared.css" />
     <link rel="stylesheet" href="index.css" />
   </head>
-  <body class="mini-mode">
+  <body class="mini-mode cards-mini">
     <div class="title-row">
       <button type="button" class="title-row-back" id="titleRowBackBtn" title="Back to All Projects" aria-label="Back to All Projects"><span aria-hidden="true">←</span></button>
       <h1 class="page-title" id="pageTitle">All Projects</h1>
+      <button type="button" class="title-row-btn load-deck-data" id="loadDeckDataFileBtn" title="Load index.txt from file" aria-label="Load from file">📂</button>
       <button type="button" class="title-row-btn export-deck-data" id="exportDeckDataBtn" title="Export deck data" aria-label="Export deck data"><span class="title-row-btn-icon" aria-hidden="true">↓</span></button>
       <button type="button" class="title-row-btn reload-deck-data" id="reloadDeckDataBtn" title="Reload data from index.txt" aria-label="Reload data from index.txt"><span class="title-row-btn-icon" aria-hidden="true">↑</span></button>
       <button type="button" class="title-row-expand" id="titleRowExpandBtn" title="Expand" aria-label="Expand"></button>
@@ -22,9 +23,15 @@
     </div>
     <main class="decks" id="decksRoot" aria-label="Decks"></main>
 
+    <a href="buddy.html" class="page-link-box" title="Buddy (LLM &amp; transcription)">B</a>
+
     <script src="old/shared.js"></script>
     <script>
-      PopsShared.setupAutoReload({ intervalMs: 4000, scrollKey: "scroll-index-card3" });
+      PopsShared.setupAutoReload({
+        intervalMs: 4000,
+        scrollKey: "scroll-index-card3",
+        canReload: function () { return !window.__popsIsListening; }
+      });
       (function () {
         const LINES_TOTAL = 20;
         const MODE_KEY = "index-card3-mode";
@@ -259,6 +266,11 @@
         }
 
         function loadDeckData() {
+          if (location.protocol === "file:") {
+            loadDecksFromData(null, false);
+            setDeckDataSource("(file:// — click 📂 to load index.txt)");
+            return;
+          }
           const url = new URL(DATA_URL + "?t=" + Date.now(), location.href).href;
           fetch(url, { cache: "no-store" })
             .then((r) => (r.ok ? r.json() : Promise.reject()))
@@ -273,7 +285,7 @@
             })
             .catch(() => {
               loadDecksFromData(null, false);
-              setDeckDataSource("(using built-in data; serve over HTTP or use Load from file)");
+              setDeckDataSource("(reload failed — click 📂 to load index.txt)");
             });
         }
 
@@ -1167,6 +1179,7 @@
         function applyMode(mode) {
           document.body.classList.toggle("mini-mode", mode === "mini");
           document.body.classList.toggle("deck-mode", mode === "deck");
+          document.body.classList.toggle("cards-mini", mode === "mini");
           if (mode !== "deck") {
             document.body.classList.remove("deck-expanded");
           }
@@ -1491,7 +1504,17 @@
         });
         }
 
-        loadDeckData();
+        if (window.__SAVED_STATE__) {
+          const state = window.__SAVED_STATE__;
+          window.__SAVED_STATE__ = null;
+          if (state.decks && state.decks.length > 0 && normalizeToDecksData({ decks: state.decks }) != null) {
+            loadDecksFromData({ decks: state.decks }, false);
+          } else {
+            loadDeckData();
+          }
+        } else {
+          loadDeckData();
+        }
       })();
     </script>
   </body>
