@@ -39,6 +39,7 @@ main {
   align-items: center;
 }
 
+
 .fit-wrapper {
   transform-origin: top center;
   position: relative;
@@ -49,38 +50,21 @@ main {
   position: relative;
 }
 
-.decks-container {
-  position: relative;
-  width: max-content;
-}
-
 .deck {
   position: relative;
 }
 
-/* mini-mode uses .cards-mini so all three decks are visible in All Projects */
+/* All Projects: show all decks when mini-mode or cards-mini */
 body:not(.cards-mini):not(.mini-mode) .deck {
   display: none;
 }
-
 body:not(.cards-mini):not(.mini-mode) .deck.is-active {
   display: block;
 }
-
-body.cards-mini .deck {
+body.cards-mini .deck,
+body.mini-mode .deck {
   display: block;
   position: relative;
-}
-
-body.cards-mini .decks-container {
-  display: flex;
-  justify-content: center;
-  gap: 16px;
-  align-items: flex-start;
-  width: max-content;
-  padding: 0 16px 0 48px;
-  margin: 12px auto 0;
-  box-sizing: border-box;
 }
 
 .mini-overlay-title {
@@ -165,6 +149,12 @@ body.cards-mini .card-stack .tab {
   pointer-events: auto;
 }
 
+/* In All Projects (mini) mode, cards/tabs are not interactive; clicks pass through to viewport */
+body.mini-mode .card-stack .card,
+body.mini-mode .card-stack .tab {
+  pointer-events: none;
+}
+
 .card-layer {
   position: absolute;
   left: var(--card-left);
@@ -180,7 +170,7 @@ body.cards-mini .card-stack .tab {
 
 .tab {
   position: absolute;
-  width: 235px;
+  width: var(--tab-width, 235px);
   height: 53px;
   border-radius: 12px 12px 4px 4px;
   clip-path: polygon(6% 0%, 94% 0%, 100% 100%, 0% 100%);
@@ -223,8 +213,15 @@ body.cards-mini .card-stack .tab {
 }
 
 .card {
-  --line-gap: 34px;
-  --line-offset: 66px;
+  /*
+   * SINGLE SOURCE OF TRUTH for card line spacing.
+   * --line-gap drives: ruled lines (red/blue), body text row height, A/B/C labels row height,
+   * line numbers row height, and blank-line height. Change this to change all of them together.
+   * Do not separate these or introduce another variable for card line/row height without checking.
+   */
+  --line-gap: calc(34px * 1.4 * 12 / 13);
+  /* Red line 3 line heights down from card top; blue lines one line-gap apart */
+  --line-offset: calc(3 * var(--line-gap));
   --baseline-shift: 12px;
   position: relative;
   width: calc(var(--card-base-width) - 108px);
@@ -236,7 +233,7 @@ body.cards-mini .card-stack .tab {
   font-family: "Bradley Hand", "Noteworthy", "Chalkboard SE", "Segoe Print", "Comic Sans MS", cursive;
   background-color: var(--card-color, #f29aa9);
   background-image: none;
-  overflow: visible;
+  overflow: hidden;
   pointer-events: auto;
   cursor: pointer;
   z-index: 1;
@@ -318,14 +315,16 @@ body.cards-mini .card-stack .tab {
   pointer-events: none;
 }
 
+/* Title midway between card top and center-of-red-line band (halfway back from full center) */
 .card-text-title {
   position: absolute;
   left: 0;
   right: 0;
-  top: var(--text-title-top, -10px);
+  top: calc((var(--line-offset) / 2 + -10px) / 2);
+  transform: translateY(-50%);
   width: 100%;
   text-align: center;
-  font-size: 28px;
+  font-size: calc(28px * 1.4 * 0.8);
   font-weight: 700;
   letter-spacing: 0.14em;
   text-transform: none;
@@ -336,24 +335,81 @@ body.cards-mini .card-stack .tab {
   position: absolute;
   left: 0;
   right: 0;
-  top: var(--text-list-top, 120px);
-  font-size: 28px;
+  font-size: calc(28px * 1.4 * 0.8);
   font-weight: 400;
-  display: grid;
-  grid-template-columns: 32px 1fr;
-  column-gap: 12px;
-  align-items: start;
   padding-left: 0px;
   font-family: "Courier New", Courier, monospace;
 }
 
+/* List: line numbers in fixed slots (match ruled lines); text rows flow beside them */
+/* Line numbers twice as close to card left edge; gap between number and A/B/C text unchanged (12px) */
+.card-text-list.card-text-list-rows {
+  top: calc(var(--line-offset) - var(--line-gap));
+  padding-left: 12px;
+  display: block;
+  position: relative;
+}
+
+/* Line numbers 1–12 at fixed vertical positions; pulled 32px left so twice as close to card edge */
+.card-line-numbers {
+  position: absolute;
+  left: -32px;
+  top: 0;
+  width: 32px;
+  height: calc(12 * var(--line-gap));
+  pointer-events: none;
+}
+
+.card-line-number-slot {
+  position: absolute;
+  left: 0;
+  top: calc(var(--line-index) * var(--line-gap));
+  width: 32px;
+  height: var(--line-gap);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+}
+
+.card-text-rows-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
 .card-text-list.compact {
-  font-size: 22px;
+  font-size: calc(22px * 1.4 * 0.8);
 }
 
 .card-text-list.compact .card-text-item {
-  line-height: 28px;
+  /* Uses same --line-gap as .card so text and ruled lines stay locked (see .card comment) */
+  line-height: var(--line-gap);
   gap: 10px;
+}
+
+/* Text row: no number inside; grows with content so full entry shows */
+.card-text-row {
+  min-height: var(--line-gap);
+  height: auto;
+  box-sizing: border-box;
+}
+
+.card-text-row:has(.card-text-item.is-editing) {
+  min-height: var(--line-gap);
+}
+
+/* Cell: content at top so label is on first line and full entry is visible */
+.card-text-cell {
+  min-height: 0;
+  overflow: visible;
+  display: flex;
+  align-items: flex-start;
+}
+
+.card-text-row:has(.is-editing) .card-text-cell {
+  overflow: visible;
+  align-items: flex-start;
 }
 
 .line-number-column {
@@ -367,12 +423,17 @@ body.cards-mini .card-stack .tab {
   flex-direction: column;
 }
 
+/* Text: one line height = one blue-line gap; label (A/B/C/D) on first line of the entry */
 .card-text-item {
   line-height: var(--line-gap);
   display: flex;
   align-items: flex-start;
   gap: 12px;
   margin-bottom: 0;
+  box-sizing: border-box;
+  min-height: 0;
+  width: 100%;
+  padding-bottom: 1px;
 }
 
 .card-text-item.level-2 {
@@ -383,12 +444,33 @@ body.cards-mini .card-stack .tab {
   padding-left: 104px;
 }
 
+/* Basic Information, Main Characters, Setting & Story: capital A at 56px; little a one step further in */
+.card[data-card-title="Basic Information"] .card-text-item:not(.level-2):not(.level-3):not(.line-break),
+.card[data-card-title="Main Characters"] .card-text-item:not(.level-2):not(.level-3):not(.line-break),
+.card[data-card-title="Setting & Story"] .card-text-item:not(.level-2):not(.level-3):not(.line-break) {
+  padding-left: 56px;
+}
+.card[data-card-title="Basic Information"] .card-text-item.level-2,
+.card[data-card-title="Main Characters"] .card-text-item.level-2,
+.card[data-card-title="Setting & Story"] .card-text-item.level-2 {
+  padding-left: 104px;
+}
+.card[data-card-title="Basic Information"] .card-text-item.level-3,
+.card[data-card-title="Main Characters"] .card-text-item.level-3,
+.card[data-card-title="Setting & Story"] .card-text-item.level-3 {
+  padding-left: 152px;
+}
+
 .card-text-item.section {
   margin-top: 0;
 }
 
+/* Blank line between A/B, B/C, etc.: one line-gap tall, no text */
 .card-text-item.line-break {
   min-height: var(--line-gap);
+  height: var(--line-gap);
+  padding: 0;
+  flex: none;
 }
 
 .card-text-item.line-break .bullet-marker {
@@ -398,13 +480,30 @@ body.cards-mini .card-stack .tab {
 .card-text-item-text {
   flex: 1;
   min-width: 0;
+  display: block;
+  line-height: var(--line-gap);
+  margin: 0;
+  padding: 0;
   pointer-events: auto;
+  white-space: normal;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
 }
 
 .card-text-item-text[contenteditable="true"] {
   outline: none;
   cursor: text;
   caret-color: currentColor;
+  display: block;
+  min-height: var(--line-gap);
+}
+
+/* When editing, item and row expand so full sentence is visible and editable (including wraps) */
+.card-text-item.is-editing {
+  overflow: visible;
+  align-items: flex-start;
+  min-height: auto;
+  padding-bottom: 0;
 }
 
 .alpha-marker {
@@ -419,12 +518,16 @@ body.cards-mini .card-stack .tab {
   margin-right: 0;
 }
 
+/* Label (A), B), etc.) stays on first line; wrapped lines align to start of text, not under label */
 .bullet-marker {
   color: #b0b0b0;
   margin-right: 12px;
+  flex-shrink: 0;
 }
 
+/* Row height from .card --line-gap only; do not separate (see .card comment) */
 .line-number-row {
+  box-sizing: border-box;
   height: var(--line-gap);
   line-height: var(--line-gap);
   display: flex;
@@ -481,7 +584,7 @@ body.cards-mini .card-stack .tab {
   --deck-height-base: calc(var(--deck-width-base) / 1.6);
   --deck-width: var(--deck-width-base);
   --deck-height: var(--deck-height-base);
-  --mini-scale: 0.56;
+  /* --mini-scale was 0.56 and could lock deck size; not used in All Projects, only overrides apply there */
   --mini-gap: 10px;
   --mini-left: 32px;
   --mini-top: calc(var(--deck-top-margin) - 8px);
@@ -508,7 +611,9 @@ body {
   margin: 0 0 0.5rem;
   padding: 0 16px;
   position: relative;
-  z-index: 10;
+  /* Keep the title bar visually above cards/overlays so
+     the top card never covers the deck title. */
+  z-index: 6000;
 }
 
 .page-title {
@@ -517,6 +622,10 @@ body {
   letter-spacing: 0.08em;
   padding: 8px 16px;
   margin: 0;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  text-align: center;
 }
 
 .title-row-btn {
@@ -605,6 +714,38 @@ body.deck-mode .title-row {
   background: rgba(0, 0, 0, 0.06);
 }
 
+.auto-reload-switch-wrap {
+  margin-left: auto;
+}
+
+.auto-reload-switch {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 10px;
+  border: 2px solid currentColor;
+  border-radius: 4px;
+  background: transparent;
+  color: var(--text-muted, #666);
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  line-height: 1.2;
+}
+
+.auto-reload-switch:hover {
+  color: var(--text, #111);
+  background: rgba(0, 0, 0, 0.06);
+}
+
+.auto-reload-switch[aria-checked="false"] .auto-reload-switch-status {
+  color: var(--text-muted, #888);
+}
+
+.auto-reload-switch[aria-checked="true"] .auto-reload-switch-status {
+  color: var(--text, #111);
+}
+
 .decks {
   position: relative;
   width: 100%;
@@ -615,13 +756,18 @@ body.deck-mode .title-row {
 
 .deck {
   position: absolute;
-  width: var(--deck-width);
-  height: var(--deck-height);
   cursor: pointer;
   user-select: none;
   display: block;
   overflow: visible;
   z-index: 2;
+}
+
+/* Single-deck / deck-mode only: use viewport-proportional size. All Projects (mini-mode) never uses this. */
+body:not(.mini-mode):not(.cards-mini) .deck,
+body.deck-mode .deck {
+  width: var(--deck-width);
+  height: var(--deck-height);
 }
 
 .deck-title {
@@ -727,34 +873,20 @@ body.mini-mode .deck {
   transform: none;
 }
 
-body.mini-mode .deck-title {
-  display: flex;
-  position: static !important;
-  inset: auto;
-  margin-top: 24px;
-  color: #ffffff;
-  align-self: center;
-}
-
-body.mini-mode {
-  --mini-height-limit: calc(100vh - var(--mini-top) - 24px);
-  --mini-height-base: calc(var(--deck-height-base) * 0.58);
-  --deck-height: min(var(--mini-height-base), var(--mini-height-limit));
-  --deck-width: calc(var(--deck-height) * 1.6);
-}
-
+/* All Projects: rectangles = 1/3 viewport width (3 cols), centered on same line of horizon */
+body.mini-mode main.decks,
 body.mini-mode .decks {
   display: grid;
-  grid-template-columns: repeat(
-    auto-fit,
-    minmax(var(--deck-width), 1fr)
-  );
-  gap: var(--mini-gap);
-  align-content: start;
-  align-items: start;
-  justify-content: start;
-  padding: var(--mini-top) var(--mini-left) 0;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 20px;
+  padding: 20px;
+  width: 100%;
+  min-height: 0;
+  align-content: center;
+  align-items: end;
+  justify-items: center;
   box-sizing: border-box;
+  min-height: 100vh;
 }
 
 body.mini-mode .deck {
@@ -762,23 +894,205 @@ body.mini-mode .deck {
   left: auto;
   top: auto;
   margin: 0;
-  justify-self: start;
-  display: flex !important;
+  display: flex;
   flex-direction: column;
   align-items: center;
-  width: var(--deck-width);
-  height: auto !important;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  cursor: pointer;
+  box-sizing: border-box;
 }
 
+body.mini-mode .deck-title {
+  display: block;
+  position: static;
+  margin: 0 0 8px 0;
+  padding: 0;
+  color: #ffffff;
+  font-size: 1rem;
+  font-weight: 700;
+  text-align: center;
+  width: 100%;
+  order: -1;
+}
+
+/* Representative profile: viewport rectangle with cards visible inside (scaled) */
 body.mini-mode .deck-viewport {
-  flex: 0 0 auto;
-  width: var(--deck-width);
-  height: var(--deck-height);
+  display: block;
+  width: 33.333vw;
+  max-width: 100%;
+  aspect-ratio: 1200 / 755;
+  min-width: 0;
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 8px;
+  overflow: hidden;
+  pointer-events: auto;
+  cursor: pointer;
+}
+
+body.mini-mode .deck-viewport .deck-scale {
+  display: block;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%) scale(var(--deck-scale, 1));
+  transform-origin: center center;
+}
+
+@media (max-width: 1023px) {
+  body.mini-mode main.decks,
+  body.mini-mode .decks {
+    grid-template-columns: 1fr;
+  }
+  body.mini-mode .deck-viewport {
+    width: 100%;
+  }
 }
 
 .deck.is-animating {
   transition: transform 520ms ease;
   will-change: transform;
+}
+
+/* Transition rectangles: cards inside, clipped */
+.transition-rect {
+  position: fixed;
+  pointer-events: none;
+  z-index: 5000;
+  background: rgba(0, 0, 0, 0.25);
+  border-radius: 8px;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.transition-rect .transition-rect-card {
+  position: absolute;
+  left: 0;
+  top: 0;
+  transform-origin: top left;
+  box-sizing: border-box;
+}
+
+body.expanded-to-mini-animating .deck.is-active {
+  visibility: hidden;
+}
+
+/* Deck proxy: independent DOM element that presents identically and animates between states */
+.deck-proxy {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 1200px;
+  height: var(--stack-base-height, 755px);
+  transform-origin: 0 0;
+  z-index: 6000;
+  pointer-events: none;
+  overflow: hidden;
+  visibility: hidden;
+  box-sizing: border-box;
+}
+
+.deck-proxy.is-active {
+  visibility: visible;
+}
+
+.deck-proxy .deck-viewport {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.deck-proxy .deck-scale {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: var(--deck-content-width);
+  height: var(--deck-content-height);
+  transform: none;
+  transform-origin: 0 0;
+}
+
+body.deck-proxy-animating .deck.is-active {
+  visibility: hidden;
+}
+
+/* Card rect framework: position, scale, transparency per card; white-through-yellow shades */
+.card-rect-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 5500;
+  pointer-events: none;
+  visibility: hidden;
+  box-sizing: border-box;
+}
+
+.card-rect-overlay.is-active {
+  visibility: visible;
+}
+
+.card-rect {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 1200px;
+  height: var(--stack-base-height, 755px);
+  transform-origin: 0 0;
+  box-sizing: border-box;
+  border-radius: 8px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.15);
+  z-index: 1;
+}
+
+/* When a real card is hosted inside a card-rect, pin the card body to
+   the rect; the tab sits above (layer top 0 = rect top). */
+.card-rect .card-layer--overlay {
+  position: absolute;
+  left: 0;
+  top: 0;
+  z-index: 1;
+  pointer-events: auto;
+  transform: none !important;
+}
+
+.card-rect .card-layer--overlay .card {
+  /* Match the full card-rect width so the card
+     expands to the right while keeping its top/left
+     aligned with the rect's origin. */
+  width: var(--card-base-width);
+}
+
+.card-rect .card-layer--overlay .card,
+.card-rect .card-layer--overlay .tab {
+  pointer-events: auto;
+}
+
+/* Deck 0: white → light yellow → yellow */
+.card-rect[data-deck-index="0"][data-index="0"] { background: #ffffff; }
+.card-rect[data-deck-index="0"][data-index="1"] { background: #fffde7; }
+.card-rect[data-deck-index="0"][data-index="2"] { background: #ffeb3b; }
+/* Deck 1: recessed family — similar cluster, similar strength (muted warm stone) */
+.card-rect[data-deck-index="1"][data-index="0"] { background: #faf8f6; }
+.card-rect[data-deck-index="1"][data-index="1"] { background: #f0ebe6; }
+.card-rect[data-deck-index="1"][data-index="2"] { background: #e2d9d0; }
+/* Deck 2: indifferent set — another group (cool slate) */
+.card-rect[data-deck-index="2"][data-index="0"] { background: #f2f3f5; }
+.card-rect[data-deck-index="2"][data-index="1"] { background: #e4e6ea; }
+.card-rect[data-deck-index="2"][data-index="2"] { background: #b8bcc6; }
+/* Fallback for additional decks */
+.card-rect[data-index="0"] { background: #f5f5f5; }
+.card-rect[data-index="1"] { background: #eeeeee; }
+.card-rect[data-index="2"] { background: #e0e0e0; }
+
+body.deck-mode .card-rect-overlay.is-active .card-rect {
+  pointer-events: auto;
+  cursor: pointer;
+}
+
+body.card-rect-framework .deck.is-active .deck-viewport {
+  visibility: hidden;
 }
 
 body.deck-mode .deck {
@@ -837,15 +1151,9 @@ body.deck-mode .deck.is-expanded .card-layer[data-color="red"] {
 }
 
 body.deck-mode .deck.is-expanded .card-layer[data-color="green"] {
-  --expand-x: var(--expanded-offset-x);
-  --expand-y: calc(var(--expanded-offset-y) + var(--expanded-step-y) - var(--expanded-bottom-row-lift));
+  --expand-x: calc(var(--expanded-offset-x) + var(--expanded-step-x) * 2);
+  --expand-y: calc(var(--expanded-offset-y) - var(--expanded-top-row-lift));
   --expand-delay: 60ms;
-}
-
-body.deck-mode .deck.is-expanded .card-layer[data-color="blue"] {
-  --expand-x: calc(var(--expanded-offset-x) + var(--expanded-step-x));
-  --expand-y: calc(var(--expanded-offset-y) + var(--expanded-step-y) - var(--expanded-bottom-row-lift));
-  --expand-delay: 90ms;
 }
 
 body.deck-mode.expand-animating .deck .card-layer,
