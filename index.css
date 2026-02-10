@@ -155,6 +155,13 @@ body.mini-mode .card-stack .tab {
   pointer-events: none;
 }
 
+/* Exception: first card (Basic Info) is clickable to open that deck in deck view */
+body.mini-mode .card-layer[data-color="yellow"] .tab,
+body.mini-mode .card-layer[data-color="yellow"] .card {
+  pointer-events: auto;
+  cursor: pointer;
+}
+
 .card-layer {
   position: absolute;
   left: var(--card-left);
@@ -175,7 +182,6 @@ body.mini-mode .card-stack .tab {
   border-radius: 12px 12px 4px 4px;
   clip-path: polygon(6% 0%, 94% 0%, 100% 100%, 0% 100%);
   border-top: none;
-  transform: translateY(1px);
   display: flex;
   align-items: flex-end;
   justify-content: center;
@@ -342,10 +348,10 @@ body.mini-mode .card-stack .tab {
 }
 
 /* List: line numbers in fixed slots (match ruled lines); text rows flow beside them */
-/* Line numbers twice as close to card left edge; gap between number and A/B/C text unchanged (12px) */
+/* More space between line numbers and A/B/C text */
 .card-text-list.card-text-list-rows {
   top: calc(var(--line-offset) - var(--line-gap));
-  padding-left: 12px;
+  padding-left: 20px;
   display: block;
   position: relative;
 }
@@ -437,28 +443,28 @@ body.mini-mode .card-stack .tab {
 }
 
 .card-text-item.level-2 {
-  padding-left: 56px;
+  padding-left: 64px;
 }
 
 .card-text-item.level-3 {
-  padding-left: 104px;
+  padding-left: 112px;
 }
 
-/* Basic Information, Main Characters, Setting & Story: capital A at 56px; little a one step further in */
+/* Basic Information, Main Characters, Setting & Story: top level A/B/C (cap); second level a/b (lowercase); more indent from line number */
 .card[data-card-title="Basic Information"] .card-text-item:not(.level-2):not(.level-3):not(.line-break),
 .card[data-card-title="Main Characters"] .card-text-item:not(.level-2):not(.level-3):not(.line-break),
 .card[data-card-title="Setting & Story"] .card-text-item:not(.level-2):not(.level-3):not(.line-break) {
-  padding-left: 56px;
+  padding-left: 68px;
 }
 .card[data-card-title="Basic Information"] .card-text-item.level-2,
 .card[data-card-title="Main Characters"] .card-text-item.level-2,
 .card[data-card-title="Setting & Story"] .card-text-item.level-2 {
-  padding-left: 104px;
+  padding-left: 120px;
 }
 .card[data-card-title="Basic Information"] .card-text-item.level-3,
 .card[data-card-title="Main Characters"] .card-text-item.level-3,
 .card[data-card-title="Setting & Story"] .card-text-item.level-3 {
-  padding-left: 152px;
+  padding-left: 172px;
 }
 
 .card-text-item.section {
@@ -518,10 +524,10 @@ body.mini-mode .card-stack .tab {
   margin-right: 0;
 }
 
-/* Label (A), B), etc.) stays on first line; wrapped lines align to start of text, not under label */
+/* Label (A), B), etc. or a), b) etc.) stays on first line; wrapped lines align to start of text, not under label */
 .bullet-marker {
   color: #b0b0b0;
-  margin-right: 12px;
+  margin-right: 14px;
   flex-shrink: 0;
 }
 
@@ -591,6 +597,8 @@ body.mini-mode .card-stack .tab {
   --title-size: 42px;
   --deck-content-width: var(--card-base-width);
   --deck-content-height: calc(var(--stack-base-height) + var(--tab-height));
+  /* Wire frame: exactly the old card design bounds (tab + .card height), no lower */
+  --wire-frame-height: calc(var(--tab-height) + var(--card-base-height));
 }
 
 body {
@@ -922,7 +930,7 @@ body.mini-mode .deck-viewport {
   display: block;
   width: 33.333vw;
   max-width: 100%;
-  aspect-ratio: 1200 / 755;
+  aspect-ratio: 1200 / 728;
   min-width: 0;
   background: rgba(0, 0, 0, 0.2);
   border-radius: 8px;
@@ -983,7 +991,7 @@ body.expanded-to-mini-animating .deck.is-active {
   left: 0;
   top: 0;
   width: 1200px;
-  height: var(--stack-base-height, 755px);
+  height: var(--wire-frame-height);
   transform-origin: 0 0;
   z-index: 6000;
   pointer-events: none;
@@ -1033,12 +1041,13 @@ body.deck-proxy-animating .deck.is-active {
   visibility: visible;
 }
 
+/* Wire frame: exactly old card design bounds (tab + .card = 728px), same in all views */
 .card-rect {
   position: fixed;
   left: 0;
   top: 0;
   width: 1200px;
-  height: var(--stack-base-height, 755px);
+  height: var(--wire-frame-height);
   transform-origin: 0 0;
   box-sizing: border-box;
   border-radius: 8px;
@@ -1046,8 +1055,7 @@ body.deck-proxy-animating .deck.is-active {
   z-index: 1;
 }
 
-/* When a real card is hosted inside a card-rect, pin the card body to
-   the rect; the tab sits above (layer top 0 = rect top). */
+/* When a real card is hosted inside a card-rect: tab and card body inside the rect */
 .card-rect .card-layer--overlay {
   position: absolute;
   left: 0;
@@ -1057,10 +1065,14 @@ body.deck-proxy-animating .deck.is-active {
   transform: none !important;
 }
 
+.card-rect .card-layer--overlay .tab {
+  top: 0;
+}
+
 .card-rect .card-layer--overlay .card {
-  /* Match the full card-rect width so the card
-     expands to the right while keeping its top/left
-     aligned with the rect's origin. */
+  position: absolute;
+  top: var(--tab-height);
+  left: 0;
   width: var(--card-base-width);
 }
 
@@ -1087,6 +1099,12 @@ body.deck-proxy-animating .deck.is-active {
 .card-rect[data-index="2"] { background: #e0e0e0; }
 
 body.deck-mode .card-rect-overlay.is-active .card-rect {
+  pointer-events: auto;
+  cursor: pointer;
+}
+
+/* All Projects: card rects must receive clicks so we can open that deck */
+body.mini-mode.card-rect-framework .card-rect-overlay.is-active .card-rect {
   pointer-events: auto;
   cursor: pointer;
 }

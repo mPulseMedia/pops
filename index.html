@@ -65,17 +65,17 @@
           {
             color: "yellow", /* ALWAYS leftmost: --card-left 0px must stay fixed */
             style:
-              "--card-left: 0px; --card-top: 0px; --tab-offset-x: 50px; --tab-offset-y: -52px; --layer-z: 90; --text-list-top: 22px;",
+              "--card-left: 0px; --card-top: 0px; --tab-offset-x: 50px; --tab-offset-y: -53px; --layer-z: 90; --text-list-top: 22px;",
           },
           {
             color: "red", /* second from left */
             style:
-              "--card-left: 36px; --card-top: -17px; --tab-offset-x: 292px; --tab-offset-y: -52px; --layer-z: 70; --text-title-top: -32px; --text-list-top: 24px;",
+              "--card-left: 36px; --card-top: -17px; --tab-offset-x: 292px; --tab-offset-y: -53px; --layer-z: 70; --text-title-top: -32px; --text-list-top: 24px;",
           },
           {
             color: "green", /* third from left / rightmost */
             style:
-              "--card-left: 72px; --card-top: -34px; --tab-offset-x: 534px; --tab-offset-y: -52px; --layer-z: 50; --text-title-top: -32px; --text-list-top: 24px;",
+              "--card-left: 72px; --card-top: -34px; --tab-offset-x: 534px; --tab-offset-y: -53px; --layer-z: 50; --text-title-top: -32px; --text-list-top: 24px;",
           },
         ];
 
@@ -633,7 +633,7 @@
           back: { cardTop: "-24px", layerZ: 30 },
         };
         const backgroundTabByColor = { yellow: "-8px", red: "-16px", green: "-24px" };
-        const tabOffsetY = -52;
+        const tabOffsetY = -53;
 
         function buildLayerMap(deck) {
           const layerMap = {};
@@ -1272,7 +1272,7 @@
 
         /* ---------- Deck proxy: independent DOM representation for transitions ---------- */
         const PROXY_CONTENT_WIDTH = 1200;
-        const PROXY_CONTENT_HEIGHT = 755;
+        const PROXY_CONTENT_HEIGHT = 728;
 
         function getDeckProxy() {
           return document.getElementById("deckProxy");
@@ -1335,7 +1335,7 @@
 
         /* ---------- Card rect framework: position, scale, transparency per card ---------- */
         const CARD_RECT_WIDTH = 1200;
-        const CARD_RECT_HEIGHT = 755;
+        const CARD_RECT_HEIGHT = 728; /* wire frame = tab + .card (53+675), matches old card bottom edge */
         const CARD_RECT_INDICES = [0, 1, 2];
 
         function cardRectState(x, y, scaleX, scaleY, opacity) {
@@ -1721,9 +1721,23 @@
           const overlay = getCardRectOverlay();
           if (!overlay) return;
           overlay.addEventListener("click", function (e) {
-            if (!document.body.classList.contains("deck-mode")) return;
             const rect = e.target.closest(".card-rect[data-deck-index]");
             if (!rect) return;
+
+            /* All Projects (mini) mode: clicking any card rect opens that deck in deck view */
+            if (document.body.classList.contains("mini-mode")) {
+              e.preventDefault();
+              e.stopPropagation();
+              const deckIndex = parseInt(rect.getAttribute("data-deck-index"), 10);
+              const deck = decks[deckIndex];
+              if (deck) {
+                setActiveDeck(deck.dataset.deck);
+                setMode("deck");
+              }
+              return;
+            }
+
+            if (!document.body.classList.contains("deck-mode")) return;
             const active = getActiveDeck();
             if (!active || rect.getAttribute("data-deck-index") !== String(decks.indexOf(active))) return;
             e.preventDefault();
@@ -1956,7 +1970,18 @@
               });
           });
 
-          /* In All Projects (mini) mode, clicking the viewport (card area) or the deck selects it */
+          /* In All Projects (mini) mode: clicking the first card (Basic Info) or the viewport opens that deck in deck view */
+          const yellowLayer = deck.querySelector('.card-layer[data-color="yellow"]');
+          if (yellowLayer) {
+            yellowLayer.querySelectorAll(".card, .tab").forEach((el) => {
+              el.addEventListener("click", (event) => {
+                if (!document.body.classList.contains("mini-mode")) return;
+                event.stopPropagation();
+                setActiveDeck(deck.dataset.deck);
+                setMode("deck");
+              });
+            });
+          }
           const viewport = deck.querySelector(".deck-viewport");
           if (viewport) {
             viewport.addEventListener("click", (event) => {
