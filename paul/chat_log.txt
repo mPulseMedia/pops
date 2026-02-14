@@ -1,0 +1,927 @@
+1.  DECK VIEW TAB CLICKS – 2025-02-11 12:00:00 PM
+    A.  Prompt
+        a.  In deck view, clicking on the tabs is strange
+            and sometimes works, and sometimes brings a
+            different card to the forfront, and usually
+            does nothing.
+    B.  Response
+        a.  Receded rects (inactive decks) were intercepting
+            clicks; set pointer-events: none when scale/opacity
+            is 0.
+        b.  Re-apply final states after card rect animations
+            so pointer-events stay correct.
+        c.  Ensure setCardRectActiveDeckIndex runs when
+            showCardRectFramework is shown in deck mode.
+
+2.  CHAT LOG UPDATE – 2025-02-11 12:01:00 PM
+    A.  Prompt
+        a.  why aren't you updating the chat_log file?
+    B.  Response
+        a.  I was not applying the paul rule system; now
+            updating chat_log per paul/rule/prompt.txt.
+
+3.  DECK TABS WORKING – 2025-02-11 12:00:00 PM
+    A.  Prompt
+        a.  get tabs working in deck view
+    B.  Response
+        a.  Set card-layer--overlay to pointer-events: none
+            so clicks pass through to tabs of cards behind when
+            stacked; tab and card-text-image remain auto.
+
+4.  TABS VS CARD EDGES – 2025-02-11 12:00:00 PM
+    A.  Prompt
+        a.  when I tap the edges of the cards that are visible
+            on the sides, I can switch cards. But this does not
+            work with the tabs.
+    B.  Response
+        a.  Card rect had pointer-events: auto, so it
+            intercepted tab-row clicks before rear tabs.
+        b.  Set rect to pointer-events: none in deck mode;
+            added ::after hit area for card body so promote
+            still works on body click.
+
+5.  NEXT PROMPT RULES – 2025-02-11 12:00:00 PM
+    A.  Prompt
+        a.  improve the rules related to generating NEXT
+            PROMPT, and make it generate more useful choices,
+            and mutiple choices, as described
+    B.  Response
+        a.  Added guidance: prefer multiple options, base on
+            context, be concrete, mix option types.
+        b.  Avoid vague placeholders; option labels 1–5 words.
+
+6.  SPEC POPULATION NEXT PROMPTS – 2025-02-11 12:00:00 PM
+    A.  Prompt
+        a.  I wanna make the next prompts about filling out
+            the spec that describes the user experience and
+            the architecture and the actual Code organization
+            involved in creating the functionality on the
+            index.HML page so look at the code and come up
+            with three alternatives make them a little more
+            detail than typical of next prompts that we could
+            do to meaningfully populate the spec file and
+            add more spec files as his appropriate
+    B.  Response
+        a.  Updated ##  NEXT PROMPT with three detailed
+            spec-population options (below).
+
+7.  SPEC UX FLOWS – 2025-02-11 12:00:00 PM
+    A.  Prompt
+        a.  Document the three views (All Projects, Deck,
+            Expanded) with entry/exit points, user actions,
+            and visual behavior. Document the state machine:
+            mode (mini/deck/expanded), active deck, card
+            order per deck (yellow/red/green), and expanded
+            flag. Document all localStorage keys (MODE_KEY,
+            ACTIVE_KEY, SELECT_KEY, EXPANDED_KEY,
+            CARD_EDITS_KEY, etc.) and what each persists.
+        b.  Create spec_02 ux.txt (or views-and-state.txt)
+            with this content. Update spec_01 app.txt to
+            reference it and trim overlap.
+        c.  Executed next prompt.
+    B.  Response
+        a.  Created spec_02 ux.txt with views, state
+            machine, and all localStorage keys.
+        b.  Updated spec_01 app.txt to reference spec_02.
+
+8.  RENAME VIEWS AND MODES – 2025-02-11 12:00:00 PM
+    A.  Prompt
+        a.  Combination of requests (done via Planning, not
+            just executing): rename spec_01 app to
+            spec_01_deck_view.txt; change All Projects to
+            Project view; replace mini-mode with project-view,
+            deck-mode with deck-view, deck-expanded with
+            expanded-view; make all three views equal footing
+            in state machine and class names.
+        b.  After spec rename: implement across index.html,
+            index.css, specs, README.
+    B.  Response
+        a.  Renamed spec to spec_01_deck_view.txt; updated
+            spec_02 ux with project-view, deck-view,
+            expanded-view.
+        b.  Replaced all mode/class names in index.html and
+            index.css; added migration for "mini" and
+            EXPANDED_KEY.
+        c.  Updated README; project-view, deck-view,
+            expanded-view as three equal views.
+
+9.  PROMPT.TXT ONE-PROMPT REMOVED – 2025-02-11 12:00:00 PM
+    A.  Prompt
+        a.  in prompt.TXT - get rid of the one prompt options
+            in 4E. and just include the three A/B/C prompt rule
+            stuff.
+    B.  Response
+        a.  Removed one-prompt option from §4E; body now
+            three options (A/B/C) only.
+
+10.  DELETE INDEX-SAVED, PNG, BUDDY – 2025-02-11 12:00:00 PM
+    A.  Prompt
+        a.  Delete the index.saved directory and it's. Delete
+            the PNG files that aren't being used currently.
+            Delete Buddy.htmland Buddy.css andbuddy.txt
+    B.  Response
+        a.  Deleted index-saved/ and contents; removed unused
+            png (character, ChatGPT images, playbill); deleted
+            buddy.html, buddy.css, buddy.txt.
+
+11.  DELETE OLD DIRECTORY – 2025-02-11 12:00:00 PM
+    A.  Prompt
+        a.  Delete the old directory and its contents
+    B.  Response
+        a.  Deleted old/ and contents. Noted index.html
+            references old/shared.css and old/shared.js (now
+            404).
+
+12.  CHAT LOG OMISSION – 2025-02-11 12:00:00 PM
+    A.  Prompt
+        a.  Why didn't you update the chat? Log just now
+    B.  Response
+        a.  I neglected to apply paul/rule/prompt.txt §3
+            (chat log for every prompt). Adding entries 10,
+            11, 12 now.
+
+13.  RECONSTRUCT SHARED CSS – 2025-02-12 12:00:00 AM
+    A.  Prompt
+        a.  I think I deleted the shared CSS and we need
+            that, but let's just keep it as part of let's
+            reconstruct it as part of index.css
+    B.  Response
+        a.  Retrieved shared.css from git; merged into
+            index.css; removed old/shared.css link.
+        b.  shared.js still missing (PopsShared)—index.html
+            will error until that is restored or inlined.
+
+14.  RESTORE SHARED.JS – 2025-02-12 12:00:00 AM
+    A.  Prompt
+        a.  index.html:32 GET file:///.../old/shared.js
+            net::ERR_FILE_NOT_FOUND;
+            index.html:34 Uncaught ReferenceError: PopsShared
+            is not defined
+    B.  Response
+        a.  Created shared.js from git; updated index.html
+            to reference shared.js; updated README.
+
+15.  THREE VIEWS EQUAL TREATMENT – 2025-02-11 12:00:00 PM
+    A.  Prompt
+        a.  check that the code actually makes the 3 views
+            equal in terms of how they are treated,
+            executed, stored, etc.
+    B.  Response
+        a.  Fixed back/title/backdrop handlers to include
+            expanded-view (was deck-view only); now Back,
+            title click, backdrop click all return to
+            project from expanded-view.
+        b.  Tab click, card rect click, showCardRectFramework
+            now treat deck-view and expanded-view
+            identically (promote, active deck index,
+            etc.).
+        c.  deck-view and expanded-view are now symmetric
+            for navigation and deck-interaction handlers.
+
+16.  REMOVE SETEXPANDED, USE SETMODE ONLY – 2025-02-11 12:00:00 PM
+    A.  Prompt
+        a.  Why have set expanded and I think you should
+            just use set mode. Having set expanded seems
+            to just make the expanded mode asymmetric and
+            how it's treated.
+    B.  Response
+        a.  Removed setExpanded; all transitions now use
+            setMode("project"|"deck"|"expanded").
+        b.  Expand button, tab click, card rect click now
+            call setMode("deck") or setMode("expanded").
+        c.  Folded expand/collapse animation into
+            setMode via internal runDeckExpandedTransition.
+        d.  Updated spec_02 §2D: applyMode(), setMode().
+
+17.  SYMMETRIC TRANSITION FUNCTIONS – 2025-02-11 12:00:00 PM
+    A.  Prompt
+        a.  If you now have a function called run deck
+            expanded transition do you have a function
+            called run deck, project transition and run
+            deck deck view transition you seem to be
+            missing that I am looking for symmetry and
+            how you handle all three modes and how you
+            transform between the modes that's what I want
+    B.  Response
+        a.  Added runProjectDeckTransition(toMode): handles
+            project↔deck (both directions).
+        b.  runDeckExpandedTransition(toMode): handles
+            deck↔expanded (both directions).
+        c.  Added runProjectExpandedTransition(toMode):
+            handles project↔expanded (both directions).
+        d.  setMode now dispatches to the appropriate
+            transition for each from/to pair.
+        e.  Updated spec_02 §2D with all five functions.
+
+18.  EXPAND SPEC 01 DECK VIEW – 2025-02-11 12:00:00 PM
+    A.  Prompt
+        a.  Expand the spec of deck view by filling out
+            spec oh one deck view. Don't put fluff in only
+            clear, direct explanations of what the user can
+            do and the code related that makes it happen.
+    B.  Response
+        a.  Filled spec_01_deck_view: user actions (promote,
+            back, expand, lightbox) with effect and code.
+        b.  Pointer-events section; key functions section.
+
+19.  SPEC 01: TEXT EDITING + RELOAD – 2025-02-11 12:00:00 PM
+    A.  Prompt
+        a.  Include the spec related to editing text. Put
+            in the spec of one file for now what happens
+            regarding reloading pages turning that on and
+            off and remembering where if if you're in
+            TextEdit mode and which item you're editing
+            and where are the insertion point or the
+            selection is.
+    B.  Response
+        a.  §5 Text editing: editable elements, CARD_EDITS_KEY,
+            setupCardTextEditing, setupCardTabAndTitleEditing.
+        b.  §6 Reload and edit-state restore: auto-reload
+            toggle, canReload, beforeunload saveCurrentEdit
+            StateIfActive; ACTIVE_EDIT_KEY; restore on load.
+
+20.  NEXT PROMPTS: INTERNAL CONSISTENCY – 2025-02-11 12:00:00 PM
+    A.  Prompt
+        a.  Suggest three next prompts that have to do with
+            creating internal consistency and symmetry with
+            the code
+    B.  Response
+        a.  Suggested A/B/C; did not update chat log or
+            NEXT PROMPT at that time.
+        b.  User noted chat log and NEXT PROMPT should have
+            been updated.
+
+21.  CHAT LOG + RULES REINFORCEMENT – 2025-02-11 12:00:00 PM
+    A.  Prompt
+        a.  Why have you stopped updating chat log with your
+            responses and in this case I've specifically asked
+            you to populate next prompt, which is within chat
+            log. Please update the rules to reinforce that
+            you will update. Chat Lodge each time unless
+            explicitly asked not to.
+    B.  Response
+        a.  Strengthened prompt.txt §3: never skip; mandatory
+            unless user explicitly asks not to.
+        b.  Added prompt.txt §4A: when user asks for next-
+            prompt suggestions, update ##  NEXT PROMPT and
+            add chat log entry.
+        c.  Updated response-style.mdc §2B: do not skip
+            unless explicitly asked not to.
+        d.  Populated ##  NEXT PROMPT with three internal-
+            consistency options (below).
+
+22.  EXECUTE NEXT PROMPT B – 2025-02-11 12:00:00 PM
+    A.  Prompt
+        a.  Symmetric spec coverage per view: give Project
+            view and Expanded view the same treatment as
+            Deck view in spec_01; create spec_03 project_view
+            and spec_04 expanded_view; ensure §2 User actions
+            mirrors structure across all three views.
+        b.  Executed next prompt.
+    B.  Response
+        a.  Created spec_03_project_view.txt: Overview, User
+            actions (open deck, load/export/reload, auto-
+            reload), Key functions, Cross-view.
+        b.  Created spec_04_expanded_view.txt: Overview,
+            User actions (promote+collapse, back, expand,
+            lightbox), Pointer-events, Key functions,
+            Cross-view.
+        c.  Updated spec_02 §4 and spec_01 §1C with cross-
+            references.
+
+23.  SWAP SPEC 01 AND 02 FILE NUMBERS – 2025-02-11 12:00:00 PM
+    A.  Prompt
+        a.  swap the numbers in the file names of spec_01
+            and spec_02
+    B.  Response
+        a.  spec_01_deck_view.txt → spec_02_deck_view.txt.
+        b.  spec_02 ux.txt → spec_01 ux.txt.
+        c.  Updated cross-references in spec_03, spec_04,
+            spec_01, spec_02.
+
+24.  SPEC 05 ARCHITECTURE – 2025-02-11 12:00:00 PM
+    A.  Prompt
+        a.  Add a spec five architecture that focuses
+            initially on the code that sets the position,
+            scale, transparency, and anything else of the
+            cards as they are moved from view to view. I
+            want to use that to ensure that there is
+            physical persistence in the representation of
+            the objects, even if at times those objects are
+            moved "beyond the horizon.
+    B.  Response
+        a.  Created spec_05_architecture.txt: state
+            representation (cardRectState), apply to DOM,
+            beyond-horizon (recede), layout functions,
+            aggregators, state persistence, animation.
+        b.  Documents physical persistence: rects stay in
+            overlay; recede = center + scale 0 + opacity 0.
+        c.  Added spec_05 reference to spec_01 §4.
+
+25.  MINI→PROJECT, MODE→VIEW REFACTOR – 2025-02-11 12:00:00 PM
+    A.  Prompt
+        a.  Remove any occurrence of MINI in the code that
+            should now be replaced with project. Remove all
+            references to mode as that word should now be
+            view. This applies everywhere, including function
+            names, and everything else.
+    B.  Response
+        a.  Mini→project: getStatesForAllDecksMiniToDeck →
+            getStatesForAllDecksProjectToDeck; setMiniStack
+            Order → setProjectStackOrder; getStatesForAll
+            DecksCurrentInDeckMode → getStatesForAllDecks
+            CurrentInDeckView; lastDeckModeStates →
+            lastDeckViewStates; mini-overlay → project-overlay;
+            --mini-* → --project-*.
+        b.  Mode→view: MODE_KEY → VIEW_KEY (+ LEGACY_MODE_KEY
+            for migration); applyMode → applyView; setMode →
+            setView; modeBackdrop → viewBackdrop;
+            mode-backdrop → view-backdrop; savedMode →
+            savedView; toMode → toView.
+        c.  Updated specs, README, prompt.txt.
+
+26.  EXECUTE NEXT PROMPT A – 2025-02-11 12:00:00 PM
+    A.  Prompt
+        a.  Unify edit-state save functions: fold
+            saveActiveEditState, saveActiveEditStateTab,
+            saveActiveEditStateCardTitle into one function
+            that takes type and optional itemIndex. Update
+            all call sites. Ensure ACTIVE_EDIT_KEY structure
+            is consistent.
+        b.  Executed next prompt.
+    B.  Response
+        a.  Replaced three functions with single
+            saveActiveEditState(type, deckId, cardIndex,
+            selStart, selEnd, itemIndex).
+        b.  type: "item" | "tab" | "cardTitle".
+            itemIndex required only for type "item".
+        c.  Updated all 18 call sites. ACTIVE_EDIT_KEY
+            structure unchanged (backward compatible).
+
+21.  TITLE OVERLAY PERSISTENT – 2025-02-11 12:00:00 PM
+    A.  Prompt
+        a.  Ensure that the title of the decks and the
+            title of the view are treated as persistent
+            objects in the same way that the decks are so
+            that each view puts the title or view name in a
+            specific location and scale. And the transition
+            between these views shows a transition of the
+            placement and scale of these title elements. I
+            don't want any title to appear or expand from
+            nothing into its location. I wanted to move for
+            where it was in the prior view to where it goes
+            in the current view. And like the decks that
+            position may be beyond the horizon.
+    B.  Response
+        a.  Added title overlay with 4 persistent elements
+            (view title + 3 deck titles); position/scale
+            per view; receded state = beyond horizon.
+        b.  Integrated title animation into all transitions
+            (project↔deck, project↔expanded, deck↔expanded).
+        c.  Real page title and deck titles hidden via
+            visibility when overlay active; overlay handles
+            clicks and display.
+
+22.  FIX REVERSE TITLE TRANSITION – 2025-02-11 12:15:00 PM
+    A.  Prompt
+        a.  That was successful in the transition from
+            project view and each project title to the
+            title placement in deck view. However, the
+            reverse transition did not work. The title
+            animation did not start with the title's
+            location in deck view as it should have. The
+            point of this animation framework is to avoid
+            having an object jump from one location to
+            another location instantaneously.
+    B.  Response
+        a.  Pass skipTitleOverlayUpdate: true when
+            transitioning TO project (deck→project,
+            expanded→project). applyView was overwriting
+            the from-state with final positions before our
+            animation started.
+
+23.  FIX EXPANDED→PROJECT TITLE JUMP – 2025-02-11 12:25:00 PM
+    A.  Prompt
+        a.  The transition from expanded view to project
+            view also caused a jump in the location of the
+            titles. Fix that as well.
+    B.  Response
+        a.  Call showTitleOverlay(titleFromStates) before
+            applyView in all transitions so the overlay is
+            at the from position before any layout change.
+
+24.  DECK→PROJECT TITLE ANIMATION – 2025-02-11 12:35:00 PM
+    A.  Prompt
+        a.  When transitioning from deck view to project
+            view, the decks title should return to where it
+            belongs in project view above its corresponding
+            deck, whereas the project title, which had moved
+            to beyond the horizon should return from beyond
+            the horizon up to the top center of the page.
+    B.  Response
+        a.  Added getTitleFromStatesForDeckToProject():
+            all titles start receded (beyond horizon).
+        b.  Deck→project and expanded→project use this for
+            titleFromStates; element 0 shows "Project" and
+            animates from receded to center; deck titles
+            animate from receded to above each deck.
+
+25.  DECK TITLE TRANSITION FIX – 2025-02-11 12:45:00 PM
+    A.  Prompt
+        a.  In deck view when returning to project view, it
+            seems like the deck title immediately disappears
+            instead of transitioning to its target location.
+    B.  Response
+        a.  getTitleFromStatesForDeckToProject(activeDeckIndex):
+            active deck title starts at center (not receded),
+            so it animates from center to above its deck.
+
+26.  DECK VIEW TITLE FORMAT – 2025-02-11 12:50:00 PM
+    A.  Prompt
+        a.  Keep the number and the parentheses prior to
+            the deck title when in deck view.
+    B.  Response
+        a.  Added getDeckTitleText(deck) using .deck-title
+            textContent; applyView and transitions use it
+            for deck/expanded view.
+
+27.  TITLE FONT SIZE TRANSITION – 2025-02-11 12:55:00 PM
+    A.  Prompt
+        a.  When transitioning the title from one view to
+            another, the size of the font in the title
+            should transition smoothly just as it does,
+            its location and object scale.
+    B.  Response
+        a.  Added fontSize to titleRectState; read from
+            getComputedStyle in getTitleStatesFromDOM and
+            helpers; animate fontSize in animateTitleOverlay;
+            applyTitleState sets fontSize.
+
+28.  REPLACE NEXT PROMPT C – 2025-02-11 01:05:00 PM
+    A.  Prompt
+        a.  Replace next prompt C with an improved writing
+            of the following prompt: In deck view, when I
+            click on the tab of a card that is not in the
+            foreground that card should be moved to the
+            foreground as it is currently, but also
+            repositioned to be the lowest of the three
+            cards with the other cards behind it being a
+            little higher and then a little higher still.
+            Use those current locations of lowest middle
+            and highest, but change which card is lowest
+            middle and highest based on which card is in
+            the foreground. And regarding the cards, not
+            in the foreground when possible make card one
+            if it's in the back lower than card two if
+            it's in the back or lower than three, if it's
+            in the back and make card two lower than card
+            three if it's in the back.
+    B.  Response
+        a.  Replaced option C with clarified version:
+            deck tab-click stack order and depth (four
+            bullets).
+
+29.  DECK TAB-CLICK STACK ORDER – 2025-02-11 01:10:00 PM
+    A.  Prompt
+        a.  When clicking a non-foreground card's tab, move
+            that card to the foreground (current behavior).
+        b.  Use the existing lowest / middle / highest
+            positions, but assign which card occupies each
+            based on the new foreground card.
+        c.  The clicked card becomes lowest; the other two
+            occupy middle and highest (slightly higher, then
+            higher still).
+        d.  When cards are in back, order by color: yellow
+            lower than red when both in back; yellow lower
+            than green when both in back; red lower than
+            green when both in back.
+        e.  Executed next prompt.
+    B.  Response
+        a.  orderMap.green: [green, yellow, red] so back
+            order yellow < red < green.
+        b.  Replaced color-based slots with position-based:
+            stackTopsByPosition [0px, -8px, -24px]; front
+            lowest, middle, highest by stack order.
+
+30.  PROMPT RULES UPDATE – 2025-02-11 01:15:00 PM
+    A.  Prompt
+        a.  Update the prompt.txt file to say that the
+            prompt names provided in the next prompt A and
+            B and C should be in and should follow the same
+            rules as the brevity of the 2 to 3 word title
+            that will be used for that final title.
+    B.  Response
+        a.  Option labels (SHORT NAME) in A, B, C: 2–3
+            words; same brevity rules as chat log LABEL.
+
+31.  PROMPT RULES REINFORCE – 2025-02-11 01:20:00 PM
+    A.  Prompt
+        a.  Update the prompt rule to specify that last
+            behavior. Also update the next prompts every
+            single time you process a prompt. They're
+            already is a rule about this. I don't know why
+            you missed it, but reinforce the rule if
+            necessary.
+    B.  Response
+        a.  When queued prompt executed: A. Prompt = full
+            option text (all bullets), not placeholder.
+        b.  Section 4.I: update ## NEXT PROMPT after every
+            processed prompt; mandatory.
+
+32.  DECK STACK POSITIONS FIX – 2025-02-11 01:25:00 PM
+    A.  Prompt
+        a.  From prompt number 29 I do not see a change in
+            behavior of the placement of the cards in deck
+            view. Try again do it better make it work.
+    B.  Response
+        a.  getStackedStatesFromViewport: positions by order,
+            each color gets STACK_OFFSETS[order.indexOf(color)].
+        b.  Front card at lowest (0,0), middle, back at
+            highest; project and expanded same.
+        c.  Card rect overlay now repositions on promote.
+
+33.  STACK VERTICAL ONLY – 2025-02-11 01:30:00 PM
+    A.  Prompt
+        a.  When lowering the card that's in the forefront
+            you are also sliding it to the left. I want you
+            only to move it down not right and left.
+    B.  Response
+        a.  STACK_OFFSETS: x=0 for all; only y varies
+            (0, -17, -34). Cards move down only.
+
+------------------
+
+30.  DECK TRANSITION TAB BUG – 2025-02-11 12:00:00 PM
+
+    A.  Prompt
+        a.  "When I move from project view to deck view,
+            and then click on the tabs, the card positions
+            do not move to the right place. However, when
+            still in deck view, if I reload the page, the
+            when I click the tabs the card position changes
+            correctly. Fix that."
+    B.  Response
+        a.  In runProjectDeckTransition, when transitioning
+            to deck: use double requestAnimationFrame so
+            layout has time to settle.
+        b.  In first rAF: call updateDeckScales and setOrder
+            for the active deck so deck DOM matches saved
+            order before measuring viewport.
+        c.  In second rAF: get toStates, animate as before.
+------------------
+
+31.  EXPANDED-TO-DECK TAB BUG – 2025-02-11 12:00:00 PM
+
+    A.  Prompt
+        a.  "This is also the case when returning from
+            expanded view to deck view. Fix that also."
+    B.  Response
+        a.  Applied same fix to runDeckExpandedTransition
+            (expanded→deck collapse): double rAF, in first
+            rAF call updateDeckScales and setOrder for
+            active deck; in second rAF get toStates and
+            animate.
+        b.  Follow-up: "When I return from expanded Butte
+            to deck view, it still does not then lower the
+            card..." — Added setCardRectActiveDeckIndex in
+            second rAF and in finish callback so z-order
+            matches stack order after collapse.
+        c.  Follow-up: "Same with returning from project
+            view back to deck view where the cards are not
+            in the default position" — Added
+            setCardRectActiveDeckIndex to project→deck
+            animateCardRects finish callback.
+        d.  Follow-up: "still a problem... whatever you're
+            doing isn't changing anything" — Replaced
+            setCardRectActiveDeckIndex callbacks with full
+            overlay refresh: in rAF after animation,
+            updateDeckScales, getStatesForAllDecks("deck"),
+            showCardRectFramework. Recomputes positions
+            from current layout so tab clicks work.
+        e.  Follow-up: "Please do something more radical...
+            When I reload the page when looking at deck
+            view, it works fine. That's your clue." —
+            RADICAL: When transitioning to deck (from
+            project or expanded), skip card-rect animation
+            entirely. Call applyView(deck) without
+            skipCardRectUpdate so the normal applyView path
+            handles the overlay — same code path as reload.
+        f.  Follow-up: "not a good solution, undo that and
+            try something else" — Restored full animations.
+            New approach: when transition to deck completes,
+            call buildCardRectOverlay() to create fresh
+            overlay elements (same as reload), then
+            showCardRectFramework with correct states.
+
+------------------
+
+32.  DECK→PROJECT FLASH – 2025-02-11 12:00:00 PM
+
+    A.  Prompt
+        a.  "There is a flash when I'm view in deck view,
+            and I click to return to project view"
+    B.  Response
+        a.  Show overlay at fromStates synchronously right
+            after applyView(project), before rAF.
+
+------------------
+
+33.  DECK TITLES CENTERED – 2025-02-11 12:00:00 PM
+
+    A.  Prompt
+        a.  "The deck titles should be centered above the
+            decks in project view"
+    B.  Response
+        a.  Set deck-title width 33.333vw, max-width 100%;
+            100% on mobile.
+
+------------------
+
+34.  EXPANDED CARD CLICK → FRONT – 2025-02-11 12:00:00 PM
+
+    A.  Prompt
+        a.  "When in expand mode, when I click one of the
+            cards, it should become the selected card when
+            it return to deck view"
+    B.  Response
+        a.  On card/tab click: promote, showCardRectFramework
+            (expanded), double rAF, setView(deck).
+
+------------------
+
+35.  SPEC UPDATE – 2025-02-11 12:00:00 PM
+
+    A.  Prompt
+        a.  "update spec what changed in the last 10 or so
+            prompts"
+    B.  Response
+        a.  Updated spec_01–05 per changes in prompts 30–34.
+
+------------------
+
+36.  RULE FILES TO CURSOR – 2025-02-11 12:00:00 PM
+
+    A.  Prompt
+        a.  "Maybe make a copy of the outline and prompt.TXT
+            files and move them into the Cursor/rules folder
+            and make them .mdc files"
+    B.  Response
+        a.  Created .cursor/rules/outline.mdc and
+            .cursor/rules/prompt.mdc (copies of paul/rule/
+            originals). Originals unchanged.
+
+------------------
+
+37.  UNIFY EDIT-STATE SAVE – 2025-02-11 12:00:00 PM
+
+    A.  Prompt
+        a.  "do next prompt A"
+        b.  Executed next prompt.
+        c.  A.  Unify edit-state save functions
+            1.  Fold saveActiveEditState, saveActiveEditStateTab,
+                saveActiveEditStateCardTitle into one function
+                that takes type and optional itemIndex.
+            2.  Update all call sites.
+            3.  Ensure ACTIVE_EDIT_KEY structure is consistent.
+    B.  Response
+        a.  Refactored saveActiveEditState to take opts object:
+            { type, deckId, cardIndex, selectionStart,
+            selectionEnd, itemIndex? }.
+        b.  Updated all 18 call sites to use object form.
+        c.  ACTIVE_EDIT_KEY payload: type, deckId, cardIndex,
+            selectionStart, selectionEnd; itemIndex only for
+            type "item". Updated spec_02 §6E.
+
+38.  CONFLICTS CARD SPLIT – 2025-02-11 12:00:00 PM
+
+    A.  Prompt
+        a.  "On deck two the conflict card item C break the
+            sentence he had a way that permitted, etc. into
+            its own item D with a blank line between C and D"
+    B.  Response
+        a.  Split Conflicts card (deck 2, Away We Go): added
+            item D "He had a way that permitted, etc." with
+            line-break between C and D in index.txt.
+        b.  Reload data (↑ button or page refresh) to see
+            the change in the app.
+
+39.  CONFLICTS FIX NOT VISIBLE – 2025-02-11 12:00:00 PM
+
+    A.  Prompt
+        a.  "your change to Conflicts card is STILL not
+            visible. you're doing something wrong. I did
+            hard reload. Also, you didn;t update log"
+    B.  Response
+        a.  Root cause: on file://, fetch to index.txt
+            fails; app uses built-in defaultDecksData
+            (old Conflicts card). Updated
+            defaultAwayWeGoCards in index.html to match
+            index.txt (line-break + item D).
+        b.  Change now visible regardless of load path.
+
+40.  UPDATE LOG – 2025-02-11 12:00:00 PM
+
+    A.  Prompt
+        a.  "update log!"
+    B.  Response
+        a.  Added this chat log entry.
+
+41.  NAME.MDC TO OUTLINE – 2025-02-11 12:00:00 PM
+
+    A.  Prompt
+        a.  "Convert what's in name.MDC into the outline
+            format from the outline MDC"
+    B.  Response
+        a.  Rewrote name.mdc as outline: L1/L2 structure,
+            ~60-char wrap, sections Structure, Term rules,
+            Maintenance, Code markers.
+
+42.  UX CODENAMES – 2025-02-11 12:00:00 PM
+
+    A.  Prompt
+        a.  "put some codenames in the code to mark where
+            user experienced are controled. make and update
+            paul/codename_index.txt"
+    B.  Response
+        a.  Added 16 __ux_* markers in index.html at UX
+            control points (load, render, view, promote,
+            lightbox, edit, transitions, title buttons).
+        b.  Created paul/codename_index.txt with index
+            by root term ux.
+
+43.  CODENAME INDEX SIMPLIFY – 2025-02-11 12:00:00 PM
+
+    A.  Prompt
+        a.  "Just simply list the root names so far
+            created across all of the code names that's
+            all that should be in the index whether it's
+            one term or 20"
+    B.  Response
+        a.  Replaced codename_index.txt with single root:
+            ux.
+
+44.  CODENAME INDEX FIRST SECOND – 2025-02-11 12:00:00 PM
+
+    A.  Prompt
+        a.  "OK, show the first and the second term in
+            the index"
+    B.  Response
+        a.  Updated codename_index.txt: unique first+
+            second terms (ux_card, ux_data, ux_deck,
+            ux_edit, ux_lightbox, ux_promote, ux_title,
+            ux_transition, ux_view).
+
+45.  UPDATE INDEX – 2025-02-11 12:00:00 PM
+
+    A.  Prompt
+        a.  "update index"
+    B.  Response
+        a.  Added occurrence counts to codename_index
+            per codename.mdc; aligned at 12 chars.
+
+46.  UPDATE INDEX EVERY TIME – 2025-02-11 12:00:00 PM
+
+    A.  Prompt
+        a.  "update index every time"
+    B.  Response
+        a.  Added codename.mdc rule: update
+            paul/codename_index.txt every time codenames
+            are added, removed, or changed.
+
+47.  PAUL RESTRUCTURE + INDEX CLARIFY – 2025-02-11 12:00:00 PM
+
+    A.  Prompt
+        a.  "For the last couple of prompts when I've been
+            talking about index, I mean code name
+            index.TXT. And by the way, get rid of the
+            outline and prompt and rule directory under
+            paul get rid of the rule directory which
+            contains the outline TXT and pro TXT and move
+            the spec files up to the top level with chat
+            log and codename index. And again review the
+            things I've been saying recently because I've
+            been wanting you to update the code name Dash
+            index not the index.HTML file or index.tXT
+            index.CSS in these most recent prompts that
+            I've been giving you thanks"
+    B.  Response
+        a.  Deleted paul/rule/ (outline.txt, prompt.txt).
+        b.  Moved spec files from paul/spec/ to paul/ top
+            level (spec_01 ux.txt, spec_02–05).
+        c.  Updated .cursor/rules (response-style, prompt,
+            outline) for new paths.
+        d.  Added codename.mdc §0: "index" means
+            paul/codename_index.txt, not index.html/
+            index.txt/index.css.
+
+48.  CODENAME INDEX + DECK VIEW – 2025-02-11 12:00:00 PM
+
+    A.  Prompt
+        a.  "Update the code index to show a lot more of
+            the Code names that have been inserted into
+            the code and add more around deck view"
+    B.  Response
+        a.  Added 16 codenames in index.html: deck_build,
+            deck_order_set, deck_rect_build, deck_stack_
+            layout, deck_active_set, deck_active_index,
+            deck_tab_promote, deck_scale_update,
+            view_state_deck, view_state_all, view_state_
+            current, view_project_stack, view_framework_
+            show, view_expanded_layout, view_expanded_
+            collapse, view_transition_project_deck,
+            view_rect_animate, ux_lightbox_image_click.
+        b.  Updated paul/codename_index.txt: 23 first+
+            second terms with counts (deck_*, ux_*,
+            view_*).
+
+49.  CODENAME ACTION LAST – 2025-02-11 12:00:00 PM
+
+    A.  Prompt
+        a.  "ex: getStatesForView --> view_state_list_get.
+            do similar."
+    B.  Response
+        a.  Renamed codenames to root_object_action:
+            *_get (view_state_deck, view_state_list,
+            view_state_current, view_expanded_layout,
+            view_expanded_collapse, view_transition_
+            project_deck, deck_stack_layout), *_set
+            (view_project_stack, deck_active_index),
+            *_run (ux_transition_project_deck,
+            ux_transition_deck_expanded), *_build
+            (ux_card_items, ux_card_layer),
+            *_setup (ux_edit_item), ux_card_promote.
+        b.  Updated codename index; ux_card now 4.
+
+50.  RELOAD UI CODENAMES – 2025-02-11 12:00:00 PM
+
+    A.  Prompt
+        a.  "Code names in there around the Paige reload
+            UI and logic add those to the index"
+    B.  Response
+        a.  Added codenames: reload_auto_setup,
+            reload_data_fetch, reload_data_click,
+            reload_auto_ui_update, reload_auto_toggle_
+            click (index.html); reload_page_setup
+            (shared.js).
+        b.  Updated codename index: reload_auto (3),
+            reload_data (2), reload_page (1).
+
+51.  RENAME AUTO RELOAD SWITCH – 2025-02-11 12:00:00 PM
+
+    A.  Prompt
+        a.  "rename things around autoReloadSwitch"
+    B.  Response
+        a.  Renamed: autoReloadSwitch→reloadAutoSwitch,
+            autoReloadStatus→reloadAutoStatus,
+            updateAutoReloadUI→updateReloadAutoUI,
+            AUTO_RELOAD_KEY→RELOAD_AUTO_KEY; classes
+            auto-reload-*→reload-auto-*; ids to match.
+        b.  Updated index.html, index.css, spec_02, spec_03.
+
+52.  CODENAME SUBJECT RULE – 2025-02-11 12:00:00 PM
+
+    A.  Prompt
+        a.  "Do a subject to the names in the code name,
+            M DC rules"
+    B.  Response
+        a.  Added codename.mdc §1B–C: subject (root =
+            domain/entity); subsequent terms = object +
+            action (verb last).
+
+53.  RELOAD CONSOLIDATE SNAKE_CASE – 2025-02-11 12:00:00 PM
+
+    A.  Prompt
+        a.  "Seems like auto reload and reload might be the
+            same thing if so just use reload and go to or
+            lowercase snake case everything else like code
+            named.MDC says"
+    B.  Response
+        a.  Merged reload_auto + reload_page → reload (ui,
+            data, setup). Codenames: reload_ui_setup,
+            reload_ui_update, reload_toggle_click,
+            reload_data_*, reload_setup.
+        b.  Snake_case: reload_switch, reload_switch_
+            status, update_reload_ui, reload_key;
+            classes reload_switch_wrap, etc.
+        c.  Updated codename index: reload_ui (3),
+            reload_data (2), reload_setup (1).
+
+------------------
+
+##  NEXT PROMPT
+    A.  Symmetric spec coverage per view
+        1.  Give Project view and Expanded view the same
+            treatment as Deck view in spec_01: user actions,
+            code paths, key functions.
+        2.  Create spec_03 project_view and spec_04 expanded_view
+        3.  Ensure §2 User actions mirrors structure across
+            all three views.
+    B.  Promote animation
+        1.  Animate card rects when promote runs in deck
+            view: from current positions to new positions.
+        2.  Duration ~300–500ms; ease-out.
+    C.  Tab vs cardTitle save fix
+        1.  Audit tab blur/input handlers: tab edits may
+            call saveEditedCardTitle; verify tabLabel vs
+            cardTitle usage.
+        2.  Ensure tab and card title stay in sync.

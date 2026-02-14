@@ -1,4 +1,45 @@
+/* Reconstructed from shared.css (was old/shared.css) */
+* {
+  box-sizing: border-box;
+}
+.page-title {
+  font-size: 40px;
+  font-weight: 600;
+  margin: 0;
+}
+.nav-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 68px;
+  padding: 0 16px;
+  border-radius: 6px;
+  border: 1px solid #dadce0;
+  background: #ffffff;
+  color: #1a73e8;
+  text-decoration: none;
+  font-size: 36px;
+}
+.shared-outline {
+  font-size: 40px;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+.shared-outline li {
+  margin: 6px 0;
+}
+.shared-outline a {
+  color: #202124;
+  text-decoration: none;
+  font-size: 40px;
+  font-weight: 600;
+  display: block;
+}
+
 body {
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif;
   background: #3a3d41;
   font-size: 32px;
   line-height: 1.4;
@@ -54,20 +95,19 @@ main {
   position: relative;
 }
 
-/* All Projects: show all decks when mini-mode or cards-mini */
-body:not(.cards-mini):not(.mini-mode) .deck {
+/* Project view: show all decks */
+body:not(.project-view) .deck {
   display: none;
 }
-body:not(.cards-mini):not(.mini-mode) .deck.is-active {
+body:not(.project-view) .deck.is-active {
   display: block;
 }
-body.cards-mini .deck,
-body.mini-mode .deck {
+body.project-view .deck {
   display: block;
   position: relative;
 }
 
-.mini-overlay-title {
+.project-overlay-title {
   display: none;
   position: absolute;
   top: 0;
@@ -91,7 +131,7 @@ body.mini-mode .deck {
   white-space: normal;
 }
 
-.mini-overlay-text {
+.project-overlay-text {
   display: block;
   max-width: 100%;
   white-space: normal;
@@ -99,11 +139,11 @@ body.mini-mode .deck {
   line-height: 1.1;
 }
 
-body.cards-mini .mini-overlay-title {
+body.project-view .project-overlay-title {
   display: flex;
 }
 
-body.cards-mini .card-set-title {
+body.project-view .card-set-title {
   visibility: visible;
 }
 
@@ -133,7 +173,7 @@ body.cards-mini .card-set-title {
   margin: var(--stack-top-offset, 0px) 0 0;
 }
 
-body.cards-mini .card-stack {
+body.project-view .card-stack {
   transform: scale(0.4);
   transform-origin: top left;
   margin: 24px 0 0 0;
@@ -144,20 +184,13 @@ body.layout-stabilizing .fit-wrapper {
   transition: none;
 }
 
-body.cards-mini .card-stack .card,
-body.cards-mini .card-stack .tab {
-  pointer-events: auto;
-}
-
-/* In All Projects (mini) mode, cards/tabs are not interactive; clicks pass through to viewport */
-body.mini-mode .card-stack .card,
-body.mini-mode .card-stack .tab {
-  pointer-events: none;
-}
-
-/* Exception: first card (Basic Info) is clickable to open that deck in deck view */
-body.mini-mode .card-layer[data-color="yellow"] .tab,
-body.mini-mode .card-layer[data-color="yellow"] .card {
+/* Overlay cards: clickable in project view to open that deck */
+body.project-view .card-layer[data-color="yellow"] .tab,
+body.project-view .card-layer[data-color="yellow"] .card,
+body.project-view .card-layer[data-color="red"] .tab,
+body.project-view .card-layer[data-color="red"] .card,
+body.project-view .card-layer[data-color="green"] .tab,
+body.project-view .card-layer[data-color="green"] .card {
   pointer-events: auto;
   cursor: pointer;
 }
@@ -590,10 +623,10 @@ body.mini-mode .card-layer[data-color="yellow"] .card {
   --deck-height-base: calc(var(--deck-width-base) / 1.6);
   --deck-width: var(--deck-width-base);
   --deck-height: var(--deck-height-base);
-  /* --mini-scale was 0.56 and could lock deck size; not used in All Projects, only overrides apply there */
-  --mini-gap: 10px;
-  --mini-left: 32px;
-  --mini-top: calc(var(--deck-top-margin) - 8px);
+  /* --project-scale was 0.56 and could lock deck size; not used in Project view, only overrides apply there */
+  --project-gap: 10px;
+  --project-left: 32px;
+  --project-top: calc(var(--deck-top-margin) - 8px);
   --title-size: 42px;
   --deck-content-width: var(--card-base-width);
   --deck-content-height: calc(var(--stack-base-height) + var(--tab-height));
@@ -661,28 +694,34 @@ body {
   display: block;
 }
 
-/* All projects mode: show export/reload, hide back/expand */
-body.mini-mode .title-row-btn.load-deck-data,
-body.mini-mode .title-row-btn.export-deck-data,
-body.mini-mode .title-row-btn.reload-deck-data {
+/* Project view: show export/reload, hide back/expand */
+body.project-view .title-row-btn.load-deck-data,
+body.project-view .title-row-btn.export-deck-data,
+body.project-view .title-row-btn.reload-deck-data {
   display: inline-flex;
 }
-body.mini-mode .title-row-back,
-body.mini-mode .title-row-expand {
+body.project-view .title-row-back,
+body.project-view .title-row-expand {
   display: none;
 }
 
-/* Deck mode: hide export/reload, show back + title + expand, space between */
-body.deck-mode .title-row-btn.load-deck-data,
-body.deck-mode .title-row-btn.export-deck-data,
-body.deck-mode .title-row-btn.reload-deck-data {
+/* Deck view: hide export/reload, show back + title + expand, space between */
+body.deck-view .title-row-btn.load-deck-data,
+body.deck-view .title-row-btn.export-deck-data,
+body.deck-view .title-row-btn.reload-deck-data,
+body.expanded-view .title-row-btn.load-deck-data,
+body.expanded-view .title-row-btn.export-deck-data,
+body.expanded-view .title-row-btn.reload-deck-data {
   display: none;
 }
-body.deck-mode .title-row-back,
-body.deck-mode .title-row-expand {
+body.deck-view .title-row-back,
+body.deck-view .title-row-expand,
+body.expanded-view .title-row-back,
+body.expanded-view .title-row-expand {
   display: inline-flex;
 }
-body.deck-mode .title-row {
+body.deck-view .title-row,
+body.expanded-view .title-row {
   justify-content: space-between;
 }
 
@@ -722,11 +761,11 @@ body.deck-mode .title-row {
   background: rgba(0, 0, 0, 0.06);
 }
 
-.auto-reload-switch-wrap {
+.reload_switch_wrap {
   margin-left: auto;
 }
 
-.auto-reload-switch {
+.reload_switch {
   display: inline-flex;
   align-items: center;
   gap: 6px;
@@ -741,16 +780,16 @@ body.deck-mode .title-row {
   line-height: 1.2;
 }
 
-.auto-reload-switch:hover {
+.reload_switch:hover {
   color: var(--text, #111);
   background: rgba(0, 0, 0, 0.06);
 }
 
-.auto-reload-switch[aria-checked="false"] .auto-reload-switch-status {
+.reload_switch[aria-checked="false"] .reload_switch_status {
   color: var(--text-muted, #888);
 }
 
-.auto-reload-switch[aria-checked="true"] .auto-reload-switch-status {
+.reload_switch[aria-checked="true"] .reload_switch_status {
   color: var(--text, #111);
 }
 
@@ -771,9 +810,9 @@ body.deck-mode .title-row {
   z-index: 2;
 }
 
-/* Single-deck / deck-mode only: use viewport-proportional size. All Projects (mini-mode) never uses this. */
-body:not(.mini-mode):not(.cards-mini) .deck,
-body.deck-mode .deck {
+/* Single-deck / deck-view or expanded-view: use viewport-proportional size. Project view never uses this. */
+body:not(.project-view) .deck,
+body.deck-view .deck {
   width: var(--deck-width);
   height: var(--deck-height);
 }
@@ -805,7 +844,7 @@ body.deck-mode .deck {
   overflow: visible;
 }
 
-.mode-backdrop {
+.view-backdrop {
   position: fixed;
   inset: 0;
   background: transparent;
@@ -813,7 +852,8 @@ body.deck-mode .deck {
   display: none;
 }
 
-body.deck-mode .mode-backdrop {
+body.deck-view .view-backdrop,
+body.expanded-view .view-backdrop {
   display: block;
 }
 
@@ -835,55 +875,59 @@ body.deck-mode .mode-backdrop {
   height: var(--stack-base-height);
 }
 
-body.deck-mode .decks {
+body.deck-view .decks,
+body.expanded-view .decks {
   display: flex;
   align-items: flex-start;
   justify-content: center;
   margin-top: calc(-1 * var(--deck-lift));
 }
 
-body.mini-mode {
+body.project-view {
   overflow-y: auto;
 }
 
-body.deck-mode.deck-expanded {
+body.expanded-view {
   overflow-y: hidden;
   --deck-top-margin: 0px;
 }
 
-body.deck-mode .deck {
+body.deck-view .deck,
+body.expanded-view .deck {
   position: relative;
   transform: none;
   margin: 0 auto;
 }
 
-body.deck-mode .deck:not(.is-active) {
+body.deck-view .deck:not(.is-active),
+body.expanded-view .deck:not(.is-active) {
   display: none;
 }
 
-body.deck-mode .deck-title {
+body.deck-view .deck-title,
+body.expanded-view .deck-title {
   display: none;
 }
 
-body.deck-mode .deck-scale {
+body.deck-view .deck-scale {
   left: 50%;
   top: 0;
   transform: translate(-50%, 0) scale(var(--deck-scale, 1));
   transform-origin: top center;
 }
 
-body.deck-mode {
+body.deck-view {
   --deck-width: var(--deck-max-width);
   --deck-height: var(--deck-max-height);
 }
 
-body.mini-mode .deck {
+body.project-view .deck {
   transform: none;
 }
 
-/* All Projects: rectangles = 1/3 viewport width (3 cols), centered on same line of horizon */
-body.mini-mode main.decks,
-body.mini-mode .decks {
+/* Project view: rectangles = 1/3 viewport width (3 cols), centered on same line of horizon */
+body.project-view main.decks,
+body.project-view .decks {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 20px;
@@ -897,7 +941,7 @@ body.mini-mode .decks {
   min-height: 100vh;
 }
 
-body.mini-mode .deck {
+body.project-view .deck {
   position: relative;
   left: auto;
   top: auto;
@@ -912,7 +956,7 @@ body.mini-mode .deck {
   box-sizing: border-box;
 }
 
-body.mini-mode .deck-title {
+body.project-view .deck-title {
   display: block;
   position: static;
   margin: 0 0 8px 0;
@@ -921,25 +965,26 @@ body.mini-mode .deck-title {
   font-size: 1rem;
   font-weight: 700;
   text-align: center;
-  width: 100%;
+  width: 33.333vw;
+  max-width: 100%;
+  min-width: 0;
   order: -1;
 }
 
 /* Representative profile: viewport rectangle with cards visible inside (scaled) */
-body.mini-mode .deck-viewport {
+body.project-view .deck-viewport {
   display: block;
   width: 33.333vw;
   max-width: 100%;
   aspect-ratio: 1200 / 728;
   min-width: 0;
-  background: rgba(0, 0, 0, 0.2);
   border-radius: 8px;
   overflow: hidden;
   pointer-events: auto;
   cursor: pointer;
 }
 
-body.mini-mode .deck-viewport .deck-scale {
+body.project-view .deck-viewport .deck-scale {
   display: block;
   left: 50%;
   top: 50%;
@@ -948,11 +993,12 @@ body.mini-mode .deck-viewport .deck-scale {
 }
 
 @media (max-width: 1023px) {
-  body.mini-mode main.decks,
-  body.mini-mode .decks {
+  body.project-view main.decks,
+  body.project-view .decks {
     grid-template-columns: 1fr;
   }
-  body.mini-mode .deck-viewport {
+  body.project-view .deck-viewport,
+  body.project-view .deck-title {
     width: 100%;
   }
 }
@@ -981,7 +1027,7 @@ body.mini-mode .deck-viewport .deck-scale {
   box-sizing: border-box;
 }
 
-body.expanded-to-mini-animating .deck.is-active {
+body.expanded-to-project-animating .deck.is-active {
   visibility: hidden;
 }
 
@@ -1041,7 +1087,61 @@ body.deck-proxy-animating .deck.is-active {
   visibility: visible;
 }
 
-/* Wire frame: exactly old card design bounds (tab + .card = 728px), same in all views */
+/* Title overlay: persistent title objects (view title + deck titles) with position/scale per view.
+   Titles animate between views; receded titles are beyond horizon (center, scale 0, opacity 0). */
+.title-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 5600;
+  pointer-events: none;
+  visibility: hidden;
+  box-sizing: border-box;
+}
+
+.title-overlay.is-active {
+  visibility: visible;
+}
+
+.title-overlay .title-element {
+  position: fixed;
+  left: 0;
+  top: 0;
+  transform-origin: 0 0;
+  font-size: var(--title-size);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  padding: 8px 16px;
+  margin: 0;
+  text-align: center;
+  white-space: nowrap;
+  color: #ffffff;
+  box-sizing: border-box;
+  pointer-events: auto;
+  cursor: pointer;
+}
+
+.title-overlay .title-element[data-index="0"] {
+  color: #ffffff;
+}
+
+.title-overlay .title-element[data-index="1"],
+.title-overlay .title-element[data-index="2"],
+.title-overlay .title-element[data-index="3"] {
+  color: #ffffff;
+}
+
+body.project-view .title-overlay .title-element[data-index="1"],
+body.project-view .title-overlay .title-element[data-index="2"],
+body.project-view .title-overlay .title-element[data-index="3"] {
+  font-size: 1rem;
+}
+
+/* When title overlay is active, hide real titles (layout preserved via visibility) */
+body.title-overlay-active .page-title { visibility: hidden; }
+body.title-overlay-active .deck-title { visibility: hidden; }
+
+/* Wire frame: exactly old card design bounds (tab + .card = 728px), same in all views.
+   Rect is hidden but kept for positioning; transform/scale are applied to it. */
 .card-rect {
   position: fixed;
   left: 0;
@@ -1051,22 +1151,41 @@ body.deck-proxy-animating .deck.is-active {
   transform-origin: 0 0;
   box-sizing: border-box;
   border-radius: 8px;
-  box-shadow: 0 2px 12px rgba(0,0,0,0.15);
+  background: transparent;
+  box-shadow: none;
   z-index: 1;
 }
 
-/* When a real card is hosted inside a card-rect: tab and card body inside the rect */
+/* When a real card is hosted inside a card-rect: tab and card body inside the rect.
+   pointer-events: none so clicks in tab row pass through to tabs of cards behind.
+   Tab, card body hit area, and card-text-image use pointer-events: auto. */
 .card-rect .card-layer--overlay {
   position: absolute;
   left: 0;
   top: 0;
   z-index: 1;
-  pointer-events: auto;
+  pointer-events: none;
   transform: none !important;
+}
+
+/* Card body hit area: receives clicks so promote works; tab row stays pass-through */
+.card-rect .card-layer--overlay::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: var(--tab-height);
+  right: 0;
+  bottom: 0;
+  pointer-events: auto;
+  cursor: pointer;
+  z-index: 0;
 }
 
 .card-rect .card-layer--overlay .tab {
   top: 0;
+  z-index: 10; /* Above card bodies so all tabs stay clickable when stacked */
+  pointer-events: auto;
+  cursor: pointer;
 }
 
 .card-rect .card-layer--overlay .card {
@@ -1074,37 +1193,24 @@ body.deck-proxy-animating .deck.is-active {
   top: var(--tab-height);
   left: 0;
   width: var(--card-base-width);
+  pointer-events: none; /* Allow clicks to pass through to tabs of cards behind */
 }
 
-.card-rect .card-layer--overlay .card,
-.card-rect .card-layer--overlay .tab {
-  pointer-events: auto;
+.card-rect .card-layer--overlay .card .card-text-image {
+  pointer-events: auto; /* Keep image clickable for lightbox */
 }
 
-/* Deck 0: white → light yellow → yellow */
-.card-rect[data-deck-index="0"][data-index="0"] { background: #ffffff; }
-.card-rect[data-deck-index="0"][data-index="1"] { background: #fffde7; }
-.card-rect[data-deck-index="0"][data-index="2"] { background: #ffeb3b; }
-/* Deck 1: recessed family — similar cluster, similar strength (muted warm stone) */
-.card-rect[data-deck-index="1"][data-index="0"] { background: #faf8f6; }
-.card-rect[data-deck-index="1"][data-index="1"] { background: #f0ebe6; }
-.card-rect[data-deck-index="1"][data-index="2"] { background: #e2d9d0; }
-/* Deck 2: indifferent set — another group (cool slate) */
-.card-rect[data-deck-index="2"][data-index="0"] { background: #f2f3f5; }
-.card-rect[data-deck-index="2"][data-index="1"] { background: #e4e6ea; }
-.card-rect[data-deck-index="2"][data-index="2"] { background: #b8bcc6; }
-/* Fallback for additional decks */
-.card-rect[data-index="0"] { background: #f5f5f5; }
-.card-rect[data-index="1"] { background: #eeeeee; }
-.card-rect[data-index="2"] { background: #e0e0e0; }
+/* Card rect backgrounds removed — rects hidden but kept for position/scale */
 
-body.deck-mode .card-rect-overlay.is-active .card-rect {
-  pointer-events: auto;
-  cursor: pointer;
+/* Rect is pointer-events: none so tab-row clicks pass through to rear tabs.
+   Card body hit area (::after) and tab handle promote clicks. */
+body.deck-view .card-rect-overlay.is-active .card-rect,
+body.expanded-view .card-rect-overlay.is-active .card-rect {
+  pointer-events: none;
 }
 
-/* All Projects: card rects must receive clicks so we can open that deck */
-body.mini-mode.card-rect-framework .card-rect-overlay.is-active .card-rect {
+/* Project view: card rects must receive clicks so we can open that deck */
+body.project-view.card-rect-framework .card-rect-overlay.is-active .card-rect {
   pointer-events: auto;
   cursor: pointer;
 }
@@ -1113,72 +1219,21 @@ body.card-rect-framework .deck.is-active .deck-viewport {
   visibility: hidden;
 }
 
-body.deck-mode .deck {
+body.deck-view .deck,
+body.expanded-view .deck {
   display: block;
 }
 
-body.deck-mode.expand-animating .deck .card-layer,
-body.deck-mode.expand-collapsing .deck .card-layer {
-  transition: transform 260ms ease;
-}
-
-body.deck-mode .deck.is-expanded .card-layer {
-  transform: translate(
-      calc(var(--expand-x) - var(--card-left)),
-      calc(var(--expand-y) - var(--card-top))
-    )
-    scale(var(--expanded-scale, 0.5));
-  transform-origin: top left;
-}
-
-body.deck-mode .deck.is-expanded .deck-scale {
+body.deck-view .deck.is-expanded .deck-scale,
+body.expanded-view .deck.is-expanded .deck-scale {
   left: 0;
   top: 0;
   transform: scale(1);
   transform-origin: top left;
 }
 
-body.deck-mode.deck-expanded .deck-scale {
+body.expanded-view .deck-scale {
   top: calc(-1 * var(--deck-lift));
-}
-
-body.deck-mode .deck.is-expanded .card-layer .card,
-body.deck-mode .deck.is-expanded .card-layer .tab {
-  filter: none;
-}
-
-body.deck-mode .deck.is-expanded .card-layer {
-  pointer-events: auto !important;
-}
-
-body.deck-mode .deck.is-expanded .card-layer .card,
-body.deck-mode .deck.is-expanded .card-layer .tab {
-  pointer-events: auto !important;
-}
-
-body.deck-mode .deck.is-expanded .card-layer[data-color="yellow"] {
-  --expand-x: var(--expanded-offset-x);
-  --expand-y: calc(var(--expanded-offset-y) - var(--expanded-top-row-lift));
-  --expand-delay: 0ms;
-}
-
-body.deck-mode .deck.is-expanded .card-layer[data-color="red"] {
-  --expand-x: calc(var(--expanded-offset-x) + var(--expanded-step-x));
-  --expand-y: calc(var(--expanded-offset-y) - var(--expanded-top-row-lift));
-  --expand-delay: 30ms;
-}
-
-body.deck-mode .deck.is-expanded .card-layer[data-color="green"] {
-  --expand-x: calc(var(--expanded-offset-x) + var(--expanded-step-x) * 2);
-  --expand-y: calc(var(--expanded-offset-y) - var(--expanded-top-row-lift));
-  --expand-delay: 60ms;
-}
-
-body.deck-mode.expand-animating .deck .card-layer,
-body.deck-mode.expand-collapsing .deck .card-layer {
-  transition: transform 520ms cubic-bezier(0.22, 1, 0.36, 1);
-  transition-delay: var(--expand-delay, 0ms);
-  will-change: transform;
 }
 
 .card-text-image {

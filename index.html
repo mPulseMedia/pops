@@ -4,35 +4,36 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Decks</title>
-    <link rel="stylesheet" href="old/shared.css" />
     <link rel="stylesheet" href="index.css" />
   </head>
-  <body class="mini-mode cards-mini">
+  <body class="project-view">
     <div class="title-row">
-      <button type="button" class="title-row-back" id="titleRowBackBtn" title="Back to All Projects" aria-label="Back to All Projects"><span aria-hidden="true">←</span></button>
-      <h1 class="page-title" id="pageTitle">All Projects</h1>
+      <button type="button" class="title-row-back" id="titleRowBackBtn" title="Back to Project" aria-label="Back to Project"><span aria-hidden="true">←</span></button>
+      <h1 class="page-title" id="pageTitle">Project</h1>
       <button type="button" class="title-row-btn load-deck-data" id="loadDeckDataFileBtn" title="Load index.txt from file" aria-label="Load from file">📂</button>
       <button type="button" class="title-row-btn export-deck-data" id="exportDeckDataBtn" title="Export deck data" aria-label="Export deck data"><span class="title-row-btn-icon" aria-hidden="true">↓</span></button>
       <button type="button" class="title-row-btn reload-deck-data" id="reloadDeckDataBtn" title="Reload data from index.txt" aria-label="Reload data from index.txt"><span class="title-row-btn-icon" aria-hidden="true">↑</span></button>
       <button type="button" class="title-row-expand" id="titleRowExpandBtn" title="Expand" aria-label="Expand"></button>
-      <span class="auto-reload-switch-wrap" title="Page auto-reload">
-        <button type="button" class="auto-reload-switch" id="autoReloadSwitch" role="switch" aria-label="Auto-reload page" title="Toggle auto-reload"><span class="auto-reload-switch-label">Reload</span> <span class="auto-reload-switch-status" id="autoReloadStatus">on</span></button>
+      <span class="reload_switch_wrap" title="Page auto-reload">
+        <button type="button" class="reload_switch" id="reload_switch" role="switch" aria-label="Auto-reload page" title="Toggle auto-reload"><span class="reload_switch_label">Reload</span> <span class="reload_switch_status" id="reload_switch_status">on</span></button>
       </span>
     </div>
     <input type="file" id="loadDeckDataFileInput" accept=".txt,.json,application/json" hidden />
-    <div class="mode-backdrop" id="modeBackdrop" aria-hidden="true"></div>
+    <div class="view-backdrop" id="viewBackdrop" aria-hidden="true"></div>
     <div class="image-lightbox" id="imageLightbox" aria-hidden="true">
       <img alt="" src="" />
     </div>
     <div id="deckProxy" class="deck-proxy" aria-hidden="true"></div>
     <div id="cardRectOverlay" class="card-rect-overlay" aria-hidden="true"></div>
+    <div id="titleOverlay" class="title-overlay" aria-hidden="true"></div>
     <main class="decks" id="decksRoot" aria-label="Decks"></main>
 
     <a href="buddy.html" class="page-link-box" title="Buddy (LLM &amp; transcription)">B</a>
 
-    <script src="old/shared.js"></script>
+    <script src="shared.js"></script>
     <script>
       PopsShared.setupAutoReload({
+        // __reload_ui_setup
         intervalMs: 4000,
         scrollKey: "scroll-index-card3",
         canReload: function () {
@@ -41,7 +42,8 @@
       });
       (function () {
         const LINES_TOTAL = 13;
-        const MODE_KEY = "index-card3-mode";
+        const VIEW_KEY = "index-card3-view";
+        const LEGACY_MODE_KEY = "index-card3-mode";
         const ACTIVE_KEY = "index-card3-active";
         const SELECT_KEY = "index-card3-selected";
         const EXPANDED_KEY = "index-card3-expanded";
@@ -53,7 +55,7 @@
         const decksRoot = document.getElementById("decksRoot");
         const imageLightbox = document.getElementById("imageLightbox");
         const imageLightboxImg = imageLightbox ? imageLightbox.querySelector("img") : null;
-        let lastMiniScroll = 0;
+        let lastProjectScroll = 0;
 
         /* Leftmost card is ALWAYS index 0 (yellow). Do not overwrite --card-left anywhere. */
         const LEFTMOST_CARD_INDEX = 0;
@@ -200,6 +202,8 @@
                 { text: "Conflicts are inevitable; we all have to navigate backgrounds and situations in the early part of our career.", classes: ["level-2"] },
                 { text: "There are differences in the meaning of words, phrases, and gestures.", classes: ["level-2"] },
                 { text: "It takes repetition to wipe out the past.", classes: ["level-2"] },
+                { classes: ["line-break"] },
+                { text: "He had a way that permitted, etc.", classes: ["level-2"] },
               ],
             };
           }
@@ -209,7 +213,7 @@
         const defaultDecksData = [
           { id: "barbershop", title: "Half a Chair's Worth", miniTitle: "Half a Chair's Worth", isActive: true, cards: defaultBarbershopCards },
           { id: "new", title: "Away We Go", miniTitle: "Away We Go", isActive: false, cards: defaultAwayWeGoCards },
-          { id: "third", title: "Comebacks", miniTitle: "Comebacks", isActive: false, cards: comebacksCards },
+          { id: "third", title: "Title", miniTitle: "Title", isActive: false, cards: comebacksCards },
         ];
 
         function normalizeToDecksData(data) {
@@ -226,13 +230,14 @@
             return [
               { id: "barbershop", title: "Half a Chair's Worth", miniTitle: "Half a Chair's Worth", isActive: true, cards: data.barbershopCards },
               { id: "new", title: "Away We Go", miniTitle: "Away We Go", isActive: false, cards: data.awayWeGoCards },
-              { id: "third", title: "Comebacks", miniTitle: "Comebacks", isActive: false, cards: (data.comebacksCards && Array.isArray(data.comebacksCards)) ? data.comebacksCards : comebacksCards },
+              { id: "third", title: "Title", miniTitle: "Title", isActive: false, cards: (data.comebacksCards && Array.isArray(data.comebacksCards)) ? data.comebacksCards : comebacksCards },
             ];
           }
           return null;
         }
 
         function loadDecksFromData(data, fromFile) {
+          // __ux_data_render
           const list = normalizeToDecksData(data);
           decksData = list != null ? list : defaultDecksData;
           /* Do not clear CARD_EDITS_KEY so title/tab and item edits persist across reloads */
@@ -244,6 +249,7 @@
           });
           decks = Array.from(document.querySelectorAll(".deck"));
           buildCardRectOverlay();
+          buildTitleOverlay();
           runDeckInit();
         }
 
@@ -253,6 +259,7 @@
         }
 
         function loadDeckData() {
+          // __ux_data_load
           if (location.protocol === "file:") {
             loadDecksFromData(null, false);
             setDeckDataSource("(file:// — click 📂 to load index.txt)");
@@ -277,6 +284,7 @@
         }
 
         function reloadDeckDataFromFile() {
+          // __reload_data_fetch
           const url = new URL(DATA_URL + "?t=" + Date.now(), location.href).href;
           fetch(url, { cache: "no-store" })
             .then((r) => (r.ok ? r.json() : Promise.reject()))
@@ -392,45 +400,25 @@
           if (words.length <= maxWords) return plain;
           return words.slice(0, maxWords).join(" ") + "…";
         }
-        function saveActiveEditState(deckId, cardIndex, itemIndex, selStart, selEnd) {
+        /** Save active edit state for reload restore. opts: { type, deckId, cardIndex, selectionStart, selectionEnd, itemIndex? }. type: "item"|"tab"|"cardTitle"; itemIndex only for type "item". */
+        function saveActiveEditState(opts) {
+          const type = opts.type;
+          const deckId = opts.deckId;
+          const cardIndex = opts.cardIndex;
+          const selectionStart = opts.selectionStart;
+          const selectionEnd = opts.selectionEnd;
+          const itemIndex = opts.itemIndex;
           try {
-            localStorage.setItem(ACTIVE_EDIT_KEY, JSON.stringify({
-              type: "item",
-              deckId,
-              cardIndex,
-              itemIndex,
-              selectionStart: selStart,
-              selectionEnd: selEnd,
-            }));
-          } catch (_) {}
-        }
-        function saveActiveEditStateTab(deckId, cardIndex, selStart, selEnd) {
-          try {
-            localStorage.setItem(ACTIVE_EDIT_KEY, JSON.stringify({
-              type: "tab",
-              deckId,
-              cardIndex,
-              selectionStart: selStart,
-              selectionEnd: selEnd,
-            }));
-          } catch (_) {}
-        }
-        function saveActiveEditStateCardTitle(deckId, cardIndex, selStart, selEnd) {
-          try {
-            localStorage.setItem(ACTIVE_EDIT_KEY, JSON.stringify({
-              type: "cardTitle",
-              deckId,
-              cardIndex,
-              selectionStart: selStart,
-              selectionEnd: selEnd,
-            }));
+            const payload = { type, deckId, cardIndex, selectionStart, selectionEnd };
+            if (type === "item" && itemIndex != null) payload.itemIndex = itemIndex;
+            localStorage.setItem(ACTIVE_EDIT_KEY, JSON.stringify(payload));
           } catch (_) {}
         }
         function clearActiveEditState() {
           localStorage.removeItem(ACTIVE_EDIT_KEY);
         }
 
-        /** Save current selection/cursor when still in edit mode (e.g. before reload without blur). */
+        /** Save current selection/cursor when still editing (e.g. before reload without blur). */
         function saveCurrentEditStateIfActive() {
           const el = document.activeElement;
           if (!el || el.contentEditable !== "true") return;
@@ -442,15 +430,15 @@
             const deckId = item.dataset.deckId;
             const cardIndex = parseInt(item.dataset.cardIndex, 10);
             const itemIndex = parseInt(item.dataset.itemIndex, 10);
-            saveActiveEditState(deckId, cardIndex, itemIndex, start, end);
+            saveActiveEditState({ type: "item", deckId, cardIndex, selectionStart: start, selectionEnd: end, itemIndex });
             return;
           }
           if (el.classList && el.classList.contains("card-tab-editable") && el.dataset.deckId) {
-            saveActiveEditStateTab(el.dataset.deckId, parseInt(el.dataset.cardIndex, 10), start, end);
+            saveActiveEditState({ type: "tab", deckId: el.dataset.deckId, cardIndex: parseInt(el.dataset.cardIndex, 10), selectionStart: start, selectionEnd: end });
             return;
           }
           if (el.classList && el.classList.contains("card-title-editable") && el.dataset.deckId) {
-            saveActiveEditStateCardTitle(el.dataset.deckId, parseInt(el.dataset.cardIndex, 10), start, end);
+            saveActiveEditState({ type: "cardTitle", deckId: el.dataset.deckId, cardIndex: parseInt(el.dataset.cardIndex, 10), selectionStart: start, selectionEnd: end });
             return;
           }
         }
@@ -497,6 +485,7 @@
         }
 
         function buildTextList(items, deckId, cardIndex) {
+          // __ux_card_items_build
           const list = createEl("div", "card-text-list");
           items.forEach((item, itemIndex) => {
             const entry = document.createElement("div");
@@ -518,6 +507,7 @@
         }
 
         function buildCardLayer(layerConfig, cardData, deckId, cardIndex) {
+          // __ux_card_layer_build
           const layer = createEl("div", "card-layer");
           layer.dataset.color = layerConfig.color;
           layer.setAttribute("style", layerConfig.style);
@@ -566,6 +556,7 @@
         }
 
         function openImageLightbox(src, alt) {
+          // __ux_lightbox_open
           if (!imageLightbox || !imageLightboxImg) return;
           imageLightboxImg.src = src;
           imageLightboxImg.alt = alt || "";
@@ -575,6 +566,7 @@
         }
 
         function closeImageLightbox() {
+          // __ux_lightbox_close
           if (!imageLightbox || !imageLightboxImg) return;
           imageLightbox.classList.remove("open");
           imageLightbox.setAttribute("aria-hidden", "true");
@@ -584,6 +576,7 @@
         }
 
         function buildDeck(deckData, index) {
+          // __deck_build
           const deck = createEl("div", "deck");
           if (deckData.isActive) {
             deck.classList.add("is-active");
@@ -601,11 +594,7 @@
           const section = createEl("section", "card-scene");
           section.setAttribute("aria-label", `${deckData.title} deck`);
           const stack = createEl("div", "card-stack");
-
-          deckData.cards.forEach((card, cardIndex) => {
-            const layer = buildCardLayer(layerLayouts[cardIndex], card, deckData.id, cardIndex);
-            stack.appendChild(layer);
-          });
+          /* Cards live only in the overlay; stack kept empty for viewport dimensions */
 
           section.appendChild(stack);
           stackWrap.appendChild(section);
@@ -620,19 +609,23 @@
           return decks.find((deck) => deck.classList.contains("is-active")) || decks[0];
         }
 
+        function getDeckTitleText(deck) {
+          const el = deck && deck.querySelector(".deck-title");
+          return el ? el.textContent : (deck ? deck.dataset.title : "");
+        }
+
         function selectionKeyFor(deckName) {
           return `${SELECT_KEY}-${deckName}`;
         }
 
         /* Slots set top + z only. Horizontal position is fixed: yellow always leftmost (0px), then red, green. */
-        /* Background tab heights: left-to-right (yellow, red, green) ascending; front tab always lowest. */
+        /* Position by stack order: front=0px (lowest), middle=-8px, highest=-24px. */
         const slots = {
           front: { cardTop: "0px", layerZ: 90 },
-          yellow: { cardTop: "-8px", layerZ: 70 },
-          green: { cardTop: "-16px", layerZ: 50 },
-          back: { cardTop: "-24px", layerZ: 30 },
+          middle: { cardTop: "-8px", layerZ: 70 },
+          highest: { cardTop: "-24px", layerZ: 50 },
         };
-        const backgroundTabByColor = { yellow: "-8px", red: "-16px", green: "-24px" };
+        const stackTopsByPosition = ["0px", "-8px", "-24px"];
         const tabOffsetY = -53;
 
         function buildLayerMap(deck) {
@@ -654,16 +647,16 @@
           const card = deck.querySelector(".card");
           const cardWidth = card ? card.offsetWidth : window.innerWidth;
           const gap = 12;
-          const inset = Math.round(cardWidth * 0.04);
-          const totalGaps = 2 * gap;
-          const available = Math.max(cardWidth - inset * 2 - totalGaps, 0);
-          const tabWidth = Math.round(available / 3);
+          /* Symmetric: equal left/right margins. Wider tabs: use max width that fits. */
+          const tabWidth = Math.floor((cardWidth - 2 * gap) / 3);
+          const totalTabsWidth = 3 * tabWidth + 2 * gap;
+          const leftInset = Math.round((cardWidth - totalTabsWidth) / 2);
           deck.style.setProperty("--tab-width", `${tabWidth}px`);
           const colors = ["yellow", "red", "green"];
           colors.forEach((color, index) => {
             const layer = layerMap[color];
             if (!layer) return;
-            const left = inset + index * (tabWidth + gap);
+            const left = leftInset + index * (tabWidth + gap);
             layer.style.setProperty("--tab-offset-x", `${left}px`);
           });
         }
@@ -675,13 +668,13 @@
         }
 
         function setOrder(order, deck) {
+          // __deck_order_set
           const layerMap = buildLayerMap(deck);
           const layerZByPosition = [90, 70, 50];
           order.forEach((color, pos) => {
             const layer = layerMap[color];
             if (!layer) return;
-            const isFront = pos === 0;
-            const cardTop = isFront ? slots.front.cardTop : (backgroundTabByColor[color] || slots.yellow.cardTop);
+            const cardTop = stackTopsByPosition[pos] || slots.front.cardTop;
             const slot = { cardTop: cardTop, layerZ: layerZByPosition[pos] };
             applyLayer(layer, slot);
           });
@@ -691,8 +684,8 @@
           }
           const cardStack = deck.querySelector(".card-stack");
           if (cardStack) {
-            const tops = order.map((color) => {
-              const top = color === order[0] ? slots.front.cardTop : (backgroundTabByColor[color] || slots.yellow.cardTop);
+            const tops = order.map((color, pos) => {
+              const top = stackTopsByPosition[pos] || slots.front.cardTop;
               return parseFloat(top) + tabOffsetY;
             });
             const minTop = Math.min(...tops);
@@ -718,39 +711,44 @@
           const maxLines = 12;
           if (!root) return;
           root.querySelectorAll(".card-text-list").forEach((list) => {
-            const sectionItems = Array.from(list.querySelectorAll(".card-text-item.section"));
-            sectionItems.forEach((section) => {
-              const prev = section.previousElementSibling;
-              if (!prev || !prev.classList.contains("line-break")) {
-                const breakItem = document.createElement("div");
-                breakItem.className = "card-text-item line-break";
-                list.insertBefore(breakItem, section);
-              }
-            });
+            const card = list.closest(".card");
+            const cardTitle = (card && (card.dataset.cardTitle || card.querySelector(".card-text-title")?.textContent || "") || "").trim().toLowerCase();
+            const isBasicInfo = cardTitle === "basic information" || (cardTitle && cardTitle.startsWith("basic info"));
 
-            list.querySelectorAll(".card-text-item.level-2").forEach((item) => {
-              const next = item.nextElementSibling;
-              if (next && next.classList.contains("level-2")) {
-                const blank = document.createElement("div");
-                blank.className = "card-text-item line-break";
-                item.parentNode.insertBefore(blank, next);
-              }
-            });
+            const sectionItems = Array.from(list.querySelectorAll(".card-text-item.section"));
+            if (!isBasicInfo) {
+              sectionItems.forEach((section) => {
+                const prev = section.previousElementSibling;
+                if (!prev || !prev.classList.contains("line-break")) {
+                  const breakItem = document.createElement("div");
+                  breakItem.className = "card-text-item line-break";
+                  list.insertBefore(breakItem, section);
+                }
+              });
+            }
+
+            if (!isBasicInfo) {
+              list.querySelectorAll(".card-text-item.level-2").forEach((item) => {
+                const next = item.nextElementSibling;
+                if (next && next.classList.contains("level-2")) {
+                  const blank = document.createElement("div");
+                  blank.className = "card-text-item line-break";
+                  item.parentNode.insertBefore(blank, next);
+                }
+              });
+            }
 
             const items = Array.from(list.querySelectorAll(".card-text-item"));
-            const card = list.closest(".card");
-            const cardTitle = (card && card.dataset.cardTitle || "").trim().toLowerCase();
-            // Cards that should use alpha-outline numbering:
-            // - Top level: A), B), C) ...
-            // - Second level: a), b), c) ...
-            const alphaOutlineCards = ["basic information", "main characters", "setting & story", "herodotus"];
-            const useAlphaOutline = alphaOutlineCards.includes(cardTitle);
+            /* Alpha-outline numbering: top level uppercase A/B/C, second level lowercase a/b/c, third level Roman i/ii/iii */
+            const alphaOutlineCards = ["basic information", "basic info", "basic info.", "main characters", "setting & story", "herodotus"];
+            const useAlphaOutline = alphaOutlineCards.includes(cardTitle) || (cardTitle && cardTitle.startsWith("basic info"));
             let topNum = 0;
             let level2Num = 0;
             let level3Num = 0;
             items.forEach((item) => {
               item.querySelectorAll(".alpha-marker").forEach((node) => node.remove());
-              if (!item.classList.contains("line-break") && !item.querySelector(".bullet-marker")) {
+              item.querySelectorAll(".bullet-marker").forEach((node) => node.remove());
+              if (!item.classList.contains("line-break")) {
                 let label;
                 if (item.classList.contains("level-3")) {
                   level3Num += 1;
@@ -762,6 +760,7 @@
                     ? String.fromCharCode(96 + level2Num) + ")"
                     : String.fromCharCode(64 + level2Num) + ")";
                 } else {
+                  /* Top level: section headers or items with no level class */
                   topNum += 1;
                   level2Num = 0;
                   level3Num = 0;
@@ -819,6 +818,7 @@
         }
 
         function setupCardTextEditing() {
+          // __ux_edit_item_setup
           document.querySelectorAll(".card-text-item:not(.line-break) .card-text-item-text").forEach((textSpan) => {
             if (textSpan._editBound) return;
             textSpan._editBound = true;
@@ -828,7 +828,7 @@
             const itemIndex = parseInt(item.dataset.itemIndex, 10);
 
             textSpan.addEventListener("dblclick", (e) => {
-              if (document.body.classList.contains("mini-mode")) return;
+              if (document.body.classList.contains("project-view")) return;
               e.stopPropagation();
               e.preventDefault();
               textSpan.contentEditable = "true";
@@ -844,7 +844,7 @@
                   sel.addRange(range);
                 }
               }
-              saveActiveEditState(deckId, cardIndex, itemIndex, textSpan.textContent.length, textSpan.textContent.length);
+              saveActiveEditState({ type: "item", deckId, cardIndex, selectionStart: textSpan.textContent.length, selectionEnd: textSpan.textContent.length, itemIndex });
             });
 
             function commitToDeckAndStorage(deckId, cardIndex, itemIndex, text) {
@@ -869,12 +869,12 @@
                   const end = range.endContainer === textSpan || range.endContainer.parentNode === textSpan
                     ? range.endOffset
                     : len;
-                  saveActiveEditState(deckId, cardIndex, itemIndex, Math.min(start, len), Math.min(end, len));
+                  saveActiveEditState({ type: "item", deckId, cardIndex, selectionStart: Math.min(start, len), selectionEnd: Math.min(end, len), itemIndex });
                 } catch (_) {}
               } else {
                 /* No selection in this span; save cursor at end so we can still restore this line */
                 const len = textSpan.textContent.length;
-                saveActiveEditState(deckId, cardIndex, itemIndex, len, len);
+                saveActiveEditState({ type: "item", deckId, cardIndex, selectionStart: len, selectionEnd: len, itemIndex });
               }
               textSpan.contentEditable = "false";
               if (item) item.classList.remove("is-editing");
@@ -906,7 +906,7 @@
                   const end = range.endContainer === textSpan || range.endContainer.parentNode === textSpan
                     ? range.endOffset
                     : len;
-                  saveActiveEditState(deckId, cardIndex, itemIndex, Math.min(start, len), Math.min(end, len));
+                  saveActiveEditState({ type: "item", deckId, cardIndex, selectionStart: Math.min(start, len), selectionEnd: Math.min(end, len), itemIndex });
                 } catch (_) {}
               }
             });
@@ -1005,7 +1005,7 @@
             const cardIndex = parseInt(tab.dataset.cardIndex, 10);
 
             tab.addEventListener("dblclick", (e) => {
-              if (document.body.classList.contains("mini-mode")) return;
+              if (document.body.classList.contains("project-view")) return;
               e.stopPropagation();
               e.preventDefault();
               tab.textContent = tab.textContent || "";
@@ -1013,13 +1013,13 @@
               tab.contentEditable = "true";
               tab.focus();
               const { start, end } = getSelectionOffsets(tab);
-              saveActiveEditStateTab(deckId, cardIndex, start, end);
+              saveActiveEditState({ type: "tab", deckId, cardIndex, selectionStart: start, selectionEnd: end });
             });
 
             tab.addEventListener("blur", () => {
               if (tab.contentEditable !== "true") return;
               const { start, end } = getSelectionOffsets(tab);
-              saveActiveEditStateTab(deckId, cardIndex, start, end);
+              saveActiveEditState({ type: "tab", deckId, cardIndex, selectionStart: start, selectionEnd: end });
               tab.contentEditable = "false";
               const text = tab.textContent.replace(/\s+$/g, "").replace(/^\s+/, "");
               saveEditedCardTitle(deckId, cardIndex, text);
@@ -1036,7 +1036,7 @@
             tab.addEventListener("input", () => {
               if (tab.contentEditable !== "true") return;
               const { start, end } = getSelectionOffsets(tab);
-              saveActiveEditStateTab(deckId, cardIndex, start, end);
+              saveActiveEditState({ type: "tab", deckId, cardIndex, selectionStart: start, selectionEnd: end });
               const text = tab.textContent.replace(/\s+$/g, "").replace(/^\s+/, "");
               saveEditedCardTitle(deckId, cardIndex, text);
               const deckData = decksData.find((d) => d.id === deckId);
@@ -1055,7 +1055,7 @@
               if (tab.contentEditable !== "true") return;
               requestAnimationFrame(() => {
                 const { start, end } = getSelectionOffsets(tab);
-                saveActiveEditStateTab(deckId, cardIndex, start, end);
+                saveActiveEditState({ type: "tab", deckId, cardIndex, selectionStart: start, selectionEnd: end });
               });
             });
 
@@ -1063,7 +1063,7 @@
               if (tab.contentEditable !== "true") return;
               requestAnimationFrame(() => {
                 const { start, end } = getSelectionOffsets(tab);
-                saveActiveEditStateTab(deckId, cardIndex, start, end);
+                saveActiveEditState({ type: "tab", deckId, cardIndex, selectionStart: start, selectionEnd: end });
               });
             });
           });
@@ -1075,20 +1075,20 @@
             const cardIndex = parseInt(title.dataset.cardIndex, 10);
 
             title.addEventListener("dblclick", (e) => {
-              if (document.body.classList.contains("mini-mode")) return;
+              if (document.body.classList.contains("project-view")) return;
               e.stopPropagation();
               e.preventDefault();
               if (!title.firstChild) title.appendChild(document.createTextNode(title.textContent || ""));
               title.contentEditable = "true";
               title.focus();
               const { start, end } = getSelectionOffsets(title);
-              saveActiveEditStateCardTitle(deckId, cardIndex, start, end);
+              saveActiveEditState({ type: "cardTitle", deckId, cardIndex, selectionStart: start, selectionEnd: end });
             });
 
             title.addEventListener("blur", () => {
               if (title.contentEditable !== "true") return;
               const { start, end } = getSelectionOffsets(title);
-              saveActiveEditStateCardTitle(deckId, cardIndex, start, end);
+              saveActiveEditState({ type: "cardTitle", deckId, cardIndex, selectionStart: start, selectionEnd: end });
               title.contentEditable = "false";
               const text = title.textContent.replace(/\s+$/g, "").replace(/^\s+/, "");
               title.textContent = text;
@@ -1105,7 +1105,7 @@
             title.addEventListener("input", () => {
               if (title.contentEditable !== "true") return;
               const { start, end } = getSelectionOffsets(title);
-              saveActiveEditStateCardTitle(deckId, cardIndex, start, end);
+              saveActiveEditState({ type: "cardTitle", deckId, cardIndex, selectionStart: start, selectionEnd: end });
               const text = title.textContent.replace(/\s+$/g, "").replace(/^\s+/, "");
               saveEditedCardTitle(deckId, cardIndex, text);
               const deckData = decksData.find((d) => d.id === deckId);
@@ -1127,7 +1127,7 @@
               if (title.contentEditable !== "true") return;
               requestAnimationFrame(() => {
                 const { start, end } = getSelectionOffsets(title);
-                saveActiveEditStateCardTitle(deckId, cardIndex, start, end);
+                saveActiveEditState({ type: "cardTitle", deckId, cardIndex, selectionStart: start, selectionEnd: end });
               });
             });
 
@@ -1135,7 +1135,7 @@
               if (title.contentEditable !== "true") return;
               requestAnimationFrame(() => {
                 const { start, end } = getSelectionOffsets(title);
-                saveActiveEditStateCardTitle(deckId, cardIndex, start, end);
+                saveActiveEditState({ type: "cardTitle", deckId, cardIndex, selectionStart: start, selectionEnd: end });
               });
             });
           });
@@ -1149,6 +1149,7 @@
         }
 
         function updateDeckScales() {
+          // __deck_scale_update
           const baseWidth = readCssNumber("--card-base-width") || 1200;
           const baseHeight = (readCssNumber("--stack-base-height") || 755) + readCssNumber("--tab-height");
           const gap = readCssNumber("--expanded-gap") || 0;
@@ -1160,9 +1161,9 @@
           document.documentElement.style.setProperty("--deck-content-height", `${baseHeight}px`);
 
           decks.forEach((deck) => {
-            const isMini = document.body.classList.contains("mini-mode") || document.body.classList.contains("cards-mini");
+            const isProjectView = document.body.classList.contains("project-view");
             let rect;
-            if (isMini) {
+            if (isProjectView) {
               const vw = document.documentElement.clientWidth || window.innerWidth;
               const viewportWidth = vw >= 1024 ? vw / 3 : vw;
               const viewportHeight = viewportWidth * (baseHeight / baseWidth);
@@ -1193,14 +1194,16 @@
           });
         }
 
-        /* Order = [leftmost, …, rightmost]. Default: yellow leftmost, green rightmost (3 cards). */
+        /* Order = [front, middle, back]. Tapping a tab brings that card to the front.
+           Back two ordered by color: yellow < red < green (lowest back to highest). */
         const orderMap = {
           yellow: ["yellow", "red", "green"],
           red: ["red", "yellow", "green"],
-          green: ["green", "red", "yellow"],
+          green: ["green", "yellow", "red"],
         };
 
         function promote(color, deckOverride) {
+          // __ux_card_promote
           const deck = deckOverride || getActiveDeck();
           const order = orderMap[color];
           if (order) {
@@ -1210,6 +1213,7 @@
         }
 
         function setActiveDeck(id) {
+          // __deck_active_set
           decks.forEach((deck) => {
             deck.classList.toggle("is-active", deck.dataset.deck === id);
           });
@@ -1217,57 +1221,135 @@
           updateDeckScales();
         }
 
-        function setExpanded(isExpanded, animate = false) {
+        function runProjectDeckTransition(toView) {
+          // __ux_transition_project_deck_run
           const active = getActiveDeck();
-          if (!active) return;
-          localStorage.setItem(EXPANDED_KEY, isExpanded ? "1" : "0");
-          const finish = () => document.body.classList.remove("expand-animating", "expand-collapsing");
-
-          if (!animate) {
-            // Immediate toggle: just switch classes and redraw the framework
-            // in the new view (expanded or deck).
-            decks.forEach((deck) => deck.classList.remove("is-expanded"));
-            if (isExpanded) active.classList.add("is-expanded");
-            document.body.classList.toggle("deck-expanded", isExpanded);
-            finish();
-            requestAnimationFrame(function () {
-              const view = isExpanded ? "expanded" : "deck";
-              showCardRectFramework(getStatesForAllDecks(view));
-            });
+          if (!active) {
+            applyView(toView);
             return;
           }
+          const activeIndex = decks.indexOf(active);
+          syncTitleOverlayContent();
+          const titleFromStates = toView === "project" ? getTitleFromStatesForDeckToProject(activeIndex) : getTitleStatesFromDOM();
+          if (toView === "project") {
+            const els = getTitleElements();
+            if (els[0]) els[0].textContent = "Project";
+          }
+          showTitleOverlay(titleFromStates);
+          const fromStates = toView === "project" ? getStatesForAllDecksCurrentInDeckView() : getStatesForAllDecks("project");
+          applyView(toView, toView === "project"
+            ? { activeDeckIndexForLayer: activeIndex, skipTitleOverlayUpdate: true }
+            : { skipCardRectUpdate: true, skipTitleOverlayUpdate: true });
+          if (toView === "project") showCardRectFramework(fromStates);
+          requestAnimationFrame(function () {
+            if (toView === "deck") {
+              updateDeckScales();
+              const saved = active ? localStorage.getItem(selectionKeyFor(active.dataset.deck)) : null;
+              const order = orderMap[saved] || orderMap.yellow;
+              if (active) setOrder(order, active);
+            }
+            requestAnimationFrame(function () {
+              const toStates = toView === "project" ? getStatesForAllDecks("project") : getStatesForAllDecksProjectToDeck();
+              if (toView === "deck") setCardRectActiveDeckIndex(activeIndex);
+              const titleEls = getTitleElements();
+              if (toView === "deck" && titleEls[activeIndex + 1]) titleEls[activeIndex + 1].textContent = getDeckTitleText(getActiveDeck());
+              const titleToStates = toView === "project" ? getTitleStatesFromDOM() : getTitleToStatesForProjectToDeck(activeIndex);
+              animateTitleOverlay(titleFromStates, titleToStates, 520);
+              showCardRectFramework(fromStates);
+              animateCardRects(fromStates, toStates, 520, toView === "deck" ? function () {
+                buildCardRectOverlay();
+                requestAnimationFrame(function () {
+                  const states = getStatesForAllDecks("deck");
+                  showCardRectFramework(states);
+                });
+              } : undefined);
+            });
+          });
+        }
 
-          if (isExpanded) {
-            // EXPAND: show overlay first so the real deck never flashes its row layout.
-            // Then animate overlay from deck layout to expanded (center + left/right) layout.
+                function runDeckExpandedTransition(toView) {
+          // __ux_transition_deck_expanded_run
+          const active = getActiveDeck();
+          if (!active) return;
+          const finish = () => document.body.classList.remove("expand-animating", "expand-collapsing");
+          syncTitleOverlayContent();
+          const titleFromStates = getTitleStatesFromDOM();
+          showTitleOverlay(titleFromStates);
+
+          if (toView === "expanded") {
             const fromStates = getStatesForAllDecks("deck");
-            lastDeckModeStates = fromStates;
+            lastDeckViewStates = fromStates;
             setCardRectActiveDeckIndex(decks.indexOf(active));
             decks.forEach((deck) => deck.classList.remove("is-expanded"));
             showCardRectFramework(fromStates);
             document.body.classList.add("expand-animating");
-            document.body.classList.add("deck-expanded");
+            document.body.classList.remove("deck-view");
+            document.body.classList.add("expanded-view");
             active.classList.add("is-expanded");
             requestAnimationFrame(function () {
+              const titleToStates = getTitleStatesFromDOM();
+              animateTitleOverlay(titleFromStates, titleToStates, 520);
               const toStates = getStatesForAllDecks("expanded");
               animateCardRects(fromStates, toStates, 520, finish);
             });
-          } else {
-            // COLLAPSE: animate from expanded layout back to deck (stacked).
-            // Show overlay in expanded positions first so we never flash the real
-            // deck’s layout (which would show three cards in a row).
+          } else if (toView === "deck") {
             const fromStates = getStatesForAllDecks("expanded");
             showCardRectFramework(fromStates);
             document.body.classList.add("expand-collapsing");
             decks.forEach((deck) => deck.classList.remove("is-expanded"));
-            document.body.classList.remove("deck-expanded");
+            document.body.classList.remove("expanded-view");
+            document.body.classList.add("deck-view");
             requestAnimationFrame(function () {
-              const toStates = getStatesForAllDecksForCollapse();
-              animateCardRects(fromStates, toStates, 520, function () {
-                finish();
+              updateDeckScales();
+              const saved = active ? localStorage.getItem(selectionKeyFor(active.dataset.deck)) : null;
+              const order = orderMap[saved] || orderMap.yellow;
+              if (active) setOrder(order, active);
+              requestAnimationFrame(function () {
+                setCardRectActiveDeckIndex(decks.indexOf(active));
+                const titleToStates = getTitleStatesFromDOM();
+                animateTitleOverlay(titleFromStates, titleToStates, 520);
+                const toStates = getStatesForAllDecksForCollapse();
+                animateCardRects(fromStates, toStates, 520, function () {
+                  buildCardRectOverlay();
+                  requestAnimationFrame(function () {
+                    const states = getStatesForAllDecks("deck");
+                    showCardRectFramework(states);
+                    finish();
+                  });
+                });
               });
             });
           }
+        }
+
+        function runProjectExpandedTransition(toView) {
+          const active = getActiveDeck();
+          if (!active) {
+            applyView(toView);
+            return;
+          }
+          const activeIndex = decks.indexOf(active);
+          syncTitleOverlayContent();
+          const titleFromStates = toView === "project" ? getTitleFromStatesForDeckToProject(activeIndex) : getTitleStatesFromDOM();
+          if (toView === "project") {
+            const els = getTitleElements();
+            if (els[0]) els[0].textContent = "Project";
+          }
+          showTitleOverlay(titleFromStates);
+          const fromStates = toView === "project" ? getStatesForAllDecks("expanded") : getStatesForAllDecks("project");
+          applyView(toView, toView === "project"
+            ? { activeDeckIndexForLayer: activeIndex, skipTitleOverlayUpdate: true }
+            : { skipCardRectUpdate: true, skipTitleOverlayUpdate: true });
+          requestAnimationFrame(function () {
+            const toStates = toView === "project" ? getStatesForAllDecks("project") : getStatesForAllDecks("expanded");
+            if (toView === "expanded") setCardRectActiveDeckIndex(activeIndex);
+            const titleElsExp = getTitleElements();
+            if (toView === "expanded" && titleElsExp[activeIndex + 1]) titleElsExp[activeIndex + 1].textContent = getDeckTitleText(getActiveDeck());
+            const titleToStates = toView === "project" ? getTitleStatesFromDOM() : getTitleToStatesForProjectToDeck(activeIndex);
+            animateTitleOverlay(titleFromStates, titleToStates, 520);
+            showCardRectFramework(fromStates);
+            animateCardRects(fromStates, toStates, 520);
+          });
         }
 
         /* ---------- Deck proxy: independent DOM representation for transitions ---------- */
@@ -1347,6 +1429,7 @@
         }
 
         function buildCardRectOverlay() {
+          // __deck_rect_build
           const overlay = getCardRectOverlay();
           if (!overlay) return;
           overlay.innerHTML = "";
@@ -1357,29 +1440,47 @@
               rect.className = "card-rect";
               rect.setAttribute("data-deck-index", String(deckIndex));
               rect.setAttribute("data-index", String(cardIndex));
-              // For now, host a single fully functional card inside the
-              // card-rect framework: the "top" card of the first deck.
-              // Its own internal layout remains, but its position, scale
-              // and opacity come entirely from the card-rect transform.
-              if (deckIndex === 0 && cardIndex === 0) {
-                const yellowLayer = deck && deck.querySelector('.card-layer[data-color="yellow"]');
-                if (yellowLayer) {
-                  const host = yellowLayer.cloneNode(true);
+              // Host cards from all three decks; built from data (no deck clones).
+              if (deckIndex === 0 || deckIndex === 1 || deckIndex === 2) {
+                const deckData = decksData && decksData.find((d) => d.id === deck.dataset.deck);
+                const cardData = deckData && deckData.cards && deckData.cards[cardIndex];
+                if (cardData) {
+                  const color = ["yellow", "red", "green"][cardIndex];
+                  const host = buildCardLayer(layerLayouts[cardIndex], cardData, deckData.id, cardIndex);
                   host.classList.add("card-layer--overlay");
                   rect.appendChild(host);
-                  // Ensure this hosted card gets the same line-number and
-                  // rows treatment as real deck cards, so its title/text
-                  // sit at the same vertical positions and line numbers
-                  // appear as expected.
                   applyLineNumbersInRoot(host);
-                  // Also wire up text, tab, and title editing on this
-                  // overlay card so the cursor/caret position, active
-                  // edit state, and saved content behave exactly like
-                  // they do in the underlying deck cards. The editing
-                  // setup functions are idempotent and will only bind
-                  // to elements that don't already have handlers.
                   setupCardTextEditing();
                   setupCardTabAndTitleEditing();
+                  host.querySelectorAll(".tab").forEach((tab) => {
+                    tab.addEventListener("click", (e) => {
+                      // __deck_tab_promote
+                      if (!document.body.classList.contains("deck-view") && !document.body.classList.contains("expanded-view")) return;
+                      const active = getActiveDeck();
+                      if (!active || deck !== active) return;
+                      /* Don't stopPropagation: allow overlay handler to run so tab click promotes */
+                      promote(color, deck);
+                      setCardRectActiveDeckIndex(deckIndex);
+                      if (document.body.classList.contains("expanded-view")) {
+                        const expandedStates = getStatesForAllDecks("expanded");
+                        showCardRectFramework(expandedStates);
+                        requestAnimationFrame(function () {
+                          requestAnimationFrame(function () { setView("deck"); });
+                        });
+                      } else {
+                        const states = getStatesForAllDecks("deck");
+                        showCardRectFramework(states);
+                      }
+                    });
+                  });
+                  host.querySelectorAll(".card-text-image").forEach((img) => {
+                    img.addEventListener("click", (e) => {
+                      // __ux_lightbox_image_click
+                      if (document.body.classList.contains("project-view")) return;
+                      e.stopPropagation();
+                      openImageLightbox(img.src, img.alt);
+                    });
+                  });
                 }
               }
               overlay.appendChild(rect);
@@ -1393,28 +1494,29 @@
           return Array.from(overlay.querySelectorAll(".card-rect"));
         }
 
-        function getStatesFromDeckRects(deck) {
-          const layers = deck ? deck.querySelectorAll(".card-layer") : [];
-          return CARD_RECT_INDICES.map(function (i) {
-            const layer = Array.from(layers).find(function (l) { return ["yellow", "red", "green"][i] === l.dataset.color; });
-            if (!layer) return cardRectState(0, 0, 0, 0, 0);
-            const r = layer.getBoundingClientRect();
-            return cardRectState(r.left, r.top, r.width / CARD_RECT_WIDTH, r.height / CARD_RECT_HEIGHT, 1);
-          });
-        }
-
-        /** Stacked positions from viewport only (no layer rects). Use when the real deck is mid-transition (e.g. collapse). */
+        /**
+         * Single source of truth for "where the three card rectangles go in deck (stacked) view."
+         * Uses the same layout as the real deck: content 1200x808, tab 53px from top, STACK_OFFSETS.
+         * Positions are assigned by stack order: front=lowest (0,0), middle, back=highest.
+         * order = [front, middle, back]; each color gets STACK_OFFSETS[order.indexOf(color)].
+         */
         function getStackedStatesFromViewport(deck) {
+          // __deck_stack_layout_get
           const vp = deck && deck.querySelector(".deck-viewport");
           if (!vp) return CARD_RECT_INDICES.map(() => cardRectState(0, 0, 0, 0, 0));
+          const saved = deck ? localStorage.getItem(selectionKeyFor(deck.dataset.deck)) : null;
+          const order = orderMap[saved] || orderMap.yellow;
           const r = vp.getBoundingClientRect();
-          const scale = Math.min(r.width / STACK_BOUNDS_WIDTH, r.height / STACK_BOUNDS_HEIGHT);
-          const stackW = STACK_BOUNDS_WIDTH * scale;
-          const stackH = STACK_BOUNDS_HEIGHT * scale;
-          const card0X = r.left + (r.width - stackW) / 2;
-          const card0Y = r.top + (r.height - stackH) / 2 + 34 * scale;
-          return CARD_RECT_INDICES.map(function (i) {
-            const o = STACK_OFFSETS[i];
+          let scale = Math.min(r.width / DECK_CONTENT_WIDTH, r.height / DECK_CONTENT_HEIGHT);
+          scale *= DECK_VIEW_SCALE;
+          const contentW = DECK_CONTENT_WIDTH * scale;
+          const contentH = DECK_CONTENT_HEIGHT * scale;
+          const card0X = r.left + (r.width - contentW) / 2;
+          const card0Y = r.top + (r.height - contentH) / 2 + DECK_TAB_OFFSET * scale;
+          const colors = ["yellow", "red", "green"];
+          return colors.map(function (color) {
+            const posInOrder = order.indexOf(color);
+            const o = STACK_OFFSETS[posInOrder >= 0 ? posInOrder : 0];
             return cardRectState(card0X + o.x * scale, card0Y + o.y * scale, scale, scale, 1);
           });
         }
@@ -1432,21 +1534,17 @@
           return [s, s, s];
         }
 
-        function getExpandedLayoutStates() {
+        function getExpandedLayoutStates(deck) {
+          // __view_expanded_layout_get
           const w = window.innerWidth;
           const h = window.innerHeight;
           const margin = 24;
           const gap = 16;
           const marginAboveHorizon = 16;
           const marginBelowHorizon = 16;
-          // Keep expanded cards below the deck title bar: use a dynamic
-          // buffer based on the pageTitle position instead of a fixed
-          // margin from the top of the viewport.
           let safeTop = margin;
           if (typeof pageTitle !== "undefined" && pageTitle) {
             const titleRect = pageTitle.getBoundingClientRect();
-            // Buffer between the bottom of the title and the top of the
-            // expanded cards.
             safeTop = Math.max(margin, titleRect.bottom + 16);
           }
           const horizonY = h / 2;
@@ -1465,60 +1563,80 @@
           const card2X = card1X + cardW + gap;
           const cardsBottomY = horizonY + marginAboveHorizon;
           const card1Y = cardsBottomY + (bottomAvailableH - cardH) / 2;
-          const card0 = cardRectState(card0X, card0Y, scale, scale, 1);
-          const card1 = cardRectState(card1X, card1Y, scale, scale, 1);
-          const card2 = cardRectState(card2X, card1Y, scale, scale, 1);
-          return [card0, card1, card2];
+          const topState = cardRectState(card0X, card0Y, scale, scale, 1);
+          const bottomLeftState = cardRectState(card1X, card1Y, scale, scale, 1);
+          const bottomRightState = cardRectState(card2X, card1Y, scale, scale, 1);
+          const saved = deck ? localStorage.getItem(selectionKeyFor(deck.dataset.deck)) : null;
+          const order = orderMap[saved] || orderMap.yellow;
+          const positions = [topState, bottomLeftState, bottomRightState];
+          const colors = ["yellow", "red", "green"];
+          return colors.map(function (color) {
+            const posInOrder = order.indexOf(color);
+            return positions[posInOrder >= 0 ? posInOrder : 0];
+          });
         }
 
-        /* Stack offsets in card pixels (match layerLayouts: yellow 0,0; red 36,-17; green 72,-34) */
+        /* Stack offsets: vertical only (down). Front=0; middle=-17; back=-34. No horizontal slide. */
         const STACK_OFFSETS = [
           { x: 0, y: 0 },
-          { x: 36, y: -17 },
-          { x: 72, y: -34 },
+          { x: 0, y: -17 },
+          { x: 0, y: -34 },
         ];
-        const STACK_BOUNDS_WIDTH = 72 + CARD_RECT_WIDTH;
+        const STACK_BOUNDS_WIDTH = CARD_RECT_WIDTH;
         const STACK_BOUNDS_HEIGHT = 34 + CARD_RECT_HEIGHT;
 
+        /** Deck content size and tab offset: must match CSS --deck-content-height and --tab-height (808 = 755+53). */
+        const DECK_CONTENT_WIDTH = 1200;
+        const DECK_CONTENT_HEIGHT = 808;
+        const DECK_TAB_OFFSET = 53;
+        /** Scale down cards in deck view so the deck title above them stays visible (all deck views). */
+        const DECK_VIEW_SCALE = 0.9;
+
         function getStatesForDeck(deck, view) {
-          if (view === "mini") {
+          // __view_state_deck_get
+          if (view === "project") {
             const vp = deck && deck.querySelector(".deck-viewport");
             if (!vp) return CARD_RECT_INDICES.map(() => cardRectState(0, 0, 0, 0, 0));
+            const saved = deck ? localStorage.getItem(selectionKeyFor(deck.dataset.deck)) : null;
+            const order = orderMap[saved] || orderMap.yellow;
             const r = vp.getBoundingClientRect();
             const scale = Math.min(r.width / STACK_BOUNDS_WIDTH, r.height / STACK_BOUNDS_HEIGHT);
             const stackW = STACK_BOUNDS_WIDTH * scale;
             const stackH = STACK_BOUNDS_HEIGHT * scale;
             const card0X = r.left + (r.width - stackW) / 2;
             const card0Y = r.top + (r.height - stackH) / 2 + 34 * scale;
-            return CARD_RECT_INDICES.map(function (i) {
-              const o = STACK_OFFSETS[i];
+            const colors = ["yellow", "red", "green"];
+            return colors.map(function (color) {
+              const posInOrder = order.indexOf(color);
+              const o = STACK_OFFSETS[posInOrder >= 0 ? posInOrder : 0];
               return cardRectState(card0X + o.x * scale, card0Y + o.y * scale, scale, scale, 1);
             });
           }
-          if (view === "deck") return getStatesFromDeckRects(deck);
-          if (view === "expanded") return getExpandedLayoutStates();
+          if (view === "deck") return getStackedStatesFromViewport(deck);
+          if (view === "expanded") return getExpandedLayoutStates(deck);
           return CARD_RECT_INDICES.map(() => cardRectState(0, 0, 0, 0, 0));
         }
 
         let lastStackedStates = null;
-        let lastMiniStatesByDeckIndex = [];
-        // Full flattened card-rect states for all decks in deck mode,
+        let lastProjectStatesByDeckIndex = [];
+        // Full flattened card-rect states for all decks in deck view,
         // captured right before expanding so we can collapse back to
         // that exact physical configuration (positions/scale/opacity).
-        let lastDeckModeStates = null;
+        let lastDeckViewStates = null;
 
         function getStatesForAllDecks(view) {
+          // __view_state_list_get
           const active = getActiveDeck();
           const flat = [];
           decks.forEach(function (deck, deckIndex) {
             const isActive = deck === active;
-            if (view === "mini") {
-              const miniStates = getStatesForDeck(deck, "mini");
-              lastMiniStatesByDeckIndex[deckIndex] = miniStates;
-              flat.push.apply(flat, miniStates);
+            if (view === "project") {
+              const projectStates = getStatesForDeck(deck, "project");
+              lastProjectStatesByDeckIndex[deckIndex] = projectStates;
+              flat.push.apply(flat, projectStates);
             } else if (view === "deck") {
               if (isActive) {
-                const stacked = getStatesFromDeckRects(deck);
+                const stacked = getStatesForDeck(deck, "deck");
                 lastStackedStates = stacked;
                 flat.push.apply(flat, stacked);
               } else {
@@ -1532,14 +1650,15 @@
                 flat.push.apply(flat, getRecedeStatesForDeck(center));
               }
             } else {
-              flat.push.apply(flat, lastMiniStatesByDeckIndex[deckIndex] || getStatesForDeck(deck, "mini"));
+              flat.push.apply(flat, lastProjectStatesByDeckIndex[deckIndex] || getStatesForDeck(deck, "project"));
             }
           });
           return flat;
         }
 
-        /** Deck-mode states for collapse: use viewport-based stacked positions so we don't read layer rects mid-transition. */
+        /** Deck-view states for collapse: use viewport-based stacked positions so we don't read layer rects mid-transition. */
         function getStatesForAllDecksForCollapse() {
+          // __view_expanded_collapse_get
           const active = getActiveDeck();
           const center = getViewportCenter();
           const flat = [];
@@ -1562,13 +1681,14 @@
           return [recedeState, recedeState, recedeState];
         }
 
-        function getStatesForAllDecksMiniToDeck() {
+        function getStatesForAllDecksProjectToDeck() {
+          // __view_transition_project_deck_get
           const active = getActiveDeck();
           const center = getViewportCenter();
           const flat = [];
           decks.forEach(function (deck) {
             if (deck === active) {
-              const stacked = getStatesFromDeckRects(deck);
+              const stacked = getStatesForDeck(deck, "deck");
               lastStackedStates = stacked;
               flat.push.apply(flat, stacked);
             } else {
@@ -1578,14 +1698,15 @@
           return flat;
         }
 
-        // Current visual states while in deck mode (stacked or expanded):
+        // Current visual states while in deck view (stacked or expanded):
         // - Active deck: real deck or expanded layout
         // - Other decks: receded to center (shrunken)
-        function getStatesForAllDecksCurrentInDeckMode() {
+        function getStatesForAllDecksCurrentInDeckView() {
+          // __view_state_current_get
           const active = getActiveDeck();
           const center = getViewportCenter();
           const flat = [];
-          const isExpanded = document.body.classList.contains("deck-expanded");
+          const isExpanded = document.body.classList.contains("expanded-view");
           decks.forEach(function (deck) {
             if (deck === active) {
               const view = isExpanded ? "expanded" : "deck";
@@ -1606,24 +1727,33 @@
         }
 
         function setCardRectActiveDeckIndex(activeDeckIndex, frontCardIndex) {
+          // __deck_active_index_set
           const overlay = getCardRectOverlay();
           if (!overlay) return;
           overlay.dataset.activeDeckIndex = String(activeDeckIndex);
           const rects = getCardRects();
           const deck = decks[activeDeckIndex];
-          const front = (frontCardIndex != null) ? frontCardIndex : getFrontCardIndexForDeck(deck);
+          const colorToIndex = { yellow: 0, red: 1, green: 2 };
+          const saved = deck ? localStorage.getItem(selectionKeyFor(deck.dataset.deck)) : null;
+          const order = orderMap[saved] || orderMap.yellow;
+          const frontIndex = colorToIndex[order[0]];
+          const secondIndex = colorToIndex[order[1]];
+          const backIndex = colorToIndex[order[2]];
           rects.forEach(function (rect) {
             const di = rect.getAttribute("data-deck-index");
             const cardIndex = parseInt(rect.getAttribute("data-index"), 10);
             if (di !== String(activeDeckIndex)) {
               rect.style.zIndex = 1;
             } else {
-              rect.style.zIndex = (cardIndex === front) ? 3 : (cardIndex === (front + 1) % 3 ? 2 : 1);
+              if (cardIndex === frontIndex) rect.style.zIndex = 3;
+              else if (cardIndex === secondIndex) rect.style.zIndex = 2;
+              else rect.style.zIndex = 1;
             }
           });
         }
 
-        function setMiniStackOrder(activeDeckIndexForLayer) {
+        function setProjectStackOrder(activeDeckIndexForLayer) {
+          // __view_project_stack_set
           const rects = getCardRects();
           const colorToIndex = { yellow: 0, red: 1, green: 2 };
           const n = decks.length;
@@ -1645,11 +1775,11 @@
 
         function getStatesForView(view) {
           const active = getActiveDeck();
-          if (view === "deck" && document.body.classList.contains("deck-expanded")) {
-            return lastStackedStates || getStatesFromDeckRects(active);
+          if (view === "deck" && document.body.classList.contains("expanded-view")) {
+            return lastStackedStates || getStatesForDeck(active, "deck");
           }
           if (view === "deck") {
-            const states = getStatesFromDeckRects(active);
+            const states = getStatesForDeck(active, "deck");
             lastStackedStates = states;
             return states;
           }
@@ -1659,7 +1789,11 @@
         function applyCardRectState(el, state) {
           if (!el || !state) return;
           el.style.transform = "translate(" + state.x + "px," + state.y + "px) scale(" + state.scaleX + "," + state.scaleY + ")";
-          el.style.opacity = String(state.opacity != null ? state.opacity : 1);
+          const opacity = state.opacity != null ? state.opacity : 1;
+          el.style.opacity = String(opacity);
+          /* Receded rects (scale 0 or opacity 0) must not intercept clicks — they overlay the active deck */
+          const isReceded = (state.scaleX === 0 && state.scaleY === 0) || opacity === 0;
+          el.style.pointerEvents = isReceded ? "none" : "";
         }
 
         function applyCardRectStates(states) {
@@ -1670,6 +1804,7 @@
         }
 
         function animateCardRects(fromStates, toStates, durationMs, onDone) {
+          // __view_rect_animate
           const overlay = getCardRectOverlay();
           const rects = getCardRects();
           if (!overlay || rects.length === 0 || fromStates.length !== rects.length || toStates.length !== rects.length) {
@@ -1697,11 +1832,14 @@
             );
           });
           Promise.all(anims.map(function (a) { return new Promise(function (res) { a.onfinish = res; }); })).then(function () {
+            /* Re-apply final states so pointer-events are correct for receded rects */
+            applyCardRectStates(toStates);
             if (onDone) onDone();
           });
         }
 
         function showCardRectFramework(states) {
+          // __view_framework_show
           const rects = getCardRects();
           if (!states || states.length !== rects.length) return;
           const overlay = getCardRectOverlay();
@@ -1709,6 +1847,10 @@
           applyCardRectStates(states);
           overlay.classList.add("is-active");
           document.body.classList.add("card-rect-framework");
+          if (document.body.classList.contains("deck-view") || document.body.classList.contains("expanded-view")) {
+            const active = getActiveDeck();
+            if (active) setCardRectActiveDeckIndex(decks.indexOf(active));
+          }
         }
 
         function hideCardRectFramework() {
@@ -1717,27 +1859,202 @@
           document.body.classList.remove("card-rect-framework");
         }
 
+        /* ---------- Title overlay: persistent title objects (view + deck titles) ---------- */
+        const TITLE_INDICES = { VIEW: 0, DECK_0: 1, DECK_1: 2, DECK_2: 3 };
+
+        function titleRectState(x, y, scaleX, scaleY, opacity, fontSize) {
+          const s = { x: x, y: y, scaleX: scaleX, scaleY: scaleY, opacity: opacity != null ? opacity : 1 };
+          if (fontSize != null) s.fontSize = fontSize;
+          return s;
+        }
+
+        function getTitleOverlay() {
+          return document.getElementById("titleOverlay");
+        }
+
+        function getRecedeStateForTitle(center) {
+          return titleRectState(center.x, center.y, 0, 0, 0, "0px");
+        }
+
+        function getComputedFontSize(el) {
+          return el ? window.getComputedStyle(el).fontSize : "0px";
+        }
+
+        /** Read current DOM layout and return 4 title states (view + 3 deck titles).
+         * In deck/expanded view, deck titles are hidden; return receded state. */
+        function getTitleStatesFromDOM() {
+          const center = getViewportCenter();
+          const isDeckOrExpanded = document.body.classList.contains("deck-view") || document.body.classList.contains("expanded-view");
+          const viewTitleState = pageTitle
+            ? (function () {
+                const r = pageTitle.getBoundingClientRect();
+                const fs = getComputedFontSize(pageTitle);
+                return titleRectState(r.left, r.top, r.width / (r.width || 1), r.height / (r.height || 1), 1, fs);
+              })()
+            : getRecedeStateForTitle(center);
+          const deckStates = decks.map(function (deck) {
+            if (isDeckOrExpanded) return getRecedeStateForTitle(center);
+            const el = deck && deck.querySelector(".deck-title");
+            if (!el) return getRecedeStateForTitle(center);
+            const r = el.getBoundingClientRect();
+            const fs = getComputedFontSize(el);
+            return titleRectState(r.left, r.top, r.width / (r.width || 1), r.height / (r.height || 1), 1, fs);
+          });
+          while (deckStates.length < 3) deckStates.push(getRecedeStateForTitle(center));
+          return [viewTitleState].concat(deckStates.slice(0, 3));
+        }
+
+        function getTitleElements() {
+          const overlay = getTitleOverlay();
+          if (!overlay) return [];
+          return Array.from(overlay.querySelectorAll(".title-element"));
+        }
+
+        function applyTitleState(el, state) {
+          if (!el || !state) return;
+          el.style.transform = "translate(" + state.x + "px," + state.y + "px) scale(" + state.scaleX + "," + state.scaleY + ")";
+          el.style.opacity = String(state.opacity != null ? state.opacity : 1);
+          if (state.fontSize != null) el.style.fontSize = state.fontSize;
+          el.style.pointerEvents = (state.opacity != null && state.opacity > 0) ? "auto" : "none";
+        }
+
+        function syncTitleOverlayContent() {
+          const elements = getTitleElements();
+          if (elements.length < 4) return;
+          elements[0].textContent = pageTitle ? pageTitle.textContent : "Project";
+          decks.forEach(function (deck, i) {
+            const el = deck && deck.querySelector(".deck-title");
+            if (elements[i + 1]) elements[i + 1].textContent = el ? el.textContent : "";
+          });
+        }
+
+        /** For deck→project: Project returns from horizon; active deck title
+         * animates from center to above its deck; other deck titles from receded. */
+        function getTitleFromStatesForDeckToProject(activeDeckIndex) {
+          const center = getViewportCenter();
+          const receded = getRecedeStateForTitle(center);
+          const fromStates = [receded, receded, receded, receded];
+          if (pageTitle && activeDeckIndex >= 0 && activeDeckIndex < 3) {
+            const r = pageTitle.getBoundingClientRect();
+            const fs = getComputedFontSize(pageTitle);
+            fromStates[activeDeckIndex + 1] = titleRectState(r.left, r.top, r.width / (r.width || 1), r.height / (r.height || 1), 1, fs);
+          }
+          return fromStates;
+        }
+
+        /** For project→deck: view title recedes, clicked deck title moves to center. */
+        function getTitleToStatesForProjectToDeck(activeDeckIndex) {
+          const center = getViewportCenter();
+          const receded = getRecedeStateForTitle(center);
+          const r = pageTitle.getBoundingClientRect();
+          const fs = getComputedFontSize(pageTitle);
+          const atCenter = titleRectState(r.left, r.top, r.width / (r.width || 1), r.height / (r.height || 1), 1, fs);
+          const toStates = [receded, receded, receded, receded];
+          toStates[activeDeckIndex + 1] = atCenter;
+          return toStates;
+        }
+
+        function buildTitleOverlay() {
+          const overlay = getTitleOverlay();
+          if (!overlay) return;
+          overlay.innerHTML = "";
+          const labels = ["Project", "", "", ""];
+          for (let i = 0; i < 4; i++) {
+            const el = document.createElement("span");
+            el.className = "title-element";
+            el.setAttribute("data-index", String(i));
+            el.textContent = labels[i];
+            el.setAttribute("aria-hidden", "true");
+            overlay.appendChild(el);
+          }
+          overlay.querySelector(".title-element[data-index='0']").addEventListener("click", function () {
+            if (document.body.classList.contains("deck-view") || document.body.classList.contains("expanded-view")) {
+              setView("project");
+            }
+          });
+          [1, 2, 3].forEach(function (i) {
+            const el = overlay.querySelector(".title-element[data-index='" + i + "']");
+            if (!el) return;
+            el.addEventListener("click", function () {
+              if (!document.body.classList.contains("project-view")) return;
+              const deck = decks[i - 1];
+              if (deck) {
+                setActiveDeck(deck.dataset.deck);
+                setView("deck");
+              }
+            });
+          });
+        }
+
+        function showTitleOverlay(states) {
+          const overlay = getTitleOverlay();
+          const elements = getTitleElements();
+          if (!overlay || !states || states.length !== elements.length) return;
+          states.forEach(function (s, i) {
+            if (elements[i]) applyTitleState(elements[i], s);
+          });
+          overlay.classList.add("is-active");
+          document.body.classList.add("title-overlay-active");
+        }
+
+        function animateTitleOverlay(fromStates, toStates, durationMs, onDone) {
+          const overlay = getTitleOverlay();
+          const elements = getTitleElements();
+          if (!overlay || elements.length === 0 || fromStates.length !== elements.length || toStates.length !== elements.length) {
+            if (onDone) onDone();
+            return;
+          }
+          const duration = durationMs || 520;
+          const easing = "cubic-bezier(0.215, 0.61, 0.355, 1)";
+          const anims = elements.map(function (el, i) {
+            const from = fromStates[i];
+            const to = toStates[i];
+            const fromFs = from.fontSize != null ? from.fontSize : getComputedFontSize(el);
+            const toFs = to.fontSize != null ? to.fontSize : getComputedFontSize(el);
+            const keyframes = [
+              {
+                transform: "translate(" + from.x + "px," + from.y + "px) scale(" + from.scaleX + "," + from.scaleY + ")",
+                opacity: from.opacity != null ? from.opacity : 1,
+                fontSize: fromFs,
+              },
+              {
+                transform: "translate(" + to.x + "px," + to.y + "px) scale(" + to.scaleX + "," + to.scaleY + ")",
+                opacity: to.opacity != null ? to.opacity : 1,
+                fontSize: toFs,
+              },
+            ];
+            return el.animate(keyframes, { duration: duration, easing: easing, fill: "both" });
+          });
+          Promise.all(anims.map(function (a) { return new Promise(function (res) { a.onfinish = res; }); })).then(function () {
+            toStates.forEach(function (s, i) {
+              if (elements[i]) applyTitleState(elements[i], s);
+            });
+            if (onDone) onDone();
+          });
+        }
+
         (function setupCardRectClicks() {
+          // __ux_card_rect_click
           const overlay = getCardRectOverlay();
           if (!overlay) return;
           overlay.addEventListener("click", function (e) {
             const rect = e.target.closest(".card-rect[data-deck-index]");
             if (!rect) return;
 
-            /* All Projects (mini) mode: clicking any card rect opens that deck in deck view */
-            if (document.body.classList.contains("mini-mode")) {
+            /* Project view: clicking any card rect opens that deck in deck view */
+            if (document.body.classList.contains("project-view")) {
               e.preventDefault();
               e.stopPropagation();
               const deckIndex = parseInt(rect.getAttribute("data-deck-index"), 10);
               const deck = decks[deckIndex];
               if (deck) {
                 setActiveDeck(deck.dataset.deck);
-                setMode("deck");
+                setView("deck");
               }
               return;
             }
 
-            if (!document.body.classList.contains("deck-mode")) return;
+            if (!document.body.classList.contains("deck-view") && !document.body.classList.contains("expanded-view")) return;
             const active = getActiveDeck();
             if (!active || rect.getAttribute("data-deck-index") !== String(decks.indexOf(active))) return;
             e.preventDefault();
@@ -1745,21 +2062,16 @@
             const idx = parseInt(rect.getAttribute("data-index"), 10);
             const color = ["yellow", "red", "green"][idx];
             if (color) {
-              // In expanded deck mode: set the clicked card as front first, then collapse.
-              // That way we never "set" card positions to the wrong order; the collapse
-              // animation uses the correct target (clicked card in front).
-              if (document.body.classList.contains("deck-expanded")) {
-                promote(color, active);
-                const activeIndex = decks.indexOf(active);
-                if (activeIndex >= 0) setCardRectActiveDeckIndex(activeIndex, idx);
-                setExpanded(false, true);
+              promote(color, active);
+              const activeIndex = decks.indexOf(active);
+              if (activeIndex >= 0) setCardRectActiveDeckIndex(activeIndex);
+              if (document.body.classList.contains("expanded-view")) {
+                const expandedStates = getStatesForAllDecks("expanded");
+                showCardRectFramework(expandedStates);
+                requestAnimationFrame(function () {
+                  requestAnimationFrame(function () { setView("deck"); });
+                });
               } else {
-                // In plain deck mode (not expanded), clicking a card-rect
-                // just promotes that card within the active deck.
-                promote(color, active);
-                setCardRectActiveDeckIndex(decks.indexOf(active), idx);
-                // Refresh deck-mode states so the overlay matches the
-                // updated stack layout after promotion.
                 const states = getStatesForAllDecks("deck");
                 showCardRectFramework(states);
               }
@@ -1767,78 +2079,70 @@
           });
         })();
 
-        function applyMode(mode, options) {
+        function applyView(view, options) {
+          // __ux_view_apply
           options = options || {};
-          document.body.classList.toggle("mini-mode", mode === "mini");
-          document.body.classList.toggle("deck-mode", mode === "deck");
-          document.body.classList.toggle("cards-mini", mode === "mini");
-          if (mode !== "deck") document.body.classList.remove("deck-expanded");
-          pageTitle.textContent = mode === "mini" ? "All Projects" : getActiveDeck().dataset.title;
+          document.body.classList.toggle("project-view", view === "project");
+          document.body.classList.toggle("deck-view", view === "deck");
+          document.body.classList.toggle("expanded-view", view === "expanded");
+          pageTitle.textContent = view === "project" ? "Project" : getDeckTitleText(getActiveDeck()) || "Project";
           document.title = pageTitle.textContent;
           updateDeckScales();
           requestAnimationFrame(updateAllTabOffsets);
-          if (mode === "deck") {
+          decks.forEach((deck) => deck.classList.remove("is-expanded"));
+          if (view === "deck" || view === "expanded") {
             clearDeckProxy();
             window.scrollTo(0, 0);
-            setExpanded(localStorage.getItem(EXPANDED_KEY) === "1", false);
+            const active = getActiveDeck();
+            if (active && view === "expanded") active.classList.add("is-expanded");
           }
           if (!options.skipCardRectUpdate) {
             requestAnimationFrame(function () {
-              const view = mode === "mini" ? "mini" : (document.body.classList.contains("deck-expanded") ? "expanded" : "deck");
-              const states = getStatesForAllDecks(view);
+              const viewState = view === "project" ? "project" : (view === "expanded" ? "expanded" : "deck");
+              const states = getStatesForAllDecks(viewState);
               showCardRectFramework(states);
-              if (mode === "mini") {
-                setMiniStackOrder(options.activeDeckIndexForLayer);
-              } else if (mode === "deck" || document.body.classList.contains("deck-expanded")) {
+              if (view === "project") {
+                setProjectStackOrder(options.activeDeckIndexForLayer);
+              } else {
                 const active = getActiveDeck();
                 if (active) setCardRectActiveDeckIndex(decks.indexOf(active));
               }
             });
           }
+          if (!options.skipTitleOverlayUpdate && getTitleOverlay() && getTitleElements().length >= 4) {
+            requestAnimationFrame(function () {
+              syncTitleOverlayContent();
+              showTitleOverlay(getTitleStatesFromDOM());
+            });
+          }
         }
 
-        function setMode(mode) {
-          if (mode === "deck") lastMiniScroll = window.scrollY;
-          localStorage.setItem(MODE_KEY, mode);
-          if (mode === "mini") {
-            if (document.body.classList.contains("deck-mode")) {
-              const active = getActiveDeck();
-              if (active) {
-                const titleFromRect = pageTitle.getBoundingClientRect();
-                const fromStates = getStatesForAllDecksCurrentInDeckMode();
-                applyMode("mini", { activeDeckIndexForLayer: decks.indexOf(active) });
-                requestAnimationFrame(function () {
-                  const titleToRect = pageTitle.getBoundingClientRect();
-                  runTitleFlip(titleFromRect, titleToRect);
-                  const toStates = getStatesForAllDecks("mini");
-                  showCardRectFramework(fromStates);
-                  // Return to All Projects with the same smooth, fast-out-slow-in
-                  // easing as other card transitions.
-                  animateCardRects(fromStates, toStates, 520);
-                });
-              } else applyMode("mini");
-            } else applyMode("mini");
+        function setView(view) {
+          // __ux_view_set
+          if (view === "deck" || view === "expanded") lastProjectScroll = window.scrollY;
+          localStorage.setItem(VIEW_KEY, view);
+          const fromProject = document.body.classList.contains("project-view");
+          const fromDeck = document.body.classList.contains("deck-view");
+          const fromExpanded = document.body.classList.contains("expanded-view");
+
+          if (fromProject && view === "deck") {
+            runProjectDeckTransition("deck");
+          } else if (fromProject && view === "expanded") {
+            runProjectExpandedTransition("expanded");
+          } else if (fromDeck && view === "project") {
+            runProjectDeckTransition("project");
+          } else if (fromDeck && view === "expanded") {
+            runDeckExpandedTransition("expanded");
+          } else if (fromExpanded && view === "project") {
+            runProjectExpandedTransition("project");
+          } else if (fromExpanded && view === "deck") {
+            runDeckExpandedTransition("deck");
           } else {
-            if (document.body.classList.contains("mini-mode")) {
-              const active = getActiveDeck();
-              if (active) {
-                const titleFromRect = pageTitle.getBoundingClientRect();
-                const fromStates = getStatesForAllDecks("mini");
-                applyMode("deck", { skipCardRectUpdate: true });
-                requestAnimationFrame(function () {
-                  const titleToRect = pageTitle.getBoundingClientRect();
-                  runTitleFlip(titleFromRect, titleToRect);
-                  const toStates = getStatesForAllDecksMiniToDeck();
-                  setCardRectActiveDeckIndex(decks.indexOf(active));
-                  showCardRectFramework(fromStates);
-                  animateCardRects(fromStates, toStates, 520);
-                });
-              } else applyMode("deck");
-            } else applyMode("deck");
+            applyView(view);
           }
-          if (mode !== "deck") setExpanded(false, false);
-          if (mode === "deck") window.scrollTo(0, 0);
-          else requestAnimationFrame(() => window.scrollTo(0, lastMiniScroll));
+
+          if (view === "deck" || view === "expanded") window.scrollTo(0, 0);
+          else requestAnimationFrame(() => window.scrollTo(0, lastProjectScroll));
         }
 
         const colorToIndex = { yellow: YELLOW_CARD_INDEX, red: RED_CARD_INDEX, green: GREEN_CARD_INDEX };
@@ -1911,96 +2215,38 @@
           decks.forEach((deck) => {
             const deckTitle = deck.querySelector(".deck-title");
           if (deckTitle) {
+            // __ux_deck_click
             deckTitle.addEventListener("click", (event) => {
-              if (document.body.classList.contains("deck-mode")) {
+              if (document.body.classList.contains("deck-view") || document.body.classList.contains("expanded-view")) {
                 event.stopPropagation();
-                setMode("mini");
+                setView("project");
                 return;
               }
               event.stopPropagation();
               setActiveDeck(deck.dataset.deck);
-              setMode("deck");
+              setView("deck");
             });
           }
-          deck.querySelectorAll(".card-text-image").forEach((img) => {
-            img.addEventListener("click", (event) => {
-              if (document.body.classList.contains("mini-mode")) {
-                return;
-              }
-              event.stopPropagation();
-              openImageLightbox(img.src, img.alt);
-            });
-          });
-          deck.querySelectorAll(".card-layer").forEach((layer) => {
-            const handleExpandPick = (event) => {
-              if (!document.body.classList.contains("deck-mode")) {
-                return;
-              }
-              if (!deck.classList.contains("is-expanded")) {
-                return;
-              }
-              event.stopPropagation();
-              const color = layer.dataset.color;
-              if (color) {
-                setExpanded(false, true);
-                setTimeout(() => {
-                  promote(color, deck);
-                }, 520);
-              }
-            };
-            layer.addEventListener("click", handleExpandPick);
-            layer
-              .querySelectorAll(".card, .tab")
-              .forEach((el) => el.addEventListener("click", handleExpandPick));
-          });
-          ["yellow", "red", "green"].forEach((color) => {
-            deck
-              .querySelectorAll(
-                `.card-layer[data-color='${color}'] .card, .card-layer[data-color='${color}'] .tab`
-              )
-              .forEach((el) => {
-                el.addEventListener("click", (event) => {
-                  if (document.body.classList.contains("mini-mode")) {
-                    event.stopPropagation();
-                    return;
-                  }
-                  event.stopPropagation();
-                  promote(color, deck);
-                });
-              });
-          });
-
-          /* In All Projects (mini) mode: clicking the first card (Basic Info) or the viewport opens that deck in deck view */
-          const yellowLayer = deck.querySelector('.card-layer[data-color="yellow"]');
-          if (yellowLayer) {
-            yellowLayer.querySelectorAll(".card, .tab").forEach((el) => {
-              el.addEventListener("click", (event) => {
-                if (!document.body.classList.contains("mini-mode")) return;
-                event.stopPropagation();
-                setActiveDeck(deck.dataset.deck);
-                setMode("deck");
-              });
-            });
-          }
+          /* Card interactivity lives in the overlay; viewport/deck clicks open deck in project view */
           const viewport = deck.querySelector(".deck-viewport");
           if (viewport) {
             viewport.addEventListener("click", (event) => {
-              if (!document.body.classList.contains("mini-mode")) return;
+              if (!document.body.classList.contains("project-view")) return;
               event.stopPropagation();
               setActiveDeck(deck.dataset.deck);
-              setMode("deck");
+              setView("deck");
             });
           }
 
           deck.addEventListener("click", () => {
             setActiveDeck(deck.dataset.deck);
-            setMode("deck");
+            setView("deck");
           });
         });
 
         pageTitle.addEventListener("click", () => {
-          if (document.body.classList.contains("deck-mode")) {
-            setMode("mini");
+          if (document.body.classList.contains("deck-view") || document.body.classList.contains("expanded-view")) {
+            setView("project");
           }
         });
 
@@ -2010,37 +2256,41 @@
         }
         const reloadDeckDataBtn = document.getElementById("reloadDeckDataBtn");
         if (reloadDeckDataBtn) {
+          // __reload_data_click
           reloadDeckDataBtn.addEventListener("click", reloadDeckDataFromFile);
         }
         const titleRowBackBtn = document.getElementById("titleRowBackBtn");
         if (titleRowBackBtn) {
-          titleRowBackBtn.addEventListener("click", () => setMode("mini"));
+          // __ux_title_back
+          titleRowBackBtn.addEventListener("click", () => setView("project"));
         }
         const titleRowExpandBtn = document.getElementById("titleRowExpandBtn");
         if (titleRowExpandBtn) {
+          // __ux_title_expand
           titleRowExpandBtn.addEventListener("click", () => {
-            const active = getActiveDeck();
-            const expanded = active && active.classList.contains("is-expanded");
-            setExpanded(!expanded, true);
+            const isExpanded = document.body.classList.contains("expanded-view");
+            setView(isExpanded ? "deck" : "expanded");
           });
         }
-        const AUTO_RELOAD_KEY = "index-card3-auto-reload";
-        const autoReloadSwitch = document.getElementById("autoReloadSwitch");
-        const autoReloadStatus = document.getElementById("autoReloadStatus");
-        function updateAutoReloadUI() {
-          const on = localStorage.getItem(AUTO_RELOAD_KEY) !== "0";
-          if (autoReloadSwitch) {
-            autoReloadSwitch.setAttribute("aria-checked", on ? "true" : "false");
-            autoReloadSwitch.setAttribute("aria-label", "Auto-reload " + (on ? "on" : "off"));
+        const reload_key = "index-card3-auto-reload";
+        const reload_switch = document.getElementById("reload_switch");
+        const reload_switch_status = document.getElementById("reload_switch_status");
+        function update_reload_ui() {
+          // __reload_ui_update
+          const on = localStorage.getItem(reload_key) !== "0";
+          if (reload_switch) {
+            reload_switch.setAttribute("aria-checked", on ? "true" : "false");
+            reload_switch.setAttribute("aria-label", "Auto-reload " + (on ? "on" : "off"));
           }
-          if (autoReloadStatus) autoReloadStatus.textContent = on ? "on" : "off";
+          if (reload_switch_status) reload_switch_status.textContent = on ? "on" : "off";
         }
-        if (autoReloadSwitch) {
-          updateAutoReloadUI();
-          autoReloadSwitch.addEventListener("click", () => {
-            const on = localStorage.getItem(AUTO_RELOAD_KEY) !== "0";
-            localStorage.setItem(AUTO_RELOAD_KEY, on ? "0" : "1");
-            updateAutoReloadUI();
+        if (reload_switch) {
+          update_reload_ui();
+          reload_switch.addEventListener("click", () => {
+            // __reload_toggle_click
+            const on = localStorage.getItem(reload_key) !== "0";
+            localStorage.setItem(reload_key, on ? "0" : "1");
+            update_reload_ui();
           });
         }
         const loadDeckDataFileBtn = document.getElementById("loadDeckDataFileBtn");
@@ -2068,22 +2318,22 @@
             y >= rect.top - pad &&
             y <= rect.bottom + pad;
           if (inside) {
-            if (document.body.classList.contains("deck-mode")) {
-              setMode("mini");
+            if (document.body.classList.contains("deck-view") || document.body.classList.contains("expanded-view")) {
+              setView("project");
             }
           }
         });
 
-        const modeBackdrop = document.getElementById("modeBackdrop");
-        if (modeBackdrop) {
-          modeBackdrop.addEventListener("click", () => {
-            if (document.body.classList.contains("deck-mode")) {
-              setMode("mini");
+        const viewBackdrop = document.getElementById("viewBackdrop");
+        if (viewBackdrop) {
+          viewBackdrop.addEventListener("click", () => {
+            if (document.body.classList.contains("deck-view") || document.body.classList.contains("expanded-view")) {
+              setView("project");
             }
           });
-          modeBackdrop.addEventListener("touchend", () => {
-            if (document.body.classList.contains("deck-mode")) {
-              setMode("mini");
+          viewBackdrop.addEventListener("touchend", () => {
+            if (document.body.classList.contains("deck-view") || document.body.classList.contains("expanded-view")) {
+              setView("project");
             }
           });
         }
@@ -2099,16 +2349,19 @@
           setActiveDeck(savedActive);
         }
 
-        const savedMode = localStorage.getItem(MODE_KEY) || "mini";
-        if (savedMode === "mini") {
+        let savedView = localStorage.getItem(VIEW_KEY) || localStorage.getItem(LEGACY_MODE_KEY) || "project";
+        if (savedView === "mini") savedView = "project";
+        if (savedView === "deck" && localStorage.getItem(EXPANDED_KEY) === "1") savedView = "expanded";
+        if (savedView) localStorage.setItem(VIEW_KEY, savedView);
+        if (savedView === "project") {
           const active = getActiveDeck();
-          applyMode(savedMode, active != null ? { activeDeckIndexForLayer: decks.indexOf(active) } : {});
+          applyView(savedView, active != null ? { activeDeckIndexForLayer: decks.indexOf(active) } : {});
         } else {
-          applyMode(savedMode);
+          applyView(savedView);
         }
-        if (savedMode === "mini") {
+        if (savedView === "project") {
           requestAnimationFrame(() => {
-            window.scrollTo(0, lastMiniScroll);
+            window.scrollTo(0, lastProjectScroll);
           });
         } else {
           window.scrollTo(0, 0);
@@ -2126,7 +2379,7 @@
         applyLineNumbers();
         setupCardTextEditing();
         setupCardTabAndTitleEditing();
-        /* Save selection when still in edit mode so reload can restore it (no blur) */
+        /* Save selection when still editing so reload can restore it (no blur) */
         window.addEventListener("pagehide", saveCurrentEditStateIfActive);
         window.addEventListener("beforeunload", saveCurrentEditStateIfActive);
         document.addEventListener("selectionchange", saveCurrentEditStateIfActive);

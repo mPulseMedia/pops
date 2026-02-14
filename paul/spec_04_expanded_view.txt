@@ -1,0 +1,62 @@
+SPEC 04 Expanded View
+
+1.  Overview
+    A.  Expanded view: same deck; all three cards in 2×2
+        grid. body class: expanded-view.
+    B.  Layout: card-rect overlay with getStatesForAllDecks
+        ("expanded"); deck-scale expanded layout.
+    C.  Title row: Back, Expand visible; Load, Export, Reload
+        hidden. See spec_01 ux.txt.
+
+2.  User actions and code
+
+    A.  Promote and collapse (→ Deck view)
+        1.  User: click tab or card body.
+        2.  Effect: promote(color, deck); clicked card becomes
+            selected (front). Overlay updates so clicked card
+            moves to top (closest to viewer); double rAF;
+            setView("deck"). Card is forefront in deck view.
+        3.  Code: promote; setCardRectActiveDeckIndex;
+            showCardRectFramework(getStatesForAllDecks
+            ("expanded")); double rAF; setView("deck").
+
+    B.  Back to Project
+        1.  User: click Back (←), page title, or backdrop.
+        2.  Effect: setView("project");
+            runProjectExpandedTransition("project").
+        3.  Code: titleRowBackBtn click; pageTitle click;
+            document click (title area); viewBackdrop
+            click/touchend.
+
+    C.  Collapse to Deck view
+        1.  User: click black square (title-row-expand).
+        2.  Effect: setView("deck"); runDeckExpandedTransition.
+        3.  Code: titleRowExpandBtn click.
+
+    D.  Open image lightbox
+        1.  User: click card image (.card-text-image).
+        2.  Effect: openImageLightbox(img.src, img.alt).
+        3.  Code: host.querySelectorAll(".card-text-image")
+            click (e.stopPropagation).
+
+3.  Pointer-events (expanded-view)
+    A.  Same as deck-view: card-rect pointer-events none;
+        tab, ::after, card-text-image pointer-events auto.
+    B.  CSS: body.expanded-view .card-rect-overlay.is-active
+        .card-rect { pointer-events: none }.
+
+4.  Key functions
+
+    A.  applyView("expanded"): body expanded-view;
+        active deck .is-expanded; getStatesForAllDecks
+        ("expanded").
+    B.  getStatesForAllDecks("expanded"): 2×2 grid layout.
+    C.  runDeckExpandedTransition("deck"): collapse
+        animation; runDeckExpandedTransition("expanded"):
+        expand animation.
+    D.  runProjectExpandedTransition("project"): expanded
+        → project with title flip.
+
+5.  Cross-view (shared)
+    A.  Text editing: same as deck (spec_02 §5).
+    B.  Reload and edit-state restore: spec_02 §6.

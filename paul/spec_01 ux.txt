@@ -1,0 +1,59 @@
+SPEC 01 UX and View State
+
+1.  Views
+    A.  Project view (project-view)
+        1.  Overview of all decks in a grid.
+        2.  Each deck shows as small card with title.
+        3.  body class: project-view.
+        4.  Entry: initial load or Back from Deck view.
+        5.  Exit: click deck or deck viewport → Deck view.
+    B.  Deck view (deck-view)
+        1.  One deck at a time; three cards fanned/stacked.
+        2.  body class: deck-view.
+        3.  Entry: click deck in Project view; click deck
+            title when another deck is active.
+        4.  Exit: Back or title click → Project view; black
+            square → Expanded view.
+        5.  Actions: click tab or card body to promote (bring
+            that card to front).
+    C.  Expanded view (expanded-view)
+        1.  Same deck; all three cards in 2×2 grid.
+        2.  body class: expanded-view.
+        3.  Entry: black square from Deck view.
+        4.  Exit: black square → Deck view; click card or
+            tab → Deck view with that card in front.
+
+2.  State machine
+    A.  view: "project" | "deck" | "expanded" (three equal
+        views; exactly one body class active)
+    B.  active deck: deck id (data-deck)
+    C.  card order per deck: "yellow" | "red" | "green"
+        (which color is front; orderMap defines full order)
+    D.  Transitions: applyView(), setView(),
+        runProjectDeckTransition(), runDeckExpandedTransition(),
+        runProjectExpandedTransition().
+    E.  Migration: "mini" → "project"; "deck" +
+        EXPANDED_KEY "1" → "expanded". Read LEGACY_MODE_KEY
+        if VIEW_KEY empty.
+
+3.  localStorage keys
+    A.  index-card3-view: "project" | "deck" | "expanded"
+    B.  index-card3-active: active deck id
+    C.  index-card3-selected-{deckId}: "yellow" | "red" |
+        "green" (front card per deck)
+    D.  index-card3-expanded: "0" | "1" (deprecated; used for
+        migration only)
+    E.  index-card3-card-edits: JSON of edited text, tab
+        labels, card titles (keyed by deckId-cardIndex-*)
+    F.  index-card3-active-edit: JSON of cursor/selection
+        when editing (for reload restore)
+    G.  index-card3-image-lightbox: JSON { open, src, alt }
+        (lightbox state)
+    H.  index-card3-auto-reload: "0" | "1" (toggle)
+
+4.  Reference
+    A.  Project view: spec_03_project_view.txt.
+    B.  Deck view: spec_02_deck_view.txt.
+    C.  Expanded view: spec_04_expanded_view.txt.
+    D.  Card position/scale/opacity architecture:
+        spec_05_architecture.txt.

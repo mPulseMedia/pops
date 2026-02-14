@@ -1,0 +1,136 @@
+---
+alwaysApply: true
+---
+# Prompt Rules
+
+1.  Scope
+    A.  These rules apply to how I respond to prompts.
+    B.  They do not replace any other spec/rule files.
+
+2.  Apply rule files to paul files
+    A.  When editing any file in `paul/`, apply the
+        formatting + layout rules in `.cursor/rules/outline.mdc`.
+
+3.  Chat log
+    A.  For every prompt, append a new entry to
+        `paul/chat_log.txt`. Do this unless the user
+        explicitly asks you not to.
+    B.  Never skip chat log updates. Treat it as mandatory
+        for every response that addresses a prompt.
+    C.  Entry header format: `N.  LABEL – YYYY-MM-DD HH:MM:SS AM`.
+    D.  LABEL is a 1–3 word summary in ALL CAPS.
+    E.  Entry body format:
+        1.  A.  Prompt
+            a.  Quote the prompt verbatim.
+        2.  B.  Response
+            a.  1–3 concise bullets of what changed/done.
+    F.  For very small changes, keep Response to 1 bullet.
+    G.  The entry must follow the outline format rules in
+        `.cursor/rules/outline.mdc` (markers, alignment, wrap).
+    H.  Prompt classification: determine whether the prompt
+        is about manipulating/creating the queued `##  NEXT
+        PROMPT` entry or about doing other work. Either way,
+        update `paul/chat_log.txt` (and apply the queue rules
+        in section 4 when relevant).
+
+4.  Processed vs queued prompts
+    A.  When a prompt asks for next-prompt suggestions or
+        to populate/update the queued prompt, update the
+        `##  NEXT PROMPT` entry in place with the new
+        options. Also add a chat log entry for that prompt.
+    B.  `paul/chat_log.txt` contains one separator line:
+        `------------------`
+    C.  Entries above the separator are PROCESSED prompts.
+    D.  The separator must appear immediately after the most
+        recent processed entry.
+    E.  Entries below the separator are QUEUED prompts.
+    F.  QUEUED prompt entries:
+        1.  Header: `##  LABEL` (ALL CAPS; no number, no
+            date/time).
+        2.  Body: three options (A/B/C).
+            a.  `A.  <SHORT NAME>`
+                1.  <prompt bullet 1>
+                2.  <prompt bullet 2, if needed>
+                3.  ...
+            b.  `B.  <SHORT NAME>`
+                1.  <prompt bullet 1>
+                2.  <prompt bullet 2, if needed>
+                3.  ...
+            c.  `C.  <SHORT NAME>`
+                1.  <prompt bullet 1>
+                2.  <prompt bullet 2, if needed>
+                3.  ...
+        3.  No Response section until processed.
+        4.  Useful choices (apply when generating or updating
+            `##  NEXT PROMPT`):
+            a.  Base options on context: recent work, spec
+                gaps, obvious next steps, or user-curated
+                ideas.
+            b.  Each option must be concrete and actionable;
+                no vague placeholders (e.g. "Continue" or
+                "Proceed as needed").
+            c.  Option labels (SHORT NAME) in A, B, C: 2–3
+                words; same brevity rules as the chat log
+                entry LABEL that becomes the final title.
+            d.  Mix types: e.g. one polish, one new feature,
+                one refactor.
+        5.  Avoid generic fallbacks when context suggests
+            specific alternatives.
+    G.  When a queued prompt is executed:
+        1.  Move it above the separator.
+        2.  Add date/time and a Response section.
+        3.  Keep exactly one queued prompt ahead (one entry
+            below the separator).
+        4.  When a queued prompt is executed, the processed
+            entry's A.  Prompt section must contain the FULL
+            prompt: the selected option's complete text
+            (all bullets), verbatim — not a placeholder like
+            "Do next prompt C". Add final item: "Executed
+            next prompt."
+    H.  If a prompt changes the queued prompt (but does not
+        execute it), update the queued `##  NEXT PROMPT`
+        entry in place. Do not add a second queued prompt.
+    I.  Update `##  NEXT PROMPT` after EVERY processed prompt.
+        This is mandatory. Re-examine the options and refresh
+        or revise as warranted; it may remain unchanged.
+        1.  If recent prompts show the user is carefully
+            curating the queued prompt, be conservative:
+            prefer minimal edits (grammar/clarity) over
+            changing intent.
+        2.  Still correct obvious grammar or formatting
+            problems when you see them.
+    J.  If a prompt is focused on modifying `##  NEXT PROMPT`,
+        do not execute the queued prompt. Only update the
+        queued `##  NEXT PROMPT` entry in place.
+    K.  If `##  NEXT PROMPT` contains A/B/C options:
+        1.  User selects by writing something like:
+            a.  "Execute next prompt: A"
+            b.  "Execute next prompt: B"
+            c.  "Execute next prompt: C"
+        2.  Abbreviations are allowed (case-insensitive):
+            a.  "Do next a"
+            b.  "Do next b"
+            c.  "Do next c"
+
+5.  Resetting the chat log
+    A.  If a prompt asks to delete/reset the chat log, replace
+        `paul/chat_log.txt` with a fresh log starting at entry
+        `1.`.
+    B.  Preserve the separator + exactly one queued `##  NEXT
+        PROMPT` entry below it.
+
+6.  Spec maintenance (primary app features)
+    A.  If a prompt creates or modifies a feature in the
+        primary application (outside `paul/`), update the
+        relevant spec file(s) in `paul/` (spec_*.txt)
+        accordingly.
+    B.  Use the outline format rules in `.cursor/rules/outline.mdc`.
+    C.  Add or modify the spec in the appropriate location,
+        with careful, intelligent organization (do not just
+        append at the end).
+    D.  Minimal as necessary: keep spec edits as small as
+        possible while still correct and complete (avoid
+        unrelated reflows/rewording).
+    E.  Re-examine the spec on every processed prompt. Only
+        change it when the prompt actually touched a primary
+        app feature.

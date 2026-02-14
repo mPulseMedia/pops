@@ -1,4 +1,0 @@
-window.APP_CONFIG = {
-  AUTO_RELOAD: true,
-  RELOAD_INTERVAL_MS: 2000,
-};

@@ -1,0 +1,122 @@
+SPEC 05 Architecture: Card Position, Scale, Opacity
+
+1.  Purpose
+    A.  Documents the code that sets position, scale,
+        opacity (and related) of card rects as they move
+        between views.
+    B.  Ensures physical persistence: every card has a
+        defined state at all times, even when "beyond the
+        horizon" (invisible but present).
+
+2.  State representation
+
+    A.  cardRectState(x, y, scaleX, scaleY, opacity)
+        1.  Single object: { x, y, scaleX, scaleY, opacity }.
+        2.  x, y: top-left in viewport pixels.
+        3.  scaleX, scaleY: 0–1 (0 = invisible).
+        4.  opacity: 0–1 (0 = invisible).
+        5.  Code: cardRectState() factory; default opacity 1.
+
+    B.  Apply to DOM
+        1.  transform: translate(x, y) scale(scaleX, scaleY).
+        2.  opacity: state.opacity.
+        3.  pointer-events: none when scale 0 or opacity 0
+            (receded rects must not intercept clicks).
+        4.  Code: applyCardRectState(el, state).
+
+3.  Beyond the horizon
+
+    A.  Receded state: card at viewport center; scale 0, 0;
+        opacity 0. Visually gone but object persists.
+    B.  getRecedeStatesForDeck(center): returns [s, s, s]
+        for a deck's three cards; s = cardRectState(center.x,
+        center.y, 0, 0, 0).
+    C.  Used when: inactive decks in deck/expanded view;
+        active deck's cards animate to/from recede during
+        view transitions.
+    D.  Physical persistence: no DOM remove; rects stay in
+        overlay; state changes only.
+
+4.  Layout functions (per view)
+
+    A.  Project: getStatesForDeck(deck, "project");
+        viewport-based project rects; STACK_OFFSETS.
+    B.  Deck: getStackedStatesFromViewport(deck);
+        getStatesForDeck(deck, "deck"); DECK_VIEW_SCALE.
+    C.  Expanded: getExpandedLayoutStates();
+        horizonY; 2×2 grid (top card + bottom row).
+    D.  Recede: getRecedeStatesForDeck(center).
+
+5.  Aggregators (all decks)
+
+    A.  getStatesForAllDecks(view): active deck gets
+        visible layout; inactive decks get recede.
+    B.  getStatesForAllDecksProjectToDeck: project→deck;
+        active stacked; others recede.
+    C.  getStatesForAllDecksCurrentInDeckView: current
+        deck/expanded; others recede.
+    D.  getStatesForAllDecksForCollapse: expanded→deck;
+        viewport-based stacked (no layer reads).
+
+6.  Transition-to-deck fixes (tab clicks after return)
+
+    A.  Problem: after project→deck or expanded→deck,
+        tab clicks did not update card positions; reload
+        worked.
+    B.  Fix: double rAF before measuring; updateDeckScales,
+        setOrder in first rAF; get toStates in second rAF.
+    C.  On animation complete: buildCardRectOverlay() then
+        showCardRectFramework(states). Fresh overlay
+        elements (same as reload) so tab clicks work.
+    D.  Deck→project flash: showCardRectFramework(fromStates)
+        synchronously after applyView(project), before rAF.
+
+7.  State persistence across transitions
+
+    A.  lastStackedStates: deck layout before expand.
+    B.  lastProjectStatesByDeckIndex: project layout per
+        deck.
+    C.  lastDeckViewStates: deck layout before expand.
+    D.  Purpose: avoid reading layer rects mid-transition;
+        use known "from" state for animation.
+
+8.  Animation
+
+    A.  animateCardRects(fromStates, toStates, durationMs,
+        onDone): Web Animations API; transform + opacity.
+    B.  On finish: applyCardRectStates(toStates) so
+        pointer-events correct for receded rects.
+    C.  Easing: cubic-bezier(0.215, 0.61, 0.355, 1).
+
+9.  Key constants
+
+    A.  CARD_RECT_WIDTH 1200; CARD_RECT_HEIGHT 728.
+    B.  STACK_OFFSETS: vertical only; front (0,0); middle
+        (0,-17); back (0,-34). No horizontal offset.
+    C.  DECK_CONTENT_WIDTH 1200; DECK_CONTENT_HEIGHT 808.
+    D.  DECK_VIEW_SCALE 0.9.
+
+10.  Title overlay (persistent titles)
+
+    A.  Same pattern as card rects: position, scale,
+        opacity per view; receded = beyond horizon.
+        fontSize animates with position/scale.
+    B.  Four elements: index 0 = view title (Project or
+        deck name); indices 1–3 = deck titles.
+    C.  getTitleStatesFromDOM(): reads current layout;
+        deck titles receded in deck/expanded view.
+    D.  getTitleToStatesForProjectToDeck(activeDeckIndex):
+        project→deck; view recedes, clicked deck moves to
+        center.
+    E.  getTitleFromStatesForDeckToProject(activeDeckIndex):
+        deck→project; Project receded; active deck title at
+        center; others receded. Active deck animates center
+        → above deck; Project horizon → center.
+    F.  showTitleOverlay(states); animateTitleOverlay(from,
+        to, duration); syncTitleOverlayContent().
+    G.  Real page title and deck titles hidden via
+        visibility when overlay active.
+
+11.  Reference
+    A.  View specs: spec_01 (UX), spec_02 (deck), spec_03
+        (project), spec_04 (expanded).

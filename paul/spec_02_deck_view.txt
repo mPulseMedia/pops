@@ -1,0 +1,115 @@
+SPEC 02 Deck View
+
+1.  Overview
+    A.  Deck view: one active deck; three cards (yellow,
+        red, green) stacked in order. body class:
+        deck-view.
+    B.  Layout: card-rect overlay with positions from
+        getStackedStatesFromViewport; STACK_OFFSETS.
+    C.  See spec_01 ux.txt. Project: spec_03; Expanded:
+        spec_04. Position/scale/opacity: spec_05.
+
+2.  User actions and code
+
+    A.  Promote (bring card to front)
+        1.  User: click tab or card body.
+        2.  Effect: clicked card moves to front; order
+            [front, middle, back]; back two ordered by
+            color (yellow < red < green); persists.
+        3.  Code: promote(color, deck); setOrder(order,
+            deck); localStorage selectionKeyFor(deck).
+        4.  Tab: buildCardRectOverlay hosts .tab click.
+            Body: setupCardRectClicks on .card-rect.
+
+    B.  Back to Project
+        1.  User: click Back (←), page title, or backdrop.
+        2.  Effect: setView("project"); runProjectDeckTransition.
+        3.  Code: titleRowBackBtn click; pageTitle click;
+            document click (title area); viewBackdrop
+            click/touchend.
+
+    C.  Expand to Expanded view
+        1.  User: click black square (title-row-expand).
+        2.  Effect: setView("expanded"); runDeckExpandedTransition.
+        3.  Code: titleRowExpandBtn click.
+
+    D.  Open image lightbox
+        1.  User: click card image (.card-text-image).
+        2.  Effect: openImageLightbox(img.src, img.alt).
+        3.  Code: host.querySelectorAll(".card-text-image")
+            click (e.stopPropagation).
+
+3.  Pointer-events (deck-view)
+
+    A.  card-rect: pointer-events none so tab-row clicks
+        pass through to rear tabs.
+    B.  card-layer--overlay: pointer-events none; tab,
+        ::after (card body hit area), card-text-image:
+        pointer-events auto.
+    C.  CSS: body.deck-view .card-rect-overlay.is-active
+        .card-rect { pointer-events: none }; .tab { auto };
+        .card-layer--overlay::after { auto } (hit area).
+
+4.  Key functions
+
+    A.  promote(color, deckOverride): orderMap[color] →
+        setOrder; selectionKeyFor localStorage. orderMap
+        back-two by color; stackTopsByPosition [0,-8,-24].
+    B.  getStackedStatesFromViewport(deck): positions by
+        order (front=lowest, middle, back=highest); each
+        color gets STACK_OFFSETS[order.indexOf(color)].
+    C.  getStatesForAllDecks("deck"): stacked positions for
+        overlay; getStackedStatesFromViewport.
+    D.  showCardRectFramework(states): applyCardRectStates;
+        overlay is-active; setCardRectActiveDeckIndex.
+    E.  applyView("deck"): body deck-view; pageTitle from
+        active deck; getStatesForAllDecks("deck").
+    F.  Transition to deck (project→deck, expanded→deck):
+        double rAF; first rAF: updateDeckScales, setOrder
+        for active deck; second rAF: get toStates, animate.
+        On animation complete: buildCardRectOverlay() then
+        showCardRectFramework so tab clicks work (fresh
+        overlay like reload).
+    G.  Deck→project: showCardRectFramework(fromStates)
+        synchronously after applyView(project) to avoid
+        flash of raw project layout before overlay covers.
+
+5.  Text editing
+
+    A.  Editable: card bullet items (.card-text-item-text),
+        tab labels (.card-tab-editable), card titles
+        (.card-title-editable). contentEditable = true on
+        dblclick; false on blur.
+    B.  Persist edits: CARD_EDITS_KEY JSON; keys
+        deckId-cardIndex-itemIndex (item), deckId-cardIndex-
+        cardTitle (title), deckId-cardIndex-tabLabel (tab).
+    C.  Code: setupCardTextEditing (items);
+        setupCardTabAndTitleEditing (tab, title).
+        saveEditedText,
+        saveEditedCardTitle; commitToDeckAndStorage.
+    D.  Entry: dblclick (not in project-view). Exit: blur or
+        Escape (blur). Item: is-editing on parent.
+
+6.  Reload and edit-state restore
+
+    A.  Auto-reload: PopsShared.setupAutoReload (shared.js);
+        intervalMs 4000; index-card3-auto-reload "0" | "1".
+    B.  Toggle: reload_switch click; aria-checked; status
+        "on" | "off". Default: on (localStorage !== "0").
+    C.  canReload: auto-reload !== "0" and !__popsIsListen
+        ing. Reload skipped when canReload false.
+    D.  Before reload: beforeunload, pagehide call
+        saveCurrentEditStateIfActive. Saves selection/cursor
+        when contentEditable element has focus.
+    E.  ACTIVE_EDIT_KEY: JSON { type, deckId, cardIndex,
+        selectionStart, selectionEnd, itemIndex? (item only) }.
+        saveActiveEditState(opts) with opts: { type, deckId,
+        cardIndex, selectionStart, selectionEnd, itemIndex? }.
+    F.  type: "item" | "tab" | "cardTitle". Identifies which
+        element was being edited.
+    G.  On load: setupCardTextEditing reads ACTIVE_EDIT_KEY;
+        finds element by data-deck-id, data-card-index,
+        data-item-index; sets contentEditable true, focus,
+        restoreSelection; clears ACTIVE_EDIT_KEY.
+    H.  selectionchange: saveCurrentEditStateIfActive (live
+        save while editing). blur, input: save offsets.

@@ -1,15 +1,20 @@
 ---
-description: Prefer short answers, no code snippets; explain at UX/architecture level only unless asked for code
 alwaysApply: true
 ---
 
-# Response style
+PAUL RULE SYSTEM (Cursor)
 
-- **Keep answers short.** Prefer a few clear sentences over long explanations unless the user asks for detail.
-- **Do not include code snippets or block quotes of code** in your reply unless the user explicitly asks for code.
-- **When it would really help**, include a diagram (e.g. flowchart, architecture, or slide-style diagram) as part of the response instead of (or in addition to) long text.
+1.  Purpose
+    A.  Point Cursor at the repository's rule system under
+        `paul/`.
 
-# Level of detail
+2.  Prompt handling
+    A.  Read and apply `.cursor/rules/prompt.mdc` to each prompt.
+    B.  Update `paul/chat_log.txt` for each prompt. Do not
+        skip unless the user explicitly asks you not to.
+    C.  Maintain spec files in `paul/` (spec_*.txt) when
+        prompts change primary app features outside `paul/`.
 
-- **Default to user experience and architecture.** When explaining how something works, what changed, or what’s in place, describe it at the UX or architecture level (flows, channels, behavior, what the user sees and does). Do not walk through code, file structure, or implementation details unless the user asks for that.
-- **Code-level specifics only on request.** If the user wants line-level or file-level detail, they will ask; otherwise stay at the higher level.
+3.  Rule file formatting
+    A.  When editing any file in `paul/`, apply
+        `.cursor/rules/outline.mdc`.

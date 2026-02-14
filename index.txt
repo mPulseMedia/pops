@@ -213,45 +213,6 @@
               ]
             }
           ]
-        },
-        {
-          "tabLabel": "Script<br />Snippets",
-          "title": "Script Snippets",
-          "items": [
-            {
-              "text": "In the chair, Aubrey checks the mirror and avoids eye contact"
-            },
-            {
-              "text": "\"If I stare too long, I start to see the questions.\"",
-              "classes": [
-                "level-2"
-              ]
-            },
-            {
-              "text": "George polishes the clippers and stalls for time",
-              "classes": [
-                "section"
-              ]
-            },
-            {
-              "text": "\"A sharp edge helps, but it doesn't make a decision for you.\"",
-              "classes": [
-                "level-2"
-              ]
-            },
-            {
-              "text": "The shop goes quiet as the cruise story hangs in the air",
-              "classes": [
-                "section"
-              ]
-            },
-            {
-              "text": "\"Seven years is a long time to wait for a boat that won't return.\"",
-              "classes": [
-                "level-2"
-              ]
-            }
-          ]
         }
       ]
     },
@@ -347,6 +308,17 @@
               "classes": [
                 "level-2"
               ]
+            },
+            {
+              "classes": [
+                "line-break"
+              ]
+            },
+            {
+              "text": "He had a way that permitted, etc.",
+              "classes": [
+                "level-2"
+              ]
             }
           ]
         },
@@ -359,8 +331,8 @@
     },
     {
       "id": "third",
-      "title": "Comebacks",
-      "miniTitle": "Comebacks",
+      "title": "Title",
+      "miniTitle": "Title",
       "cards": [
         {
           "tabLabel": "Too cheap",
