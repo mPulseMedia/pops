@@ -906,6 +906,139 @@
         c.  Updated codename index: reload_ui (3),
             reload_data (2), reload_setup (1).
 
+54.  TAB WIDTH REDISTRIBUTE – 2025-02-11 12:00:00 PM
+
+    A.  Prompt
+        a.  "Make the width of the tabs for all of the
+            cards wider and red distribute them so that
+            they each take up about 30% which leaves
+            about 30% each which leads 10% to be split
+            between the left and the right maybe it's a
+            little less than 30 and there's more gap
+            between the tabs. You can figure that out"
+    B.  Response
+        a.  Updated updateTabOffsets: tabs 28%, margins
+            4% each side, gaps 4% between tabs
+            (percentage-based for any card width).
+        b.  Added codename __deck_tab_offset_update
+            (new; deck_tab now 2: promote, offset_update).
+    C.  Codenames
+        a.  new: deck_tab_offset_update. Role: update
+            paul/codename_index.txt when codenames
+            added/removed/changed.
+
+55.  PROMPT CODENAMES IN CHAT LOG – 2025-02-11 12:00:00 PM
+
+    A.  Prompt
+        a.  "Adderall to prompt that another point should
+            be responded. Chat should respond with another
+            point in the chat log it should be C. and then
+            it should say code names and then it should
+            list the Code names that were involved in the
+            prompt effort and somehow Marc those that are
+            new and include that role and what gets
+            executed every time the chat processes a prom"
+    B.  Response
+        a.  Added prompt.mdc §3E3: C. Codenames (list
+            codenames, mark new ones, role:
+            update codename index when added/removed/
+            changed).
+        b.  Retroactively added C. Codenames to entry 54.
+    C.  Codenames
+        a.  None. Role: update paul/codename_index.txt
+            when codenames added/removed/changed.
+
+56.  CHAT LOG DIRECTORY MOVE – 2025-02-11 12:00:00 PM
+
+    A.  Prompt
+        a.  "Inside paul delete the rule and spec folders
+            and make a new folder call chat_log and put
+            those file named one – deck – view..MDC inside
+            right now it's inside the cursor rules folder.
+            It shouldn't be that should be inside the
+            chat, log directory and it should say chat_log
+            I think the date of the last prompt so this
+            one. 2025-02-11 12:35:00 PM"
+    B.  Response
+        a.  Created paul/chat_law/chat_log_2025-02-11_12-
+            35-00-PM.mdc (content from 1-deck-view-.mdc).
+        b.  Deleted .cursor/rules/1-deck-view-.mdc.
+        c.  No paul/rule or paul/spec folders existed
+            (already removed earlier).
+    C.  Codenames
+        a.  None.
+
+57.  CHAT LOG RENAME TO CHAT_LAW.DIR – 2025-02-11
+
+    A.  Prompt
+        a.  "Rename directory chat_log to chat_law.dir"
+    B.  Response
+        a.  Renamed paul/chat_log to paul/chat_law.dir; then to paul/chat_law.
+        b.  Updated entry 56 path reference.
+    C.  Codenames
+        a.  None.
+
+58.  LOG – 2025-02-11
+
+    A.  Prompt
+        a.  "log"
+    B.  Response
+        a.  Added this entry.
+    C.  Codenames
+        a.  None.
+
+59.  CHAT_LAW DIRECTORY NAME – 2025-02-11
+
+    A.  Prompt
+        a.  "Actually get rid of the DIR from the end of
+            that direct"
+    B.  Response
+        a.  Renamed paul/chat_law.dir to paul/chat_law.
+    C.  Codenames
+        a.  None.
+
+60.  TABS WIDER EVENLY DISTRIBUTED – 2025-02-11
+
+    A.  Prompt
+        a.  "Can you make the tabs wider and evenly
+            distributed on all the decks"
+    B.  Response
+        a.  updateTabOffsets: tabs 32%, margins 1% each
+            side, gaps 1% between.
+        b.  Applies to all decks via updateAllTabOffsets.
+    C.  Codenames
+        a.  deck_tab_offset_update.
+
+61.  TABS NOT UPDATING ON RELOAD – 2025-02-11
+
+    A.  Prompt
+        a.  "i dont see change in tab size or position
+            with hard reload"
+    B.  Response
+        a.  buildLayerMap was looking for .card-layer
+            inside deck; tabs live in overlay.
+        b.  Changed buildLayerMap to get layers from
+            overlay by deck index.
+        c.  updateTabOffsets: use cardWidth 1200
+            (overlay design width), set --tab-width and
+            --tab-offset-x on each layer.
+        d.  Call updateAllTabOffsets after
+            buildCardRectOverlay.
+    C.  Codenames
+        a.  deck_tab_offset_update.
+
+62.  TABS MARGIN AT EDGES – 2025-02-11
+
+    A.  Prompt
+        a.  "Can you make it so that there's a little
+            room on the right and the left where the
+            tabs don't go all the way to the edge of
+            the card went back a little"
+    B.  Response
+        a.  Margins 5% each side; tabs 28%; gaps 2%.
+    C.  Codenames
+        a.  deck_tab_offset_update.
+
 ------------------
 
 ##  NEXT PROMPT

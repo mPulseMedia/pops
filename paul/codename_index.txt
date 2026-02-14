@@ -5,6 +5,7 @@ ux_lightbox       ---
 view_state        ---
 reload_ui         ---
 deck_active       --
+deck_tab          --
 reload_data       --
 ux_data           --
 ux_title          --
@@ -16,7 +17,6 @@ deck_order        -
 deck_rect         -
 deck_scale        -
 deck_stack        -
-deck_tab          -
 ux_deck           -
 ux_edit           -
 view_framework    -
@@ -33,7 +33,7 @@ deck_order        -
 deck_rect         -
 deck_scale        -
 deck_stack        -
-deck_tab          -
+deck_tab          --
 reload_data       --
 reload_setup      -
 reload_ui         ---

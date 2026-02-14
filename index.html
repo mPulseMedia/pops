@@ -630,8 +630,15 @@
 
         function buildLayerMap(deck) {
           const layerMap = {};
-          deck.querySelectorAll(".card-layer").forEach((layer) => {
-            layerMap[layer.dataset.color] = layer;
+          const overlay = document.getElementById("cardRectOverlay");
+          if (!overlay) return layerMap;
+          const deckIndex = decks.indexOf(deck);
+          if (deckIndex < 0) return layerMap;
+          overlay.querySelectorAll(".card-rect[data-deck-index=\"" + deckIndex + "\"]").forEach((rect) => {
+            const layer = rect.querySelector(".card-layer");
+            if (layer && layer.dataset.color) {
+              layerMap[layer.dataset.color] = layer;
+            }
           });
           return layerMap;
         }
@@ -644,20 +651,23 @@
         }
 
         function updateTabOffsets(layerMap, deck) {
-          const card = deck.querySelector(".card");
-          const cardWidth = card ? card.offsetWidth : window.innerWidth;
-          const gap = 12;
-          /* Symmetric: equal left/right margins. Wider tabs: use max width that fits. */
-          const tabWidth = Math.floor((cardWidth - 2 * gap) / 3);
-          const totalTabsWidth = 3 * tabWidth + 2 * gap;
-          const leftInset = Math.round((cardWidth - totalTabsWidth) / 2);
-          deck.style.setProperty("--tab-width", `${tabWidth}px`);
+          // __deck_tab_offset_update
+          /* Card layers live in overlay; use design width 1200 (CARD_RECT_WIDTH) */
+          const cardWidth = 1200;
+          /* Tabs 28% each; margins 5% each side; gaps 2% between – room at edges */
+          const tabFrac = 0.28;
+          const marginFrac = 0.05;
+          const gapFrac = 0.02;
+          const tabWidth = Math.floor(cardWidth * tabFrac);
+          const leftInset = Math.round(cardWidth * marginFrac);
+          const gap = Math.round(cardWidth * gapFrac);
           const colors = ["yellow", "red", "green"];
           colors.forEach((color, index) => {
             const layer = layerMap[color];
             if (!layer) return;
+            layer.style.setProperty("--tab-width", tabWidth + "px");
             const left = leftInset + index * (tabWidth + gap);
-            layer.style.setProperty("--tab-offset-x", `${left}px`);
+            layer.style.setProperty("--tab-offset-x", left + "px");
           });
         }
 
@@ -1486,6 +1496,7 @@
               overlay.appendChild(rect);
             });
           });
+          requestAnimationFrame(updateAllTabOffsets);
         }
 
         function getCardRects() {

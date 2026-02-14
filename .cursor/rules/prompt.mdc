@@ -24,6 +24,15 @@ alwaysApply: true
             a.  Quote the prompt verbatim.
         2.  B.  Response
             a.  1–3 concise bullets of what changed/done.
+        3.  C.  Codenames
+            a.  List codenames involved in the prompt effort.
+            b.  Mark new ones (e.g. prefix with "new:" or
+                append "(new)").
+            c.  If none, write "None."
+            d.  Role executed every prompt: update
+                paul/codename_index.txt when codenames are
+                added, removed, or changed (codename.mdc
+                §3B3).
     F.  For very small changes, keep Response to 1 bullet.
     G.  The entry must follow the outline format rules in
         `.cursor/rules/outline.mdc` (markers, alignment, wrap).

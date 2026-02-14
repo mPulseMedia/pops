@@ -43,7 +43,7 @@
 5.  NEXT PROMPT RULES – 2025-02-11 12:00:00 PM
     A.  Prompt
         a.  improve the rules related to generating NEXT
-            PROMPT, and make it generate more useful choices,
+            PROMPT, and make them generate more useful choices,
             and mutiple choices, as described
     B.  Response
         a.  Added guidance: prefer multiple options, base on
@@ -358,7 +358,7 @@
         c.  Updated all 18 call sites. ACTIVE_EDIT_KEY
             structure unchanged (backward compatible).
 
-21.  TITLE OVERLAY PERSISTENT – 2025-02-11 12:00:00 PM
+27.  TITLE OVERLAY PERSISTENT – 2025-02-11 12:00:00 PM
     A.  Prompt
         a.  Ensure that the title of the decks and the
             title of the view are treated as persistent
@@ -382,7 +382,7 @@
             visibility when overlay active; overlay handles
             clicks and display.
 
-22.  FIX REVERSE TITLE TRANSITION – 2025-02-11 12:15:00 PM
+28.  FIX REVERSE TITLE TRANSITION – 2025-02-11 12:15:00 PM
     A.  Prompt
         a.  That was successful in the transition from
             project view and each project title to the
@@ -400,7 +400,7 @@
             the from-state with final positions before our
             animation started.
 
-23.  FIX EXPANDED→PROJECT TITLE JUMP – 2025-02-11 12:25:00 PM
+29.  FIX EXPANDED→PROJECT TITLE JUMP – 2025-02-11 12:25:00 PM
     A.  Prompt
         a.  The transition from expanded view to project
             view also caused a jump in the location of the
@@ -410,7 +410,7 @@
             applyView in all transitions so the overlay is
             at the from position before any layout change.
 
-24.  DECK→PROJECT TITLE ANIMATION – 2025-02-11 12:35:00 PM
+30.  DECK→PROJECT TITLE ANIMATION – 2025-02-11 12:35:00 PM
     A.  Prompt
         a.  When transitioning from deck view to project
             view, the decks title should return to where it
