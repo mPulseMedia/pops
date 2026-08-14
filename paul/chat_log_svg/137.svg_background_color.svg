@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 150" style="background: white;">
+  <style>
+    text { font-family: monospace; font-size: 11px; }
+    .del { fill: #c44; }
+    .add { fill: #28a745; }
+  </style>
+
+  <text x="200" y="20" text-anchor="middle" font-size="13" font-weight="bold">137. SVG Background Color</text>
+
+  <!-- BEFORE -->
+  <rect x="20" y="40" width="160" height="50" rx="4" fill="none" stroke="#c44" stroke-dasharray="4,3"/>
+  <text x="30" y="60" font-size="10" class="del">background: transparent</text>
+  <text x="30" y="75" font-size="9" class="del">(checkerboard in viewers)</text>
+
+  <!-- Arrow -->
+  <text x="195" y="70" font-size="20">→</text>
+
+  <!-- AFTER -->
+  <rect x="220" y="40" width="160" height="50" rx="4" fill="white" stroke="#28a745" stroke-width="1.5"/>
+  <text x="230" y="60" font-size="10" class="add">background: white</text>
+  <text x="230" y="75" font-size="9" class="add">(solid, readable)</text>
+
+  <!-- Rule -->
+  <rect x="60" y="105" width="280" height="28" rx="4" fill="#fff3cd" stroke="#ffc107"/>
+  <text x="70" y="124" font-size="9">prompt.mdc F.5: non-transparent background</text>
+</svg>

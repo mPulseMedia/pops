@@ -1,0 +1,233 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 920 790" style="background: white;">
+  <style>
+    text { font-family: monospace; font-size: 8px; }
+    .heading { font-size: 13px; font-weight: bold; }
+    .layer-label { font-size: 10px; font-weight: bold; fill: #999; letter-spacing: 2px; }
+    .sub { font-size: 11px; font-weight: bold; }
+    .inner-label { font-size: 8.5px; font-weight: bold; }
+    .fn { font-size: 7.5px; fill: #444; }
+    .arrow { stroke: #555; stroke-width: 1.5; fill: none; marker-end: url(#ah); }
+    .arrow-bold { stroke: #333; stroke-width: 2.5; fill: none; marker-end: url(#ahb); }
+    .arrow-dash { stroke: #999; stroke-width: 1; fill: none; stroke-dasharray: 4 3; marker-end: url(#ah); }
+  </style>
+  <defs>
+    <marker id="ah" markerWidth="7" markerHeight="5" refX="7" refY="2.5" orient="auto">
+      <polygon points="0 0, 7 2.5, 0 5" fill="#555"/>
+    </marker>
+    <marker id="ahb" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#333"/>
+    </marker>
+  </defs>
+
+  <text x="460" y="18" text-anchor="middle" class="heading">Pops Architecture — Proportional Subsystem Map</text>
+
+  <!-- ROW 1 -->
+  <!-- 5. CLICK DISPATCH — SMALL pipeline -->
+  <rect x="25" y="35" width="155" height="160" rx="5" fill="#f3e5f5" stroke="#9c27b0" stroke-width="1.5"/>
+  <text x="103" y="50" text-anchor="middle" class="sub" fill="#9c27b0">5. Click Dispatch</text>
+
+  <rect x="35" y="57" width="135" height="27" rx="3" fill="white" stroke="#9c27b0" stroke-width="0.7"/>
+  <text x="103" y="68" text-anchor="middle" class="inner-label" fill="#9c27b0">Event Gate</text>
+  <text x="43" y="78" class="fn">skip editable, lightbox, UI</text>
+  <polygon points="103,86 99,90 107,90" fill="#c9a0d6"/>
+
+  <rect x="35" y="93" width="135" height="27" rx="3" fill="white" stroke="#9c27b0" stroke-width="0.7"/>
+  <text x="103" y="104" text-anchor="middle" class="inner-label" fill="#9c27b0">Hit-Test</text>
+  <text x="43" y="114" class="fn">elementsFromPoint(x, y)</text>
+  <polygon points="103,122 99,126 107,126" fill="#c9a0d6"/>
+
+  <rect x="35" y="129" width="135" height="27" rx="3" fill="white" stroke="#9c27b0" stroke-width="0.7"/>
+  <text x="103" y="140" text-anchor="middle" class="inner-label" fill="#9c27b0">Target Resolve</text>
+  <text x="43" y="150" class="fn">tab | image | content | body</text>
+  <polygon points="103,158 99,162 107,162" fill="#c9a0d6"/>
+
+  <rect x="35" y="165" width="135" height="27" rx="3" fill="white" stroke="#9c27b0" stroke-width="0.7"/>
+  <text x="103" y="176" text-anchor="middle" class="inner-label" fill="#9c27b0">Action Route</text>
+  <text x="43" y="186" class="fn">→ view_set / card_promote</text>
+
+  <!-- 8. VIEW SYSTEM — LARGE -->
+  <rect x="205" y="35" width="250" height="285" rx="6" fill="#e8eaf6" stroke="#3f51b5" stroke-width="2"/>
+  <text x="330" y="52" text-anchor="middle" class="sub" fill="#3f51b5">8. View System</text>
+
+  <rect x="215" y="60" width="230" height="40" rx="3" fill="white" stroke="#3f51b5" stroke-width="0.7"/>
+  <text x="330" y="73" text-anchor="middle" class="inner-label" fill="#3f51b5">View Entry Point</text>
+  <text x="223" y="88" class="fn">view_set → save + select transition</text>
+
+  <rect x="215" y="108" width="230" height="40" rx="3" fill="white" stroke="#3f51b5" stroke-width="0.7"/>
+  <text x="330" y="121" text-anchor="middle" class="inner-label" fill="#3f51b5">CSS Class Toggle</text>
+  <text x="223" y="136" class="fn">body.project-view | .deck-view | .expanded-view</text>
+
+  <rect x="215" y="156" width="230" height="40" rx="3" fill="white" stroke="#3f51b5" stroke-width="0.7"/>
+  <text x="330" y="169" text-anchor="middle" class="inner-label" fill="#3f51b5">Layout Calculators</text>
+  <text x="223" y="184" class="fn">stack offsets · expanded grid · project grid</text>
+
+  <rect x="215" y="204" width="230" height="40" rx="3" fill="white" stroke="#3f51b5" stroke-width="0.7"/>
+  <text x="330" y="217" text-anchor="middle" class="inner-label" fill="#3f51b5">Title Positioner</text>
+  <text x="223" y="232" class="fn">title_state_list_get → page + deck transforms</text>
+
+  <rect x="215" y="252" width="230" height="40" rx="3" fill="white" stroke="#3f51b5" stroke-width="0.7"/>
+  <text x="330" y="265" text-anchor="middle" class="inner-label" fill="#3f51b5">Framework Visibility</text>
+  <text x="223" y="280" class="fn">view_framework_show / hide → overlay toggle</text>
+
+  <!-- 4. TRANSITION SYSTEM — BIGGEST -->
+  <rect x="480" y="35" width="430" height="295" rx="6" fill="#fce4ec" stroke="#dc3545" stroke-width="2.5"/>
+  <text x="695" y="52" text-anchor="middle" class="sub" fill="#dc3545">4. Transition System</text>
+
+  <rect x="490" y="60" width="410" height="30" rx="3" fill="white" stroke="#dc3545" stroke-width="0.7"/>
+  <text x="695" y="78" text-anchor="middle" class="inner-label" fill="#dc3545">View Router — select transition fn for view pair</text>
+
+  <rect x="490" y="100" width="130" height="82" rx="3" fill="white" stroke="#dc3545" stroke-width="0.7"/>
+  <text x="555" y="113" text-anchor="middle" class="inner-label" fill="#dc3545">proj ↔ deck</text>
+  <text x="498" y="128" class="fn">transition_project_deck_run</text>
+  <text x="498" y="142" class="fn">All 3 decks · stack ↔ grid</text>
+  <text x="498" y="170" class="fn" fill="#dc3545" font-weight="bold">Most common path</text>
+
+  <rect x="630" y="100" width="130" height="82" rx="3" fill="white" stroke="#dc3545" stroke-width="0.7"/>
+  <text x="695" y="113" text-anchor="middle" class="inner-label" fill="#dc3545">deck ↔ expanded</text>
+  <text x="638" y="128" class="fn">transition_deck_expanded_run</text>
+  <text x="638" y="142" class="fn">Active deck · cards fan out</text>
+
+  <rect x="770" y="100" width="130" height="82" rx="3" fill="white" stroke="#dc3545" stroke-width="0.7"/>
+  <text x="835" y="113" text-anchor="middle" class="inner-label" fill="#dc3545">proj ↔ expanded</text>
+  <text x="778" y="128" class="fn">transition_project_expanded_run</text>
+  <text x="778" y="142" class="fn">Two-step: chains 2 transitions</text>
+
+  <rect x="490" y="192" width="410" height="45" rx="3" fill="white" stroke="#dc3545" stroke-width="0.7"/>
+  <text x="695" y="205" text-anchor="middle" class="inner-label" fill="#dc3545">Animation Executor</text>
+  <text x="498" y="221" class="fn">Web Animations API · 520ms · view_rect_animate + title_rect_animate</text>
+
+  <rect x="490" y="247" width="410" height="45" rx="3" fill="white" stroke="#dc3545" stroke-width="0.7"/>
+  <text x="695" y="260" text-anchor="middle" class="inner-label" fill="#dc3545">Frame Finalizer</text>
+  <text x="498" y="276" class="fn">transition_complete_run → rebuild overlay · update registry</text>
+
+  <!-- ROW 2 -->
+  <!-- 7. EDIT SYSTEM — MEDIUM-SMALL -->
+  <rect x="25" y="350" width="155" height="200" rx="5" fill="#fff8e1" stroke="#ff8f00" stroke-width="1.5"/>
+  <text x="103" y="366" text-anchor="middle" class="sub" fill="#ff8f00">7. Edit System</text>
+
+  <rect x="35" y="374" width="135" height="35" rx="3" fill="white" stroke="#ff8f00" stroke-width="0.7"/>
+  <text x="103" y="386" text-anchor="middle" class="inner-label" fill="#ff8f00">Edit Binders</text>
+  <text x="43" y="400" class="fn">dblclick → contentEditable</text>
+
+  <rect x="35" y="417" width="135" height="35" rx="3" fill="white" stroke="#ff8f00" stroke-width="0.7"/>
+  <text x="103" y="429" text-anchor="middle" class="inner-label" fill="#ff8f00">Text Savers</text>
+  <text x="43" y="443" class="fn">item · card · deck · tab_sync</text>
+
+  <rect x="35" y="460" width="135" height="35" rx="3" fill="white" stroke="#ff8f00" stroke-width="0.7"/>
+  <text x="103" y="472" text-anchor="middle" class="inner-label" fill="#ff8f00">Insert / Delete</text>
+  <text x="43" y="486" class="fn">item_insert · item_delete</text>
+
+  <rect x="35" y="503" width="135" height="35" rx="3" fill="white" stroke="#ff8f00" stroke-width="0.7"/>
+  <text x="103" y="515" text-anchor="middle" class="inner-label" fill="#ff8f00">DOM Rebuild</text>
+  <text x="43" y="529" class="fn">item_text_rebuild + re-bind</text>
+
+  <!-- 3. STATE MANAGEMENT — MEDIUM-LARGE -->
+  <rect x="205" y="350" width="250" height="200" rx="6" fill="#d4edda" stroke="#28a745" stroke-width="2"/>
+  <text x="330" y="366" text-anchor="middle" class="sub" fill="#28a745">3. State Management</text>
+
+  <rect x="215" y="374" width="230" height="35" rx="3" fill="white" stroke="#28a745" stroke-width="0.7"/>
+  <text x="330" y="386" text-anchor="middle" class="inner-label" fill="#28a745">Active Deck Tracker</text>
+  <text x="223" y="400" class="fn">deck_active_get/set → .is-active + ACTIVE_KEY</text>
+
+  <rect x="215" y="417" width="230" height="35" rx="3" fill="white" stroke="#28a745" stroke-width="0.7"/>
+  <text x="330" y="429" text-anchor="middle" class="inner-label" fill="#28a745">View State Calculator</text>
+  <text x="223" y="443" class="fn">view_state_list_get · view_state_current_get</text>
+
+  <rect x="215" y="460" width="230" height="35" rx="3" fill="white" stroke="#28a745" stroke-width="0.7"/>
+  <text x="330" y="472" text-anchor="middle" class="inner-label" fill="#28a745">Layout Geometry</text>
+  <text x="223" y="486" class="fn">deck_stack_layout · expanded_layout · viewport rect</text>
+
+  <rect x="215" y="503" width="230" height="35" rx="3" fill="white" stroke="#28a745" stroke-width="0.7"/>
+  <text x="330" y="515" text-anchor="middle" class="inner-label" fill="#28a745">State Cache</text>
+  <text x="223" y="529" class="fn">lastStackedStates · lastProjectStates · lastDeckView</text>
+
+  <!-- 6. SPATIAL PERSISTENCE — SMALL -->
+  <rect x="480" y="350" width="195" height="155" rx="5" fill="#e0f2f1" stroke="#009688" stroke-width="1.5"/>
+  <text x="578" y="366" text-anchor="middle" class="sub" fill="#009688">6. Spatial Persist</text>
+
+  <rect x="490" y="374" width="175" height="33" rx="3" fill="white" stroke="#009688" stroke-width="0.7"/>
+  <text x="578" y="386" text-anchor="middle" class="inner-label" fill="#009688">Registry Store</text>
+  <text x="498" y="400" class="fn">keyed "deck-card" → {x,y,sX,sY,op}</text>
+
+  <rect x="490" y="415" width="175" height="33" rx="3" fill="white" stroke="#009688" stroke-width="0.7"/>
+  <text x="578" y="427" text-anchor="middle" class="inner-label" fill="#009688">Contract Validator</text>
+  <text x="498" y="441" class="fn">from.length === to.length === rects</text>
+
+  <rect x="490" y="456" width="175" height="33" rx="3" fill="white" stroke="#009688" stroke-width="0.7"/>
+  <text x="578" y="468" text-anchor="middle" class="inner-label" fill="#009688">Receded State Gen</text>
+  <text x="498" y="482" class="fn">center, scale(0), opacity(0)</text>
+
+  <!-- Beyond-the-horizon note -->
+  <rect x="692" y="358" width="210" height="85" rx="6" fill="#f5faf9" stroke="#009688" stroke-width="0.8" stroke-dasharray="4 3"/>
+  <text x="797" y="375" text-anchor="middle" class="inner-label" fill="#009688">Beyond the Horizon</text>
+  <text x="700" y="392" class="fn" fill="#009688">Cards never appear/disappear.</text>
+  <text x="700" y="404" class="fn" fill="#009688">Invisible = center, scale(0), op(0).</text>
+  <text x="700" y="416" class="fn" fill="#009688">Everything animates in/out smoothly.</text>
+
+  <!-- ROW 3 -->
+  <!-- 1. DATA LAYER — WIDE -->
+  <rect x="25" y="580" width="445" height="175" rx="6" fill="#e8f4f8" stroke="#0366d6" stroke-width="1.5"/>
+  <text x="248" y="596" text-anchor="middle" class="sub" fill="#0366d6">1. Data Layer</text>
+
+  <rect x="35" y="605" width="207" height="55" rx="3" fill="white" stroke="#0366d6" stroke-width="0.7"/>
+  <text x="139" y="617" text-anchor="middle" class="inner-label" fill="#0366d6">Source Chain</text>
+  <text x="43" y="632" class="fn">embedded → external → default</text>
+
+  <rect x="252" y="605" width="207" height="55" rx="3" fill="white" stroke="#0366d6" stroke-width="0.7"/>
+  <text x="356" y="617" text-anchor="middle" class="inner-label" fill="#0366d6">Schema Normalize</text>
+  <text x="260" y="632" class="fn">→ {id, title, miniTitle, cards[]}</text>
+
+  <rect x="35" y="672" width="207" height="55" rx="3" fill="white" stroke="#0366d6" stroke-width="0.7"/>
+  <text x="139" y="684" text-anchor="middle" class="inner-label" fill="#0366d6">Edit Merger</text>
+  <text x="43" y="699" class="fn">localStorage edits → data model</text>
+
+  <rect x="252" y="672" width="207" height="55" rx="3" fill="white" stroke="#0366d6" stroke-width="0.7"/>
+  <text x="356" y="684" text-anchor="middle" class="inner-label" fill="#0366d6">Persistence Store</text>
+  <text x="260" y="699" class="fn">5 localStorage keys per session</text>
+
+  <!-- 2. DOM LAYERS — WIDE -->
+  <rect x="495" y="580" width="415" height="175" rx="6" fill="#fff3cd" stroke="#ffc107" stroke-width="1.5"/>
+  <text x="703" y="596" text-anchor="middle" class="sub" fill="#856404">2. DOM Layers</text>
+
+  <rect x="505" y="605" width="192" height="55" rx="3" fill="white" stroke="#ffc107" stroke-width="0.7"/>
+  <text x="601" y="617" text-anchor="middle" class="inner-label" fill="#856404">Real Deck Structure</text>
+  <text x="513" y="632" class="fn">.deck → .deck-viewport (hidden)</text>
+
+  <rect x="707" y="605" width="192" height="55" rx="3" fill="white" stroke="#ffc107" stroke-width="0.7"/>
+  <text x="803" y="617" text-anchor="middle" class="inner-label" fill="#856404">Card Rect Overlay</text>
+  <text x="715" y="632" class="fn">#cardRectOverlay · 3 rects/deck</text>
+
+  <rect x="505" y="672" width="192" height="55" rx="3" fill="white" stroke="#ffc107" stroke-width="0.7"/>
+  <text x="601" y="684" text-anchor="middle" class="inner-label" fill="#856404">Card Layers</text>
+  <text x="513" y="699" class="fn">3 per rect: yellow / red / green</text>
+
+  <rect x="707" y="672" width="192" height="55" rx="3" fill="white" stroke="#ffc107" stroke-width="0.7"/>
+  <text x="803" y="684" text-anchor="middle" class="inner-label" fill="#856404">Title Rect Overlay</text>
+  <text x="715" y="699" class="fn">1 page + 3 deck titles (z:5600)</text>
+
+  <!-- FLOW ARROWS -->
+  <path d="M180,115 L205,115" class="arrow-bold"/>
+  <path d="M455,175 L480,175" class="arrow-bold"/>
+  <path d="M560,330 Q470,342 420,350" class="arrow"/>
+  <path d="M620,330 L590,350" class="arrow"/>
+  <path d="M280,350 L280,320" class="arrow-dash"/>
+  <path d="M103,550 L150,580" class="arrow-dash"/>
+  <path d="M470,660 L495,660" class="arrow-dash"/>
+
+  <!-- LEGEND -->
+  <line x1="30" y1="773" x2="55" y2="773" stroke="#333" stroke-width="2.5"/>
+  <polygon points="55,770.5 60,773 55,775.5" fill="#333"/>
+  <text x="65" y="776" class="fn">Main flow</text>
+  <line x1="150" y1="773" x2="175" y2="773" stroke="#555" stroke-width="1.5"/>
+  <polygon points="175,771 180,773 175,775" fill="#555"/>
+  <text x="185" y="776" class="fn">Data flow</text>
+  <line x1="270" y1="773" x2="295" y2="773" stroke="#999" stroke-width="1" stroke-dasharray="4 3"/>
+  <polygon points="295,771 300,773 295,775" fill="#999"/>
+  <text x="305" y="776" class="fn">Support</text>
+  <text x="430" y="776" class="fn" fill="#888">Size ∝ complexity · Position ∝ data flow · Rows = layers</text>
+
+  <!-- ROW LABELS — rendered last so they paint on top -->
+  <text x="460" y="31" text-anchor="middle" class="layer-label">INPUT  ·  ORCHESTRATION  ·  ENGINE</text>
+  <text x="340" y="344" text-anchor="middle" class="layer-label">STATE  ·  PERSISTENCE</text>
+  <text x="460" y="573" text-anchor="middle" class="layer-label">FOUNDATION</text>
+</svg>

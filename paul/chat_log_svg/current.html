@@ -1,0 +1,190 @@
+<!-- https://mpulsemedia.github.io/pops/paul/chat_log_svg/current.html -->
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>SVG Viewer</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: #2a2a2a;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
+    font-family: "Patrick Hand", Arial, sans-serif;
+    color: #ccc;
+  }
+  .controls {
+    position: fixed;
+    top: 8px;
+    left: 0;
+    right: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    z-index: 100;
+  }
+  .nav-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 32px;
+    padding: 0;
+    border: 2px solid #666;
+    border-radius: 4px;
+    background: transparent;
+    color: #888;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    line-height: 1;
+  }
+  .nav-btn:hover { color: #ccc; background: rgba(255,255,255,0.06); }
+  .nav-btn:disabled { opacity: 0.3; cursor: default; }
+  .nav-label {
+    font-size: 13px;
+    color: #aaa;
+    min-width: 60px;
+    text-align: center;
+  }
+  .reload-switch {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 10px;
+    border: 2px solid #666;
+    border-radius: 4px;
+    background: transparent;
+    color: #888;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    line-height: 1.2;
+    margin-left: 16px;
+  }
+  .reload-switch:hover { color: #ccc; background: rgba(255,255,255,0.06); }
+  .reload-switch[aria-checked="true"] .status { color: #6f6; }
+  .reload-switch[aria-checked="false"] .status { color: #999; }
+  img {
+    max-width: 96vw;
+    max-height: 90vh;
+    margin-top: 48px;
+  }
+</style>
+</head>
+<body>
+  <div class="controls">
+    <button type="button" class="nav-btn" id="prevBtn" title="Previous SVG">&#9664;</button>
+    <span class="nav-label" id="navLabel">latest</span>
+    <button type="button" class="nav-btn" id="nextBtn" title="Next SVG">&#9654;</button>
+    <button type="button" class="nav-btn" id="latestBtn" title="Jump to latest" style="font-size:14px;">&#9654;&#9654;</button>
+    <button type="button" class="reload-switch" id="reloadSwitch"
+            role="switch" aria-checked="true" aria-label="Auto-reload"
+            title="Toggle auto-reload">
+      Reload <span class="status" id="reloadStatus">on</span>
+    </button>
+  </div>
+  <img id="svgImg" alt="SVG diagram" />
+  <script>
+    var svgFiles = [
+      "131.card_title_centered.svg",
+      "132.title_system_refactor.svg",
+      "133.tab_gap_fix.svg",
+      "134.svg_diagram_folder.svg",
+      "135.svg_link_update.svg",
+      "136.url_no_wrap_rule.svg",
+      "137.svg_background_color.svg",
+      "138.continuity_audit.svg",
+      "139.spatial_persistence_abc.svg",
+      "140.spatial_title_animate.svg",
+      "141.current_html_viewer.svg",
+      "142.chat_log_current.svg",
+      "143.chat_entry_codename_rule.svg",
+      "144.svg_context_rule.svg",
+      "145.title_settle_jump_fix.svg",
+      "146.svg_nav_arrow.svg",
+      "147.title_natural_width_fix.svg",
+      "148.transition_flash_fix.svg",
+      "149.chat_header_format.svg",
+      "150.deck_title_edit.svg",
+      "151.deck_title_click_fix.svg",
+      "152.architecture_diagram.svg",
+      "153.architecture_detail.svg",
+      "154.architecture_organic.svg",
+      "155.architecture_lean.svg",
+      "156.merge_spatial_state.svg",
+      "157.spatial_registry_define.svg",
+      "158.current_html_rule.svg",
+      "159.item_move_cursor_fix.svg",
+      "160.current_html_simplify.svg",
+      "161.current_html_nav_restore.svg",
+      "162.reload_toggle_restore.svg",
+      "163.item_move_swap_fix.svg",
+      "164.reload_full_page.svg",
+      "165.single_click_edit.svg",
+      "166.ctrl_shift_indent.svg",
+      "167.edit_state_persist.svg",
+      "168.deck_text_download.svg",
+      "169.json_save_read_revert.svg",
+      "170.svg_text_size_rule.svg",
+      "171.card_title_click_fix.svg",
+      "172.paste_sentence_split.svg",
+      "173.deck_size_increase.svg",
+      "174.deck_top_pin_fix.svg",
+      "175.card_text_edit_resolved.svg"
+    ];
+
+    var img = document.getElementById("svgImg");
+    var prevBtn = document.getElementById("prevBtn");
+    var nextBtn = document.getElementById("nextBtn");
+    var latestBtn = document.getElementById("latestBtn");
+    var navLabel = document.getElementById("navLabel");
+    var currentIndex = svgFiles.length - 1;
+
+    function showFile(idx) {
+      currentIndex = idx;
+      img.src = svgFiles[idx] + "?t=" + Date.now();
+      var num = svgFiles[idx].split(".")[0];
+      var last = svgFiles[svgFiles.length - 1].split(".")[0];
+      navLabel.textContent = idx === svgFiles.length - 1
+        ? num + " (latest)"
+        : num + " / " + last;
+      prevBtn.disabled = idx <= 0;
+      nextBtn.disabled = idx >= svgFiles.length - 1;
+      latestBtn.disabled = idx >= svgFiles.length - 1;
+    }
+
+    prevBtn.addEventListener("click", function () {
+      if (currentIndex > 0) showFile(currentIndex - 1);
+    });
+    nextBtn.addEventListener("click", function () {
+      if (currentIndex < svgFiles.length - 1) showFile(currentIndex + 1);
+    });
+    latestBtn.addEventListener("click", function () {
+      showFile(svgFiles.length - 1);
+    });
+
+    var sw = document.getElementById("reloadSwitch");
+    var st = document.getElementById("reloadStatus");
+    var AUTO_KEY = "svgViewerAutoReload";
+    var autoOn = localStorage.getItem(AUTO_KEY) !== "off";
+    sw.setAttribute("aria-checked", String(autoOn));
+    st.textContent = autoOn ? "on" : "off";
+    sw.addEventListener("click", function () {
+      autoOn = !autoOn;
+      sw.setAttribute("aria-checked", String(autoOn));
+      st.textContent = autoOn ? "on" : "off";
+      localStorage.setItem(AUTO_KEY, autoOn ? "on" : "off");
+    });
+
+    showFile(currentIndex);
+    if (autoOn) {
+      setTimeout(function () { location.reload(); }, 5000);
+    }
+  </script>
+</body>
+</html>

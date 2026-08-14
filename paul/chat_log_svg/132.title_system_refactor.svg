@@ -1,0 +1,63 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 520 360">
+  <style>
+    text { font-family: monospace; font-size: 11px; }
+    .label { font-size: 10px; fill: #666; }
+    .del { fill: #c44; }
+    .add { fill: #28a745; }
+    .heading { font-size: 13px; font-weight: bold; }
+    .box-del { fill: #fdd; stroke: #c44; }
+    .box-add { fill: #d4edda; stroke: #28a745; }
+  </style>
+
+  <text x="260" y="20" text-anchor="middle" class="heading">132. Title System Refactor</text>
+
+  <!-- BEFORE: overlay system -->
+  <text x="130" y="50" text-anchor="middle" font-size="12" font-weight="bold" class="del">BEFORE (deleted)</text>
+
+  <rect x="20" y="60" width="220" height="280" rx="6" class="box-del" stroke-width="1.5"/>
+
+  <text x="30" y="80" class="del">#titleOverlay (HTML)</text>
+  <text x="30" y="95" class="del">  4 persistent span elements</text>
+
+  <text x="30" y="120" class="del">14 JS functions (~180 lines):</text>
+  <text x="30" y="135" font-size="9" class="del">  title_overlay_build</text>
+  <text x="30" y="148" font-size="9" class="del">  title_overlay_show</text>
+  <text x="30" y="161" font-size="9" class="del">  title_overlay_animate</text>
+  <text x="30" y="174" font-size="9" class="del">  title_state_dom_get</text>
+  <text x="30" y="187" font-size="9" class="del">  title_from/to_state_get</text>
+  <text x="30" y="200" font-size="9" class="del">  title_element_get</text>
+  <text x="30" y="213" font-size="9" class="del">  title_state_apply</text>
+  <text x="30" y="226" font-size="9" class="del">  font_size_get</text>
+  <text x="30" y="239" font-size="9" class="del">  TITLE_INDICES</text>
+  <text x="30" y="252" font-size="9" class="del">  + 5 more...</text>
+
+  <text x="30" y="275" class="del">~50 lines CSS</text>
+  <text x="30" y="290" class="del">getBoundingClientRect</text>
+  <text x="30" y="305" class="del">Timing-sensitive measurement</text>
+  <text x="30" y="320" class="del">~20 recurring bugs</text>
+
+  <!-- Arrow -->
+  <text x="265" y="200" font-size="24">→</text>
+
+  <!-- AFTER: crossfade -->
+  <text x="390" y="50" text-anchor="middle" font-size="12" font-weight="bold" class="add">AFTER (added)</text>
+
+  <rect x="290" y="60" width="220" height="180" rx="6" class="box-add" stroke-width="1.5"/>
+
+  <text x="300" y="85" class="add">2 JS functions (~20 lines):</text>
+  <text x="300" y="105" font-size="10" class="add">  title_crossfade(text, ms)</text>
+  <text x="300" y="120" font-size="10" class="add">    fade out → swap text →</text>
+  <text x="300" y="133" font-size="10" class="add">    fade in</text>
+
+  <text x="300" y="155" font-size="10" class="add">  deck_title_fade(show)</text>
+  <text x="300" y="168" font-size="10" class="add">    add/remove .title-fading</text>
+
+  <text x="300" y="195" class="add">CSS: opacity 260ms ease</text>
+  <text x="300" y="210" class="add">Zero measurement</text>
+  <text x="300" y="225" class="add">Zero timing sensitivity</text>
+
+  <!-- Net result -->
+  <rect x="290" y="255" width="220" height="50" rx="4" fill="#e8f4fd" stroke="#0366d6"/>
+  <text x="300" y="275" font-size="10" fill="#0366d6">Net: ~250 lines deleted</text>
+  <text x="300" y="290" font-size="10" fill="#0366d6">      ~30 lines added</text>
+</svg>

@@ -1,0 +1,69 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 320">
+  <style>
+    text { font-family: monospace; font-size: 12px; }
+    .label { font-size: 10px; fill: #666; }
+    .arrow { stroke: #333; stroke-width: 1.5; fill: none; marker-end: url(#arrowhead); }
+    .dim { font-size: 9px; fill: #c44; }
+  </style>
+  <defs>
+    <marker id="arrowhead" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L8,3 L0,6" fill="#333"/>
+    </marker>
+  </defs>
+
+  <!-- Title -->
+  <text x="240" y="20" text-anchor="middle" font-size="14" font-weight="bold">131. Card Title Centering Fix</text>
+
+  <!-- BEFORE -->
+  <text x="120" y="50" text-anchor="middle" font-size="11" font-weight="bold">BEFORE</text>
+
+  <!-- Card outline -->
+  <rect x="20" y="60" width="200" height="120" rx="6" fill="#f5e6a3" stroke="#c9a800" stroke-width="1.5"/>
+
+  <!-- .card-text box (unequal offsets) -->
+  <rect x="52" y="80" width="104" height="80" rx="3" fill="none" stroke="#888" stroke-dasharray="4,3"/>
+  <text x="54" y="76" class="label">.card-text</text>
+
+  <!-- Left offset label -->
+  <line x1="20" y1="95" x2="52" y2="95" class="arrow"/>
+  <text x="26" y="90" class="dim">32px</text>
+
+  <!-- Right offset label -->
+  <line x1="156" y1="95" x2="220" y2="95" class="arrow"/>
+  <text x="168" y="90" class="dim">64px</text>
+
+  <!-- Title centered in .card-text (wrong) -->
+  <rect x="60" y="100" width="88" height="20" rx="2" fill="#fff3b0" stroke="#c9a800"/>
+  <text x="104" y="114" text-anchor="middle" font-size="10">Title Text</text>
+  <text x="104" y="138" text-anchor="middle" class="dim">centered in .card-text</text>
+  <text x="104" y="150" text-anchor="middle" class="dim">(looks left-shifted)</text>
+
+  <!-- AFTER -->
+  <text x="360" y="50" text-anchor="middle" font-size="11" font-weight="bold">AFTER</text>
+
+  <!-- Card outline -->
+  <rect x="260" y="60" width="200" height="120" rx="6" fill="#f5e6a3" stroke="#c9a800" stroke-width="1.5"/>
+
+  <!-- .card-text box -->
+  <rect x="292" y="80" width="104" height="80" rx="3" fill="none" stroke="#888" stroke-dasharray="4,3"/>
+  <text x="294" y="76" class="label">.card-text</text>
+
+  <!-- Title spanning full card (negative offsets) -->
+  <rect x="268" y="100" width="184" height="20" rx="2" fill="#d4edda" stroke="#28a745"/>
+  <text x="360" y="114" text-anchor="middle" font-size="10">Title Text</text>
+
+  <!-- Negative offset arrows -->
+  <text x="270" y="90" class="dim">left: -32px</text>
+  <text x="394" y="90" class="dim">right: -64px</text>
+
+  <text x="360" y="138" text-anchor="middle" class="dim">centered across full card</text>
+  <text x="360" y="150" text-anchor="middle" class="dim">(text-align: center)</text>
+
+  <!-- CSS snippet -->
+  <rect x="40" y="210" width="400" height="90" rx="4" fill="#f0f0f0" stroke="#ccc"/>
+  <text x="50" y="230" font-size="10" fill="#333">.card-text-title {</text>
+  <text x="60" y="245" font-size="10" fill="#c44">- left: 0; right: 0; width: 100%;</text>
+  <text x="60" y="260" font-size="10" fill="#28a745">+ left: calc(-1 * var(--text-left, 32px));</text>
+  <text x="60" y="275" font-size="10" fill="#28a745">+ right: calc(-1 * var(--text-right, 64px));</text>
+  <text x="50" y="290" font-size="10" fill="#333">}</text>
+</svg>

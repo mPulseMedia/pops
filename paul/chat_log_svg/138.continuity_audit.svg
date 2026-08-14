@@ -1,0 +1,65 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 520 400" style="background: white;">
+  <style>
+    text { font-family: monospace; font-size: 10px; }
+    .heading { font-size: 13px; font-weight: bold; }
+    .sub { font-size: 11px; font-weight: bold; }
+    .rule { fill: #0366d6; }
+    .bad { fill: #c44; }
+    .good { fill: #28a745; }
+    .ref { fill: #666; font-size: 9px; }
+  </style>
+
+  <text x="260" y="20" text-anchor="middle" class="heading">138. Spatial Continuity Audit</text>
+  <text x="260" y="35" text-anchor="middle" font-size="9" fill="#666">20+ requests across entries 21-132</text>
+
+  <!-- Core Principle Box -->
+  <rect x="20" y="48" width="480" height="65" rx="6" fill="#e8f4fd" stroke="#0366d6" stroke-width="1.5"/>
+  <text x="260" y="66" text-anchor="middle" class="sub" fill="#0366d6">CORE PRINCIPLE</text>
+  <text x="30" y="82" class="rule">Z-index: changes INSTANTLY (no animation)</text>
+  <text x="30" y="96" class="rule">Position, scale, fontSize, opacity: TRANSITIONS smoothly</text>
+  <text x="30" y="108" class="rule">No object may jump from position A to position B</text>
+
+  <!-- BAD: Jump -->
+  <text x="130" y="135" text-anchor="middle" class="sub bad">WRONG (jump)</text>
+  <rect x="30" y="145" width="60" height="30" rx="4" fill="#fdd" stroke="#c44"/>
+  <text x="60" y="164" text-anchor="middle" font-size="9">pos A</text>
+  <text x="110" y="164" text-anchor="middle" font-size="16" class="bad">⚡</text>
+  <rect x="130" y="145" width="60" height="30" rx="4" fill="#fdd" stroke="#c44"/>
+  <text x="160" y="164" text-anchor="middle" font-size="9">pos B</text>
+
+  <!-- GOOD: Transition -->
+  <text x="390" y="135" text-anchor="middle" class="sub good">RIGHT (transition)</text>
+  <rect x="280" y="145" width="60" height="30" rx="4" fill="#d4edda" stroke="#28a745"/>
+  <text x="310" y="164" text-anchor="middle" font-size="9">pos A</text>
+  <line x1="340" y1="160" x2="410" y2="160" stroke="#28a745" stroke-width="2" stroke-dasharray="4,2"/>
+  <text x="375" y="154" text-anchor="middle" font-size="8" class="good">animate</text>
+  <rect x="410" y="145" width="60" height="30" rx="4" fill="#d4edda" stroke="#28a745"/>
+  <text x="440" y="164" text-anchor="middle" font-size="9">pos B</text>
+
+  <!-- Object types -->
+  <text x="20" y="200" class="sub">Persistent Objects</text>
+  <rect x="20" y="208" width="110" height="24" rx="3" fill="#f5e6a3" stroke="#c9a800"/>
+  <text x="75" y="224" text-anchor="middle" font-size="9">Cards (3/deck)</text>
+  <rect x="140" y="208" width="110" height="24" rx="3" fill="#b8d4e3" stroke="#4a90d9"/>
+  <text x="195" y="224" text-anchor="middle" font-size="9">Page title</text>
+  <rect x="260" y="208" width="110" height="24" rx="3" fill="#d4b8e3" stroke="#9b59b6"/>
+  <text x="315" y="224" text-anchor="middle" font-size="9">Deck titles (3)</text>
+  <rect x="380" y="208" width="110" height="24" rx="3" fill="#ccc" stroke="#888"/>
+  <text x="435" y="224" text-anchor="middle" font-size="9">Beyond horizon</text>
+
+  <!-- Chat log references -->
+  <text x="20" y="256" class="sub">Related Entries (by theme)</text>
+
+  <rect x="20" y="264" width="480" height="120" rx="4" fill="#f8f9fa" stroke="#dee2e6"/>
+
+  <text x="30" y="280" font-size="9" font-weight="bold">Title persistence &amp; no-jump:</text>
+  <text x="30" y="292" class="ref">#21 persistent objects, #22 no instantaneous jump, #23 expanded→project jump,</text>
+  <text x="30" y="303" class="ref">#24 beyond horizon return, #25 title disappears, #27 fontSize transition,</text>
+  <text x="30" y="314" class="ref">#69 left→center jump, #107 Projects title, #108 centered, #114 left-justified,</text>
+  <text x="30" y="325" class="ref">#115 refactor centering, #132 title refactor (20th bug → crossfade solution)</text>
+
+  <text x="30" y="342" font-size="9" font-weight="bold">Card persistence &amp; no-jump:</text>
+  <text x="30" y="354" class="ref">#24 spec_05 architecture, #29-33 stack positions, #30-31 positions wrong</text>
+  <text x="30" y="365" class="ref">after transition, #32 flash on return, #127 animate position / instant z-layer</text>
+  <text x="30" y="376" class="ref">#128 front card bright (z-layer visual), #125 keep front card on return</text>
+</svg>

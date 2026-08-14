@@ -1,0 +1,143 @@
+A.  Overview
+    1.  Every visible object (card, page title,
+        deck title) is a persistent spatial entity.
+    2.  Each has a defined position, scale, opacity,
+        and z-index in every view.
+    3.  Objects never appear from nothing or vanish;
+        they transition between their positions
+        across views.
+
+B.  Spatial properties
+    1.  Position: x, y (pixels from viewport origin).
+    2.  Scale: scaleX, scaleY (uniform for cards).
+    3.  Opacity: 0 (invisible) to 1 (fully visible).
+    4.  Z-index: stacking order within the overlay.
+    5.  These four groups fully define an object's
+        visual state in any view.
+
+C.  Transition rules
+    1.  Z-index changes INSTANTLY on promote or
+        view change. No animation for stacking.
+    2.  Position, scale, and opacity ANIMATE over
+        a duration (default 520ms) using easing
+        cubic-bezier(0.215, 0.61, 0.355, 1).
+    3.  No object may jump from state A to state B.
+        Every view change must compute from-state
+        (where object is now) and to-state (where
+        object goes), then animate between them.
+    4.  Font size, when animated (e.g. title text),
+        follows the same animate rule as
+        position/scale.
+
+D.  Beyond the horizon
+    1.  Objects not visible in the current view are
+        placed "beyond the horizon": scale 0,
+        opacity 0, positioned at viewport center.
+    2.  This is NOT removal from the DOM. The
+        element persists; it is merely invisible.
+    3.  Receded objects have pointer-events: none
+        so they do not intercept clicks.
+    4.  When transitioning TO a view where the
+        object is visible, it animates FROM the
+        receded state to its target position.
+    5.  When transitioning FROM a view where the
+        object is visible, it animates TO the
+        receded state.
+
+E.  Persistent objects
+    1.  Cards: 3 per deck (yellow, red, green).
+        9 total across 3 decks. Each card-rect
+        element in #cardRectOverlay.
+    2.  Page title: "Projects". Title-rect element
+        in #titleRectOverlay. Animates position
+        and scale between views via
+        title_rect_animate.
+    3.  Deck titles: 3 total, one per deck.
+        Title-rect elements in #titleRectOverlay.
+        Animate position/scale/opacity between
+        views. Positions cached at rest via
+        title_rect_cache_build.
+
+F.  Per-view states
+    1.  Project view:
+        a.  All 9 cards visible, stacked per deck
+            in grid cells. Front card lowest
+            (STACK_OFFSETS[0]), middle, back highest.
+        b.  Page title: scale 1, opacity 1, at
+            cached .page-title rect position.
+        c.  Deck titles: scale 32/42 (~0.76),
+            opacity 1, at cached .deck-title rect
+            positions (centered above each deck).
+    2.  Deck view:
+        a.  Active deck's 3 cards visible, stacked
+            (deck_stack_layout_get). Non-active
+            decks' cards receded (beyond horizon).
+        b.  Page title: beyond horizon (scale 0,
+            opacity 0, viewport center).
+        c.  Active deck title: scale 1, opacity 1,
+            at page-title center position.
+        d.  Non-active deck titles: beyond horizon.
+    3.  Expanded view:
+        a.  Active deck's 3 cards visible in
+            expanded layout (top, bottom-left,
+            bottom-right). Non-active receded.
+        b.  Page title: beyond horizon.
+        c.  Active deck title: scale 1, at
+            page-title center. Others: horizon.
+
+G.  Transition contract
+    1.  Before any view_set call:
+        a.  Compute from-states for all animated
+            objects (measured or from registry).
+        b.  Compute to-states for all animated
+            objects (target view layout).
+    2.  During transition:
+        a.  Set z-index instantly (deck_active_index
+            _set, view_project_stack_set).
+        b.  Call view_rect_animate(from, to, duration)
+            to interpolate position/scale/opacity.
+    3.  After transition:
+        a.  Apply final states via
+            card_rect_state_apply_all.
+        b.  Update spatial_registry with new states.
+        c.  Rebuild overlay (transition_complete_run)
+            for fresh DOM if needed.
+    4.  Validation: spatial_contract_validate logs
+        a warning if any from-state is missing or
+        if from and to arrays have different
+        lengths.
+
+H.  Spatial registry
+    1.  spatial_registry: object mapping each
+        persistent element ID to its current
+        {x, y, scaleX, scaleY, opacity, zIndex}.
+    2.  Updated after every animation completes
+        and after every view_framework_show.
+    3.  Read as the from-state source when
+        starting a new transition, eliminating
+        the need to measure getBoundingClientRect
+        for animated objects.
+    4.  Survives overlay rebuilds: registry values
+        persist across card_rect_overlay_build
+        calls.
+
+I.  History of this principle
+    1.  Entry 24: spec_05 architecture created to
+        document physical persistence and beyond-
+        the-horizon pattern.
+    2.  Entries 21-27: title overlay system built
+        for persistent title animation; iterated
+        through 7 prompts fixing jump bugs.
+    3.  Entries 30-33: card position bugs after
+        transitions; "flash" on return.
+    4.  Entry 69: title left-align then jump to
+        center.
+    5.  Entries 107-108, 114-115: title centering
+        and positioning regressions.
+    6.  Entry 127: "animate position, z-layer
+        instant."
+    7.  Entry 132: title overlay system replaced
+        with crossfade after 20 recurring bugs.
+        Positional persistence for titles traded
+        for reliability; cards retain full
+        positional persistence.

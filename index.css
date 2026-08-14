@@ -211,7 +211,7 @@ body.project-view .card-layer[data-color="green"] .card {
 .tab {
   position: absolute;
   width: var(--tab-width, 235px);
-  height: 53px;
+  height: 54px;
   border-radius: 12px 12px 4px 4px;
   clip-path: polygon(6% 0%, 94% 0%, 100% 100%, 0% 100%);
   border-top: none;
@@ -293,6 +293,12 @@ body.project-view .card-layer[data-color="green"] .card {
   filter: saturate(0.9) brightness(0.74);
 }
 
+/* Expanded view: all cards bright */
+body.expanded-view .card-layer:not(.is-front) .card,
+body.expanded-view .card-layer:not(.is-front) .tab {
+  filter: none;
+}
+
 .tab {
   filter: drop-shadow(12px -18px 36px rgba(0, 0, 0, 0.2));
 }
@@ -357,17 +363,19 @@ body.project-view .card-layer[data-color="green"] .card {
 /* Title midway between card top and center-of-red-line band (halfway back from full center) */
 .card-text-title {
   position: absolute;
-  left: 0;
-  right: 0;
+  left: calc(-1 * var(--text-left, 32px));
+  right: calc(-1 * var(--text-right, 64px));
   top: calc((var(--line-offset) / 2 + -10px) / 2);
   transform: translateY(-50%);
-  width: 100%;
   text-align: center;
   font-size: calc(28px * 1.4 * 0.8);
   font-weight: 700;
   letter-spacing: 0.14em;
   text-transform: none;
   font-family: "Courier New", Courier, monospace;
+  min-height: var(--line-gap);
+  pointer-events: auto;
+  cursor: text;
 }
 
 .card-text-list {
@@ -451,6 +459,14 @@ body.project-view .card-layer[data-color="green"] .card {
   align-items: flex-start;
 }
 
+.card-text-cell:empty,
+.card-text-cell:has(> .line-break:only-child) {
+  cursor: text;
+  pointer-events: auto;
+  min-height: var(--line-gap);
+  width: 100%;
+}
+
 .line-number-column {
   display: flex;
   flex-direction: column;
@@ -483,21 +499,8 @@ body.project-view .card-layer[data-color="green"] .card {
   padding-left: 112px;
 }
 
-/* Basic Information, Main Characters, Setting & Story: top level A/B/C (cap); second level a/b (lowercase); more indent from line number */
-.card[data-card-title="Basic Information"] .card-text-item:not(.level-2):not(.level-3):not(.line-break),
-.card[data-card-title="Main Characters"] .card-text-item:not(.level-2):not(.level-3):not(.line-break),
-.card[data-card-title="Setting & Story"] .card-text-item:not(.level-2):not(.level-3):not(.line-break) {
-  padding-left: 68px;
-}
-.card[data-card-title="Basic Information"] .card-text-item.level-2,
-.card[data-card-title="Main Characters"] .card-text-item.level-2,
-.card[data-card-title="Setting & Story"] .card-text-item.level-2 {
-  padding-left: 120px;
-}
-.card[data-card-title="Basic Information"] .card-text-item.level-3,
-.card[data-card-title="Main Characters"] .card-text-item.level-3,
-.card[data-card-title="Setting & Story"] .card-text-item.level-3 {
-  padding-left: 172px;
+.card-text-item.level-4 {
+  padding-left: 160px;
 }
 
 .card-text-item.section {
@@ -519,12 +522,13 @@ body.project-view .card-layer[data-color="green"] .card {
 .card-text-item-text {
   flex: 1;
   min-width: 0;
+  min-height: var(--line-gap);
   display: block;
   line-height: var(--line-gap);
   margin: 0;
   padding: 0;
   pointer-events: auto;
-  white-space: normal;
+  white-space: pre-wrap;
   word-wrap: break-word;
   overflow-wrap: break-word;
 }
@@ -615,7 +619,7 @@ body.project-view .card-layer[data-color="green"] .card {
   --expanded-bottom-row-lift: 70px;
   --expanded-buffer: 12px;
   --deck-max-width: min(
-    96vw,
+    99vw,
     calc((100vh - var(--deck-top-margin) - var(--deck-bottom-margin) - var(--safe-bottom)) * 1.6)
   );
   --deck-max-height: calc(var(--deck-max-width) / 1.6);
@@ -667,6 +671,7 @@ body {
   left: 50%;
   transform: translateX(-50%);
   text-align: center;
+  transition: opacity 260ms ease;
 }
 
 .title-row-btn {
@@ -959,7 +964,7 @@ body.project-view .deck {
 body.project-view .deck-title {
   display: block;
   position: static;
-  margin: 0 0 8px 0;
+  margin: -20px 0 16px 0;
   padding: 0;
   color: #ffffff;
   font-size: 1rem;
@@ -969,7 +974,9 @@ body.project-view .deck-title {
   max-width: 100%;
   min-width: 0;
   order: -1;
+  transition: opacity 260ms ease;
 }
+
 
 /* Representative profile: viewport rectangle with cards visible inside (scaled) */
 body.project-view .deck-viewport {
@@ -1085,11 +1092,11 @@ body.deck-proxy-animating .deck.is-active {
 
 .card-rect-overlay.is-active {
   visibility: visible;
+  pointer-events: auto;
 }
 
-/* Title overlay: persistent title objects (view title + deck titles) with position/scale per view.
-   Titles animate between views; receded titles are beyond horizon (center, scale 0, opacity 0). */
-.title-overlay {
+/* Title rect overlay: spatially persistent title objects */
+.title-rect-overlay {
   position: fixed;
   inset: 0;
   z-index: 5600;
@@ -1098,47 +1105,28 @@ body.deck-proxy-animating .deck.is-active {
   box-sizing: border-box;
 }
 
-.title-overlay.is-active {
+.title-rect-overlay.is-active {
   visibility: visible;
 }
 
-.title-overlay .title-element {
+.title-rect {
   position: fixed;
   left: 0;
   top: 0;
   transform-origin: 0 0;
-  font-size: var(--title-size);
   font-weight: 700;
   letter-spacing: 0.08em;
-  padding: 8px 16px;
-  margin: 0;
-  text-align: center;
   white-space: nowrap;
-  color: #ffffff;
-  box-sizing: border-box;
-  pointer-events: auto;
-  cursor: pointer;
+  color: #fff;
+  font-family: "Patrick Hand", "Avenir Next", "Futura", "Gill Sans", "Helvetica Neue", Arial, sans-serif;
+  font-size: var(--title-size);
+  pointer-events: none;
 }
 
-.title-overlay .title-element[data-index="0"] {
-  color: #ffffff;
+body.title-rect-active .page-title,
+body.title-rect-active .deck-title {
+  visibility: hidden;
 }
-
-.title-overlay .title-element[data-index="1"],
-.title-overlay .title-element[data-index="2"],
-.title-overlay .title-element[data-index="3"] {
-  color: #ffffff;
-}
-
-body.project-view .title-overlay .title-element[data-index="1"],
-body.project-view .title-overlay .title-element[data-index="2"],
-body.project-view .title-overlay .title-element[data-index="3"] {
-  font-size: 1rem;
-}
-
-/* When title overlay is active, hide real titles (layout preserved via visibility) */
-body.title-overlay-active .page-title { visibility: hidden; }
-body.title-overlay-active .deck-title { visibility: hidden; }
 
 /* Wire frame: exactly old card design bounds (tab + .card = 728px), same in all views.
    Rect is hidden but kept for positioning; transform/scale are applied to it. */
@@ -1154,11 +1142,13 @@ body.title-overlay-active .deck-title { visibility: hidden; }
   background: transparent;
   box-shadow: none;
   z-index: 1;
+  pointer-events: none;
 }
 
-/* When a real card is hosted inside a card-rect: tab and card body inside the rect.
-   pointer-events: none so clicks in tab row pass through to tabs of cards behind.
-   Tab, card body hit area, and card-text-image use pointer-events: auto. */
+/* Card rect overlay: click_dispatch routes all clicks.
+   Tabs and card-body hit area (::after) need pointer-events: auto
+   so elementsFromPoint can detect them. Card/layer stay none
+   so clicks on gaps fall through to ::after. */
 .card-rect .card-layer--overlay {
   position: absolute;
   left: 0;
@@ -1168,9 +1158,7 @@ body.title-overlay-active .deck-title { visibility: hidden; }
   transform: none !important;
 }
 
-/* Card body hit area: receives clicks so promote works; tab row stays pass-through */
-.card-rect .card-layer--overlay::after {
-  content: "";
+.card-rect .card-body-hit {
   position: absolute;
   left: 0;
   top: var(--tab-height);
@@ -1183,7 +1171,7 @@ body.title-overlay-active .deck-title { visibility: hidden; }
 
 .card-rect .card-layer--overlay .tab {
   top: 0;
-  z-index: 10; /* Above card bodies so all tabs stay clickable when stacked */
+  z-index: 10;
   pointer-events: auto;
   cursor: pointer;
 }
@@ -1193,26 +1181,7 @@ body.title-overlay-active .deck-title { visibility: hidden; }
   top: var(--tab-height);
   left: 0;
   width: var(--card-base-width);
-  pointer-events: none; /* Allow clicks to pass through to tabs of cards behind */
-}
-
-.card-rect .card-layer--overlay .card .card-text-image {
-  pointer-events: auto; /* Keep image clickable for lightbox */
-}
-
-/* Card rect backgrounds removed — rects hidden but kept for position/scale */
-
-/* Rect is pointer-events: none so tab-row clicks pass through to rear tabs.
-   Card body hit area (::after) and tab handle promote clicks. */
-body.deck-view .card-rect-overlay.is-active .card-rect,
-body.expanded-view .card-rect-overlay.is-active .card-rect {
   pointer-events: none;
-}
-
-/* Project view: card rects must receive clicks so we can open that deck */
-body.project-view.card-rect-framework .card-rect-overlay.is-active .card-rect {
-  pointer-events: auto;
-  cursor: pointer;
 }
 
 body.card-rect-framework .deck.is-active .deck-viewport {
@@ -1286,13 +1255,17 @@ body.expanded-view .deck-scale {
   box-shadow: 0 18px 48px rgba(0, 0, 0, 0.6);
 }
 
-.card-tab-editable,
 .card-title-editable {
   cursor: text;
 }
 
 .card-text-title.card-title-editable {
   pointer-events: auto;
+}
+
+.card-text-title.card-title-editable[contenteditable="true"] {
+  outline: none;
+  caret-color: currentColor;
 }
 
 /* Bottom-right link to Buddy page */

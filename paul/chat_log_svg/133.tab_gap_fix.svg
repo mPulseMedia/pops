@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 200">
+  <style>
+    text { font-family: monospace; font-size: 11px; }
+    .del { fill: #c44; }
+    .add { fill: #28a745; }
+  </style>
+
+  <text x="200" y="20" text-anchor="middle" font-size="13" font-weight="bold">133. Tab-Card 1px Gap Fix</text>
+
+  <!-- BEFORE -->
+  <text x="100" y="50" text-anchor="middle" font-size="11" font-weight="bold">BEFORE</text>
+
+  <!-- Tab -->
+  <rect x="30" y="60" width="140" height="53" rx="6 6 0 0" fill="#f5e6a3" stroke="#c9a800" stroke-width="1.5"/>
+  <text x="100" y="90" text-anchor="middle">Tab (53px)</text>
+
+  <!-- Gap -->
+  <rect x="30" y="113" width="140" height="2" fill="#ff4444"/>
+  <text x="100" y="126" text-anchor="middle" class="del">1px gap</text>
+
+  <!-- Card -->
+  <rect x="30" y="115" width="140" height="60" rx="0 0 6 6" fill="#f5e6a3" stroke="#c9a800" stroke-width="1.5"/>
+  <text x="100" y="150" text-anchor="middle">Card body</text>
+
+  <!-- AFTER -->
+  <text x="300" y="50" text-anchor="middle" font-size="11" font-weight="bold">AFTER</text>
+
+  <!-- Tab -->
+  <rect x="230" y="60" width="140" height="54" rx="6 6 0 0" fill="#d4edda" stroke="#28a745" stroke-width="1.5"/>
+  <text x="300" y="90" text-anchor="middle">Tab (54px)</text>
+
+  <!-- Card (no gap) -->
+  <rect x="230" y="114" width="140" height="60" rx="0 0 6 6" fill="#d4edda" stroke="#28a745" stroke-width="1.5"/>
+  <text x="300" y="148" text-anchor="middle">Card body</text>
+  <text x="300" y="126" text-anchor="middle" class="add">No gap</text>
+</svg>

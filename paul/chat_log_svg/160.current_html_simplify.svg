@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 460 240" style="background:#fff">
+  <style>
+    text { font-family: monospace; font-size: 12px; fill: #222; }
+    .title { font-size: 14px; font-weight: bold; }
+    .old { fill: #fce4ec; stroke: #c62828; stroke-width: 1.5; rx: 6; }
+    .new { fill: #e8f5e9; stroke: #2e7d32; stroke-width: 2; rx: 6; }
+    .arrow { stroke: #555; stroke-width: 1.5; fill: none; marker-end: url(#ah); }
+  </style>
+  <defs>
+    <marker id="ah" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L8,3 L0,6" fill="#555"/>
+    </marker>
+  </defs>
+  <text x="230" y="24" text-anchor="middle" class="title">chat_160: current_html_simplify</text>
+
+  <!-- Before -->
+  <rect x="20" y="50" width="190" height="90" class="old"/>
+  <text x="115" y="70" text-anchor="middle" font-weight="bold">Before</text>
+  <text x="115" y="88" text-anchor="middle" font-size="10">svgFiles[] array (30 entries)</text>
+  <text x="115" y="102" text-anchor="middle" font-size="10">prev/next nav buttons</text>
+  <text x="115" y="116" text-anchor="middle" font-size="10">toggle auto-reload button</text>
+  <text x="115" y="130" text-anchor="middle" font-size="10">~185 lines</text>
+
+  <line x1="212" y1="95" x2="248" y2="95" class="arrow"/>
+
+  <!-- After -->
+  <rect x="250" y="50" width="190" height="90" class="new"/>
+  <text x="345" y="70" text-anchor="middle" font-weight="bold">After</text>
+  <text x="345" y="88" text-anchor="middle" font-size="10">currentFile = "N.label.svg"</text>
+  <text x="345" y="102" text-anchor="middle" font-size="10">auto-reload every 3s</text>
+  <text x="345" y="116" text-anchor="middle" font-size="10">shows filename as label</text>
+  <text x="345" y="130" text-anchor="middle" font-size="10">~45 lines</text>
+
+  <!-- Rule update -->
+  <rect x="70" y="165" width="320" height="44" rx="6" fill="#e3f2fd" stroke="#1565c0" stroke-width="1.5"/>
+  <text x="230" y="185" text-anchor="middle" font-size="11" fill="#1565c0">prompt.mdc F.7 + MEMORY.md C.9 updated:</text>
+  <text x="230" y="200" text-anchor="middle" font-size="11" fill="#1565c0">"update currentFile" replaces "append to svgFiles"</text>
+
+  <text x="230" y="232" text-anchor="middle" font-size="10" fill="#888">Red = removed | Green = simplified replacement</text>
+</svg>

@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 520 340" style="background:#fff">
+  <style>
+    text { font-family: monospace; font-size: 12px; fill: #222; }
+    .title { font-size: 14px; font-weight: bold; }
+    .bug { fill: #fce4ec; stroke: #c62828; stroke-width: 1.5; rx: 6; }
+    .fix { fill: #e8f5e9; stroke: #2e7d32; stroke-width: 2; rx: 6; }
+    .step { fill: #e3f2fd; stroke: #1565c0; stroke-width: 1.5; rx: 6; }
+    .arrow { stroke: #555; stroke-width: 1.5; fill: none; marker-end: url(#ah); }
+  </style>
+  <defs>
+    <marker id="ah" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L8,3 L0,6" fill="#555"/>
+    </marker>
+  </defs>
+  <text x="260" y="24" text-anchor="middle" class="title">chat_159: item_move_cursor_fix</text>
+  <text x="260" y="42" text-anchor="middle" font-size="11" fill="#666">Ctrl+Shift+Arrow: i-beam follows moved item</text>
+
+  <!-- Bug 1: blur on detached span -->
+  <rect x="20" y="60" width="230" height="56" class="bug"/>
+  <text x="135" y="80" text-anchor="middle" font-weight="bold">Bug 1: blur fires on old span</text>
+  <text x="135" y="96" text-anchor="middle" font-size="10">DOM rebuild detaches span, blur</text>
+  <text x="135" y="108" text-anchor="middle" font-size="10">writes text to WRONG item index</text>
+
+  <!-- Bug 2: focus timing -->
+  <rect x="270" y="60" width="230" height="56" class="bug"/>
+  <text x="385" y="80" text-anchor="middle" font-weight="bold">Bug 2: cursor not shown</text>
+  <text x="385" y="96" text-anchor="middle" font-size="10">focus() on new contentEditable</text>
+  <text x="385" y="108" text-anchor="middle" font-size="10">before browser paints = no i-beam</text>
+
+  <!-- Fix 1 -->
+  <rect x="20" y="140" width="230" height="50" class="fix"/>
+  <text x="135" y="162" text-anchor="middle" font-weight="bold">Fix: contentEditable = false</text>
+  <text x="135" y="178" text-anchor="middle" font-size="10" fill="#2e7d32">Set BEFORE move; blur early-returns</text>
+
+  <!-- Fix 2 -->
+  <rect x="270" y="140" width="230" height="50" class="fix"/>
+  <text x="385" y="162" text-anchor="middle" font-weight="bold">Fix: requestAnimationFrame</text>
+  <text x="385" y="178" text-anchor="middle" font-size="10" fill="#2e7d32">Defer focus+cursor to next frame</text>
+
+  <line x1="135" y1="116" x2="135" y2="138" class="arrow"/>
+  <line x1="385" y1="116" x2="385" y2="138" class="arrow"/>
+
+  <!-- Timeline -->
+  <rect x="40" y="215" width="440" height="2" fill="#999"/>
+  <rect x="50" y="205" width="80" height="24" class="step"/>
+  <text x="90" y="221" text-anchor="middle" font-size="10">save sel</text>
+  <rect x="145" y="205" width="80" height="24" class="step"/>
+  <text x="185" y="221" text-anchor="middle" font-size="10">CE=false</text>
+  <rect x="240" y="205" width="80" height="24" class="step"/>
+  <text x="280" y="221" text-anchor="middle" font-size="10">move+rebuild</text>
+  <rect x="340" y="205" width="110" height="24" class="fix"/>
+  <text x="395" y="221" text-anchor="middle" font-size="10">rAF: focus+sel</text>
+
+  <text x="260" y="260" text-anchor="middle" font-size="10" fill="#888">Red = bugs | Green = fixes | Blue = execution steps</text>
+
+  <!-- Note about data safety -->
+  <rect x="60" y="275" width="400" height="40" rx="6" fill="#fff8e1" stroke="#f57f17" stroke-width="1"/>
+  <text x="260" y="293" text-anchor="middle" font-size="11" fill="#e65100">Also fixes data corruption: old blur handler was</text>
+  <text x="260" y="307" text-anchor="middle" font-size="11" fill="#e65100">writing moved item's text to the wrong index post-swap</text>
+</svg>

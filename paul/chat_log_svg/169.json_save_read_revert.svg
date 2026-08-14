@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 260" style="background:#fff">
+  <style>
+    text { font-family: monospace; font-size: 12px; fill: #222; }
+    .title { font-size: 14px; font-weight: bold; }
+    .old { fill: #fce4ec; stroke: #c62828; stroke-width: 1.5; rx: 6; }
+    .new { fill: #e8f5e9; stroke: #2e7d32; stroke-width: 2; rx: 6; }
+    .arrow { font-size: 20px; font-weight: bold; }
+  </style>
+  <text x="240" y="22" text-anchor="middle" class="title">chat_169: json_save_read_revert</text>
+  <text x="240" y="40" text-anchor="middle" font-size="11" fill="#666">Reverted to JSON save/load, removed folder icon</text>
+
+  <!-- Before (chat_168) -->
+  <text x="120" y="68" text-anchor="middle" font-size="11" fill="#888">Before</text>
+  <rect x="30" y="76" width="80" height="36" class="old"/>
+  <text x="70" y="99" text-anchor="middle" font-size="11">📂 load</text>
+  <rect x="120" y="76" width="80" height="36" class="old"/>
+  <text x="160" y="99" text-anchor="middle" font-size="11">↓ text</text>
+  <text x="120" y="130" text-anchor="middle" font-size="10" fill="#c62828">decks.txt (plain text)</text>
+
+  <!-- After (chat_169) -->
+  <text x="360" y="68" text-anchor="middle" font-size="11" fill="#888">After</text>
+  <rect x="280" y="76" width="80" height="36" class="new"/>
+  <text x="320" y="99" text-anchor="middle" class="arrow" fill="#2e7d32">↓</text>
+  <text x="320" y="130" text-anchor="middle" font-size="10" fill="#2e7d32">JSON save</text>
+  <rect x="370" y="76" width="80" height="36" class="new"/>
+  <text x="410" y="99" text-anchor="middle" class="arrow" fill="#2e7d32">↑</text>
+  <text x="410" y="130" text-anchor="middle" font-size="10" fill="#2e7d32">JSON load</text>
+
+  <!-- Arrow between -->
+  <line x1="210" y1="94" x2="270" y2="94" stroke="#666" stroke-width="2" marker-end="url(#arr)"/>
+  <defs><marker id="arr" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6Z" fill="#666"/></marker></defs>
+
+  <!-- Data flow diagram -->
+  <rect x="60" y="155" width="140" height="40" rx="6" fill="#e3f2fd" stroke="#1565c0" stroke-width="1.5"/>
+  <text x="130" y="178" text-anchor="middle" font-size="11">export_file_save()</text>
+  <text x="130" y="210" text-anchor="middle" font-size="10" fill="#1565c0">index.txt (JSON)</text>
+
+  <rect x="280" y="155" width="140" height="40" rx="6" fill="#e3f2fd" stroke="#1565c0" stroke-width="1.5"/>
+  <text x="350" y="178" text-anchor="middle" font-size="11">deck_data_file_load()</text>
+  <text x="350" y="210" text-anchor="middle" font-size="10" fill="#1565c0">file picker → parse JSON</text>
+
+  <line x1="200" y1="175" x2="280" y2="175" stroke="#1565c0" stroke-width="1.5" stroke-dasharray="4,3" marker-end="url(#arr2)"/>
+  <defs><marker id="arr2" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6Z" fill="#1565c0"/></marker></defs>
+  <text x="240" y="168" text-anchor="middle" font-size="9" fill="#1565c0">round-trip</text>
+
+  <text x="240" y="245" text-anchor="middle" font-size="10" fill="#666">Supports 3+ decks via decks[] array</text>
+</svg>

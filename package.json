@@ -1,0 +1,24 @@
+{
+  "name": "pops",
+  "version": "1.0.0",
+  "description": "A full-screen app that displays multiple **decks** of **cards**. Each deck is a stack of four colored cards: the first (leftmost) card is **yellow**, the second is **red**, then **green**, then **blue**. Cards can be fanned, reordered, and expanded. Built with `index.html` and `index.css` (the main page and its styles; shared script in `shared.js`).",
+  "main": "shared.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mPulseMedia/pops.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/mPulseMedia/pops/issues"
+  },
+  "homepage": "https://github.com/mPulseMedia/pops#readme",
+  "dependencies": {
+    "playwright": "^1.58.2"
+  }
+}

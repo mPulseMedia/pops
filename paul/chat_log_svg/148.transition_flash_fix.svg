@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 560 340" style="background: white;">
+  <style>
+    text { font-family: monospace; font-size: 10px; }
+    .heading { font-size: 13px; font-weight: bold; }
+    .sub { font-size: 11px; font-weight: bold; }
+    .add { fill: #28a745; }
+    .del { fill: #dc3545; }
+    .rule { fill: #0366d6; }
+  </style>
+  <text x="280" y="20" text-anchor="middle" class="heading">148. Transition Flash Fix</text>
+  <text x="280" y="36" text-anchor="middle" font-size="9" fill="#666">Context: entries 140 (spatial titles), 145 (settle fix), 147 (natural width)</text>
+
+  <!-- Bug timeline -->
+  <rect x="10" y="50" width="540" height="90" rx="6" fill="#fce4ec" stroke="#dc3545" stroke-width="1.5"/>
+  <text x="280" y="68" text-anchor="middle" class="sub del">Bug: one-frame flash on deck/expanded → project</text>
+  <text x="20" y="86" font-size="9">Frame 0: view_apply changes body class to project-view</text>
+  <text x="20" y="100" font-size="9" class="del">Frame 1: view_apply's rAF → view_framework_show(projectStates) → FLASH!</text>
+  <text x="20" y="114" font-size="9">Frame 2: transition's rAF → view_framework_show(fromStates) → animation starts</text>
+  <text x="20" y="128" font-size="9" class="del">Cards jump to final positions for one frame before animating from start</text>
+
+  <!-- Fix -->
+  <rect x="10" y="155" width="540" height="75" rx="6" fill="#d4edda" stroke="#28a745" stroke-width="1.5"/>
+  <text x="280" y="173" text-anchor="middle" class="sub add">Fix: skipCardRectUpdate for both directions</text>
+  <text x="20" y="191" font-size="9" class="add">view_apply({ skipCardRectUpdate: true, skipTitleUpdate: true })</text>
+  <text x="20" y="205" font-size="9" class="add">Transition calls view_project_stack_set + title_rect_cache_build itself</text>
+  <text x="20" y="219" font-size="9" class="add">view_framework_show(fromStates) called synchronously — no rAF gap</text>
+
+  <!-- Pattern -->
+  <rect x="10" y="245" width="540" height="80" rx="6" fill="#f8f9fa" stroke="#dee2e6"/>
+  <text x="280" y="263" text-anchor="middle" class="sub">Pattern: transition owns all state changes</text>
+  <text x="20" y="281" font-size="9">view_apply: only changes body classes, scrolls, updates title text</text>
+  <text x="20" y="295" font-size="9">Transition function: manages fromStates, toStates, animation timing</text>
+  <text x="20" y="309" font-size="9" class="rule">Rule: never let view_apply's rAF compete with transition's rAFs</text>
+</svg>

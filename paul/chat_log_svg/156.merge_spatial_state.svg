@@ -1,0 +1,156 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 520" style="background: white;">
+  <style>
+    text { font-family: monospace; font-size: 8px; }
+    .heading { font-size: 12px; font-weight: bold; }
+    .section { font-size: 10px; font-weight: bold; fill: #666; }
+    .sub { font-size: 10px; font-weight: bold; }
+    .fn { font-size: 7.5px; fill: #444; }
+    .label { font-size: 8px; font-weight: bold; }
+    .arrow { stroke: #555; stroke-width: 1.5; fill: none; marker-end: url(#ah); }
+    .arrow-bad { stroke: #dc3545; stroke-width: 1.5; fill: none; marker-end: url(#ahR); stroke-dasharray: 5 3; }
+    .arrow-good { stroke: #28a745; stroke-width: 2; fill: none; marker-end: url(#ahG); }
+  </style>
+  <defs>
+    <marker id="ah" markerWidth="7" markerHeight="5" refX="7" refY="2.5" orient="auto">
+      <polygon points="0 0, 7 2.5, 0 5" fill="#555"/>
+    </marker>
+    <marker id="ahR" markerWidth="7" markerHeight="5" refX="7" refY="2.5" orient="auto">
+      <polygon points="0 0, 7 2.5, 0 5" fill="#dc3545"/>
+    </marker>
+    <marker id="ahG" markerWidth="7" markerHeight="5" refX="7" refY="2.5" orient="auto">
+      <polygon points="0 0, 7 2.5, 0 5" fill="#28a745"/>
+    </marker>
+  </defs>
+
+  <text x="410" y="16" text-anchor="middle" class="heading">Merge Spatial Persistence into State Management</text>
+
+  <!-- ======== LEFT: BEFORE (current) ======== -->
+  <text x="200" y="38" text-anchor="middle" class="section">BEFORE (8 systems)</text>
+
+  <!-- Transition -->
+  <rect x="100" y="50" width="200" height="50" rx="5" fill="#fce4ec" stroke="#dc3545" stroke-width="1.5"/>
+  <text x="200" y="68" text-anchor="middle" class="sub" fill="#dc3545">Transition System</text>
+  <text x="200" y="82" text-anchor="middle" class="fn">reads from both, hopes they agree</text>
+
+  <!-- State -->
+  <rect x="20" y="130" width="170" height="80" rx="5" fill="#d4edda" stroke="#28a745" stroke-width="1.5"/>
+  <text x="105" y="148" text-anchor="middle" class="sub" fill="#28a745">State Mgmt</text>
+  <text x="105" y="162" text-anchor="middle" class="fn">computes where rects</text>
+  <text x="105" y="172" text-anchor="middle" class="fn">SHOULD be</text>
+  <text x="105" y="186" text-anchor="middle" class="fn">view_state_list_get</text>
+  <text x="105" y="198" text-anchor="middle" class="fn" fill="#28a745">theoretical positions</text>
+
+  <!-- Spatial -->
+  <rect x="210" y="130" width="170" height="80" rx="5" fill="#e0f2f1" stroke="#009688" stroke-width="1.5"/>
+  <text x="295" y="148" text-anchor="middle" class="sub" fill="#009688">Spatial Persist</text>
+  <text x="295" y="162" text-anchor="middle" class="fn">caches where rects</text>
+  <text x="295" y="172" text-anchor="middle" class="fn">ACTUALLY are</text>
+  <text x="295" y="186" text-anchor="middle" class="fn">spatial_registry{}</text>
+  <text x="295" y="198" text-anchor="middle" class="fn" fill="#009688">rendered positions</text>
+
+  <!-- Arrows: Transition reads both -->
+  <path d="M155,100 L105,130" class="arrow"/>
+  <path d="M245,100 L295,130" class="arrow"/>
+
+  <!-- Danger zone between State and Spatial -->
+  <rect x="175" y="145" width="50" height="50" rx="4" fill="#fff3cd" stroke="#dc3545" stroke-width="1" stroke-dasharray="3 2"/>
+  <text x="200" y="165" text-anchor="middle" class="label" fill="#dc3545">GAP</text>
+  <text x="200" y="178" text-anchor="middle" style="font-size:6.5px;" fill="#dc3545">can diverge</text>
+
+  <!-- Bug examples -->
+  <rect x="20" y="230" width="360" height="55" rx="4" fill="#fff3cd" stroke="#ffc107" stroke-width="1"/>
+  <text x="200" y="246" text-anchor="middle" class="label" fill="#856404">Bugs caused by this gap</text>
+  <text x="28" y="260" class="fn">chat_145: title settle jump — from-state didn't match rendered pos</text>
+  <text x="28" y="272" class="fn">chat_148: transition flash — state and registry disagreed on opacity</text>
+
+  <!-- ======== RIGHT: AFTER (proposed) ======== -->
+  <text x="620" y="38" text-anchor="middle" class="section">AFTER (7 systems)</text>
+
+  <!-- Transition -->
+  <rect x="520" y="50" width="200" height="50" rx="5" fill="#fce4ec" stroke="#dc3545" stroke-width="1.5"/>
+  <text x="620" y="68" text-anchor="middle" class="sub" fill="#dc3545">Transition System</text>
+  <text x="620" y="82" text-anchor="middle" class="fn">reads one source of truth</text>
+
+  <!-- Merged State -->
+  <rect x="500" y="130" width="240" height="105" rx="6" fill="#d4edda" stroke="#28a745" stroke-width="2"/>
+  <text x="620" y="148" text-anchor="middle" class="sub" fill="#28a745">State Management</text>
+
+  <rect x="510" y="157" width="105" height="35" rx="3" fill="white" stroke="#28a745" stroke-width="0.7"/>
+  <text x="563" y="170" text-anchor="middle" class="label" fill="#28a745">desired</text>
+  <text x="563" y="182" text-anchor="middle" class="fn">where rects SHOULD be</text>
+
+  <rect x="625" y="157" width="105" height="35" rx="3" fill="white" stroke="#009688" stroke-width="0.7"/>
+  <text x="678" y="170" text-anchor="middle" class="label" fill="#009688">rendered</text>
+  <text x="678" y="182" text-anchor="middle" class="fn">where rects ARE</text>
+
+  <text x="620" y="207" text-anchor="middle" class="fn" fill="#28a745">internal consistency — no cross-system contract</text>
+  <text x="620" y="222" text-anchor="middle" class="fn" fill="#28a745">validate on set, not on read</text>
+
+  <!-- Arrow: Transition reads one thing -->
+  <path d="M620,100 L620,130" class="arrow-good"/>
+
+  <!-- Benefits -->
+  <rect x="500" y="250" width="240" height="55" rx="4" fill="#d4edda" stroke="#28a745" stroke-width="1"/>
+  <text x="620" y="266" text-anchor="middle" class="label" fill="#28a745">Result</text>
+  <text x="508" y="280" class="fn">One system owns all position truth</text>
+  <text x="508" y="292" class="fn">Eliminates the divergence bug class entirely</text>
+
+  <!-- ======== BOTTOM: data flow comparison ======== -->
+  <line x1="10" y1="320" x2="810" y2="320" stroke="#ddd" stroke-width="1"/>
+  <text x="410" y="340" text-anchor="middle" class="section">Data Flow Comparison</text>
+
+  <!-- Before flow -->
+  <text x="200" y="360" text-anchor="middle" class="label" fill="#666">Before: 3-system handoff</text>
+
+  <rect x="30" y="370" width="90" height="28" rx="3" fill="#e8eaf6" stroke="#3f51b5" stroke-width="1"/>
+  <text x="75" y="388" text-anchor="middle" class="fn" fill="#3f51b5">View System</text>
+
+  <rect x="135" y="370" width="90" height="28" rx="3" fill="#d4edda" stroke="#28a745" stroke-width="1"/>
+  <text x="180" y="388" text-anchor="middle" class="fn" fill="#28a745">State: to-pos</text>
+
+  <rect x="240" y="370" width="90" height="28" rx="3" fill="#e0f2f1" stroke="#009688" stroke-width="1"/>
+  <text x="285" y="388" text-anchor="middle" class="fn" fill="#009688">Spatial: from-pos</text>
+
+  <rect x="345" y="370" width="90" height="28" rx="3" fill="#fce4ec" stroke="#dc3545" stroke-width="1"/>
+  <text x="390" y="383" text-anchor="middle" class="fn" fill="#dc3545">Transition:</text>
+  <text x="390" y="393" text-anchor="middle" class="fn" fill="#dc3545">merge + pray</text>
+
+  <path d="M120,384 L135,384" class="arrow"/>
+  <path d="M225,384 L240,384" class="arrow-bad"/>
+  <path d="M330,384 L345,384" class="arrow-bad"/>
+
+  <!-- After flow -->
+  <text x="620" y="360" text-anchor="middle" class="label" fill="#666">After: 2-system handoff</text>
+
+  <rect x="490" y="370" width="100" height="28" rx="3" fill="#e8eaf6" stroke="#3f51b5" stroke-width="1"/>
+  <text x="540" y="388" text-anchor="middle" class="fn" fill="#3f51b5">View System</text>
+
+  <rect x="610" y="370" width="100" height="28" rx="3" fill="#d4edda" stroke="#28a745" stroke-width="1"/>
+  <text x="660" y="383" text-anchor="middle" class="fn" fill="#28a745">State: from</text>
+  <text x="660" y="393" text-anchor="middle" class="fn" fill="#28a745">AND to</text>
+
+  <rect x="730" y="370" width="80" height="28" rx="3" fill="#fce4ec" stroke="#dc3545" stroke-width="1"/>
+  <text x="770" y="388" text-anchor="middle" class="fn" fill="#dc3545">Transition</text>
+
+  <path d="M590,384 L610,384" class="arrow-good"/>
+  <path d="M710,384 L730,384" class="arrow-good"/>
+
+  <!-- What moves where -->
+  <line x1="10" y1="420" x2="810" y2="420" stroke="#ddd" stroke-width="1"/>
+  <text x="410" y="440" text-anchor="middle" class="section">What Moves Where</text>
+
+  <rect x="30" y="455" width="230" height="55" rx="4" fill="#e0f2f1" stroke="#009688" stroke-width="1" stroke-dasharray="4 2"/>
+  <text x="145" y="470" text-anchor="middle" class="label" fill="#009688">Absorbed from Spatial</text>
+  <text x="38" y="484" class="fn">spatial_registry{} → field on state</text>
+  <text x="38" y="496" class="fn">spatial_contract_validate → internal check</text>
+
+  <rect x="280" y="455" width="230" height="55" rx="4" fill="#d4edda" stroke="#28a745" stroke-width="1"/>
+  <text x="395" y="470" text-anchor="middle" class="label" fill="#28a745">State Gains</text>
+  <text x="288" y="484" class="fn">registry_update on every state change</text>
+  <text x="288" y="496" class="fn">from-state always = last rendered pos</text>
+
+  <rect x="530" y="455" width="230" height="55" rx="4" fill="#fce4ec" stroke="#dc3545" stroke-width="1"/>
+  <text x="645" y="470" text-anchor="middle" class="label" fill="#dc3545">Transition Simplifies</text>
+  <text x="538" y="484" class="fn">Ask state for from AND to</text>
+  <text x="538" y="496" class="fn">No cross-system validation needed</text>
+</svg>

@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 560 280" style="background: white;">
+  <style>
+    text { font-family: monospace; font-size: 10px; }
+    .heading { font-size: 13px; font-weight: bold; }
+    .sub { font-size: 11px; font-weight: bold; }
+    .add { fill: #28a745; }
+    .del { fill: #dc3545; }
+    .rule { fill: #0366d6; }
+  </style>
+  <text x="280" y="20" text-anchor="middle" class="heading">151. Deck Title Click Fix</text>
+  <text x="280" y="36" text-anchor="middle" font-size="9" fill="#666">Context: entry 150 added deck title dblclick editing</text>
+
+  <!-- Bug -->
+  <rect x="10" y="50" width="540" height="75" rx="6" fill="#fce4ec" stroke="#dc3545" stroke-width="1.5"/>
+  <text x="280" y="68" text-anchor="middle" class="sub del">Bug: single-click navigates before dblclick fires</text>
+  <text x="20" y="86" font-size="9">Document click listener checks if click is near pageTitle rect</text>
+  <text x="20" y="100" font-size="9" class="del">Deck title overlay sits at same position as pageTitle in deck/expanded view</text>
+  <text x="20" y="114" font-size="9" class="del">Single click → view_set("project") → navigates away, dblclick never fires</text>
+
+  <!-- Fix -->
+  <rect x="10" y="140" width="540" height="55" rx="6" fill="#d4edda" stroke="#28a745" stroke-width="1.5"/>
+  <text x="280" y="158" text-anchor="middle" class="sub add">Fix: skip navigation for deck title clicks</text>
+  <text x="20" y="176" font-size="9" class="add">if (event.target.closest(".title-rect[data-title-type='deck']")) return;</text>
+  <text x="20" y="190" font-size="9" class="add">Deck title clicks pass through to dblclick handler. Back button still navigates.</text>
+
+  <!-- Interaction model -->
+  <rect x="10" y="210" width="540" height="55" rx="4" fill="#f8f9fa" stroke="#dee2e6"/>
+  <text x="20" y="228" font-size="9" font-weight="bold">Interaction model (deck/expanded view):</text>
+  <text x="20" y="244" font-size="9">Single-click deck title: no action (future: could toggle something)</text>
+  <text x="20" y="258" font-size="9">Double-click deck title: edit name. Back button (←): return to project.</text>
+</svg>

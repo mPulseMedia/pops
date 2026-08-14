@@ -1,0 +1,171 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 620" style="background: white;">
+  <style>
+    text { font-family: monospace; font-size: 9px; }
+    .heading { font-size: 14px; font-weight: bold; }
+    .sub { font-size: 10px; font-weight: bold; }
+    .fn { font-size: 8px; fill: #555; }
+    .arrow { stroke: #666; stroke-width: 1.5; fill: none; marker-end: url(#arrowhead); }
+    .arrow-bold { stroke: #333; stroke-width: 2; fill: none; marker-end: url(#arrowhead); }
+  </style>
+  <defs>
+    <marker id="arrowhead" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#666"/>
+    </marker>
+  </defs>
+  <text x="400" y="18" text-anchor="middle" class="heading">Pops Architecture — 8 Subsystems</text>
+
+  <!-- 1. DATA LAYER -->
+  <rect x="10" y="30" width="180" height="105" rx="6" fill="#e8f4f8" stroke="#0366d6" stroke-width="1.5"/>
+  <text x="100" y="46" text-anchor="middle" class="sub" fill="#0366d6">1. Data Layer</text>
+  <text x="18" y="60" class="fn">deck_data_load</text>
+  <text x="18" y="72" class="fn">deck_data_normalize</text>
+  <text x="18" y="84" class="fn">deck_data_render</text>
+  <text x="18" y="96" class="fn">deck_data_embed_get</text>
+  <text x="18" y="108" class="fn">decksData[] → DOM build</text>
+  <text x="18" y="124" class="fn">localStorage: 5 keys</text>
+
+  <!-- 2. DOM LAYERS -->
+  <rect x="200" y="30" width="190" height="105" rx="6" fill="#fff3cd" stroke="#ffc107" stroke-width="1.5"/>
+  <text x="295" y="46" text-anchor="middle" class="sub" fill="#856404">2. DOM Layers</text>
+  <text x="208" y="60" class="fn">Real: .deck, .deck-title</text>
+  <text x="208" y="72" class="fn">#cardRectOverlay (z:5500)</text>
+  <text x="208" y="84" class="fn">#titleRectOverlay (z:5600)</text>
+  <text x="208" y="96" class="fn">#deckProxy (temp clones)</text>
+  <text x="208" y="108" class="fn">card-rect × 3 per deck</text>
+  <text x="208" y="124" class="fn">title-rect × 4 (page+3 deck)</text>
+
+  <!-- 3. STATE MGMT -->
+  <rect x="400" y="30" width="190" height="105" rx="6" fill="#d4edda" stroke="#28a745" stroke-width="1.5"/>
+  <text x="495" y="46" text-anchor="middle" class="sub" fill="#28a745">3. State Management</text>
+  <text x="408" y="60" class="fn">view_state_list_get(view)</text>
+  <text x="408" y="72" class="fn">view_state_current_get()</text>
+  <text x="408" y="84" class="fn">card_rect_state(x,y,sX,sY,op)</text>
+  <text x="408" y="96" class="fn">title_rect_state(x,y,s,op)</text>
+  <text x="408" y="108" class="fn">deck_active_get/set</text>
+  <text x="408" y="124" class="fn">VIEW_KEY, ACTIVE_KEY, SELECT_KEY</text>
+
+  <!-- 4. TRANSITION SYSTEM -->
+  <rect x="600" y="30" width="190" height="105" rx="6" fill="#fce4ec" stroke="#dc3545" stroke-width="1.5"/>
+  <text x="695" y="46" text-anchor="middle" class="sub" fill="#dc3545">4. Transition System</text>
+  <text x="608" y="60" class="fn">transition_project_deck_run</text>
+  <text x="608" y="72" class="fn">transition_deck_expanded_run</text>
+  <text x="608" y="84" class="fn">transition_project_expanded_run</text>
+  <text x="608" y="96" class="fn">view_rect_animate (520ms)</text>
+  <text x="608" y="108" class="fn">title_rect_animate (520ms)</text>
+  <text x="608" y="124" class="fn">transition_complete_run</text>
+
+  <!-- 5. CLICK DISPATCH -->
+  <rect x="10" y="155" width="180" height="95" rx="6" fill="#f3e5f5" stroke="#9c27b0" stroke-width="1.5"/>
+  <text x="100" y="171" text-anchor="middle" class="sub" fill="#9c27b0">5. Click Dispatch</text>
+  <text x="18" y="185" class="fn">click_dispatch (document)</text>
+  <text x="18" y="197" class="fn">elementsFromPoint hit-test</text>
+  <text x="18" y="209" class="fn">click_target_resolve</text>
+  <text x="18" y="221" class="fn">click_route → view_set</text>
+  <text x="18" y="237" class="fn">tab | card-image | card-body</text>
+
+  <!-- 6. SPATIAL PERSISTENCE -->
+  <rect x="200" y="155" width="190" height="95" rx="6" fill="#e0f2f1" stroke="#009688" stroke-width="1.5"/>
+  <text x="295" y="171" text-anchor="middle" class="sub" fill="#009688">6. Spatial Persistence</text>
+  <text x="208" y="185" class="fn">spatial_registry{}</text>
+  <text x="208" y="197" class="fn">spatial_registry_update</text>
+  <text x="208" y="209" class="fn">spatial_contract_validate</text>
+  <text x="208" y="221" class="fn">title_rect_natural{}</text>
+  <text x="208" y="237" class="fn">Beyond horizon: scale(0) op(0)</text>
+
+  <!-- 7. EDIT SYSTEM -->
+  <rect x="400" y="155" width="190" height="95" rx="6" fill="#fff8e1" stroke="#ff8f00" stroke-width="1.5"/>
+  <text x="495" y="171" text-anchor="middle" class="sub" fill="#ff8f00">7. Edit System</text>
+  <text x="408" y="185" class="fn">item_edit_setup (dblclick)</text>
+  <text x="408" y="197" class="fn">card_title_save / tab_sync</text>
+  <text x="408" y="209" class="fn">deck_title_edit_setup</text>
+  <text x="408" y="221" class="fn">item_insert / item_delete</text>
+  <text x="408" y="237" class="fn">edit_state_save → restore</text>
+
+  <!-- 8. VIEW SYSTEM -->
+  <rect x="600" y="155" width="190" height="95" rx="6" fill="#e8eaf6" stroke="#3f51b5" stroke-width="1.5"/>
+  <text x="695" y="171" text-anchor="middle" class="sub" fill="#3f51b5">8. View System</text>
+  <text x="608" y="185" class="fn">view_apply(view, opts)</text>
+  <text x="608" y="197" class="fn">view_set → transition_*_run</text>
+  <text x="608" y="209" class="fn">view_framework_show(states)</text>
+  <text x="608" y="221" class="fn">project | deck | expanded</text>
+  <text x="608" y="237" class="fn">CSS: body.{view}-view</text>
+
+  <!-- ARROWS: connections between systems -->
+  <!-- Data → DOM -->
+  <path d="M190,80 L200,80" class="arrow"/>
+  <!-- Data → Edit (persistence) -->
+  <path d="M100,135 L100,155" class="arrow" stroke="#ff8f00"/>
+  <path d="M100,155 L100,155" class="arrow"/>
+  <!-- Actually: data → edit is diagonal -->
+  <path d="M190,120 Q300,145 400,165" class="arrow" stroke="#ff8f00" stroke-dasharray="4"/>
+
+  <!-- State → Transition -->
+  <path d="M590,80 L600,80" class="arrow"/>
+  <!-- State → View -->
+  <path d="M590,120 L600,180" class="arrow" stroke="#3f51b5" stroke-dasharray="4"/>
+
+  <!-- Click → View (routing) -->
+  <path d="M100,250 Q100,280 400,280 Q700,280 695,250" class="arrow-bold"/>
+  <text x="400" y="276" text-anchor="middle" class="fn" fill="#333">click → view_set → transition</text>
+
+  <!-- Transition → Spatial (validate + update) -->
+  <path d="M600,120 Q500,145 390,185" class="arrow" stroke="#009688"/>
+
+  <!-- View → DOM (apply states) -->
+  <path d="M600,250 Q500,270 295,250" class="arrow" stroke="#ffc107" stroke-dasharray="4"/>
+
+  <!-- Spatial → Transition -->
+  <path d="M390,200 L600,100" class="arrow" stroke="#009688" stroke-dasharray="4"/>
+
+  <!-- ======================== -->
+  <!-- LOWER HALF: Key patterns -->
+  <!-- ======================== -->
+
+  <text x="400" y="310" text-anchor="middle" class="heading" font-size="12">Key Architectural Patterns</text>
+
+  <!-- Pattern 1: Overlay architecture -->
+  <rect x="10" y="325" width="250" height="130" rx="6" fill="#f8f9fa" stroke="#dee2e6"/>
+  <text x="135" y="342" text-anchor="middle" class="sub">Dual-DOM Overlay</text>
+  <text x="18" y="358" class="fn">Real DOM: .deck elements for layout/grid</text>
+  <text x="18" y="372" class="fn">Card overlay: positioned rects for display</text>
+  <text x="18" y="386" class="fn">Title overlay: 4 positioned title rects</text>
+  <text x="18" y="400" class="fn">Real elements hidden (visibility:hidden)</text>
+  <text x="18" y="414" class="fn">Overlay elements have transforms applied</text>
+  <text x="18" y="428" class="fn">Editing happens ON the overlay elements</text>
+  <text x="18" y="442" class="fn">card_rect_overlay_build rebuilds on change</text>
+
+  <!-- Pattern 2: Transition protocol -->
+  <rect x="275" y="325" width="250" height="130" rx="6" fill="#f8f9fa" stroke="#dee2e6"/>
+  <text x="400" y="342" text-anchor="middle" class="sub">Transition Protocol</text>
+  <text x="283" y="358" class="fn">1. Capture fromStates (current positions)</text>
+  <text x="283" y="372" class="fn">2. title_rect_overlay_show(titleFrom)</text>
+  <text x="283" y="386" class="fn">3. view_apply(skipCard+skipTitle)</text>
+  <text x="283" y="400" class="fn">4. view_framework_show(fromStates)</text>
+  <text x="283" y="414" class="fn">5. rAF: compute toStates, validate</text>
+  <text x="283" y="428" class="fn">6. view_rect_animate + title_rect_animate</text>
+  <text x="283" y="442" class="fn">7. onFinish: transition_complete_run</text>
+
+  <!-- Pattern 3: Persistence -->
+  <rect x="540" y="325" width="250" height="130" rx="6" fill="#f8f9fa" stroke="#dee2e6"/>
+  <text x="665" y="342" text-anchor="middle" class="sub">Persistence Model</text>
+  <text x="548" y="358" class="fn">5 localStorage keys per session:</text>
+  <text x="548" y="372" class="fn">  CARD_EDITS  → text, titles, tabs</text>
+  <text x="548" y="386" class="fn">  CARD_ITEMS  → structural (inserts)</text>
+  <text x="548" y="400" class="fn">  DECK_TITLES → deck name overrides</text>
+  <text x="548" y="414" class="fn">  VIEW/ACTIVE → current view + deck</text>
+  <text x="548" y="428" class="fn">  SELECT      → card order per deck</text>
+  <text x="548" y="442" class="fn">  ACTIVE_EDIT → cursor pos for reload</text>
+
+  <!-- Bottom: Beyond the horizon -->
+  <rect x="10" y="470" width="780" height="55" rx="6" fill="#e0f2f1" stroke="#009688" stroke-width="1.5"/>
+  <text x="400" y="488" text-anchor="middle" class="sub" fill="#009688">Core Principle: Spatial Persistence (Beyond the Horizon)</text>
+  <text x="18" y="505" class="fn">Every visible object has a defined position/scale/opacity per view. Objects never appear or disappear — they transition.</text>
+  <text x="18" y="518" class="fn">Invisible objects move to center with scale(0) opacity(0) — "beyond the horizon." Z-index changes instantly; position/scale animate smoothly.</text>
+
+  <!-- Bottom: File structure -->
+  <rect x="10" y="540" width="780" height="70" rx="6" fill="#f8f9fa" stroke="#dee2e6"/>
+  <text x="400" y="557" text-anchor="middle" class="sub">File Structure</text>
+  <text x="18" y="573" class="fn">index.html  — All JS inline (~3200 lines), HTML structure, embedded deck data</text>
+  <text x="18" y="587" class="fn">index.css   — All styles (~1300 lines), card rects, overlays, views, editing</text>
+  <text x="18" y="601" class="fn">paul/       — chat_log.txt, codename_index.txt, spec_*.txt, chat_log_svg/, chat_log_current.txt</text>
+</svg>

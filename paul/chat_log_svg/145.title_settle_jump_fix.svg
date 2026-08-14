@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 560 340" style="background: white;">
+  <style>
+    text { font-family: monospace; font-size: 10px; }
+    .heading { font-size: 13px; font-weight: bold; }
+    .sub { font-size: 11px; font-weight: bold; }
+    .add { fill: #28a745; }
+    .del { fill: #dc3545; }
+    .rule { fill: #0366d6; }
+  </style>
+  <text x="280" y="20" text-anchor="middle" class="heading">145. Title Settle Jump Fix</text>
+  <text x="280" y="36" text-anchor="middle" font-size="9" fill="#666">Context: entry 140 added spatial title animation</text>
+
+  <!-- Problem 1 -->
+  <rect x="10" y="50" width="265" height="110" rx="6" fill="#fce4ec" stroke="#dc3545" stroke-width="1.5"/>
+  <text x="142" y="68" text-anchor="middle" class="sub del">Bug 1: view_apply flash</text>
+  <text x="20" y="86" font-size="9">Frame 0: titles at deck positions</text>
+  <text x="20" y="100" font-size="9" class="del">Frame 1: view_apply rAF snaps to</text>
+  <text x="20" y="112" font-size="9" class="del">  project positions (one-frame flash)</text>
+  <text x="20" y="126" font-size="9">Frame 2: animation starts, restores</text>
+  <text x="20" y="138" font-size="9">  deck positions via fill:"both"</text>
+  <text x="20" y="152" font-size="9" class="add">Fix: skipTitleUpdate option</text>
+
+  <!-- Problem 2 -->
+  <rect x="285" y="50" width="265" height="110" rx="6" fill="#fce4ec" stroke="#dc3545" stroke-width="1.5"/>
+  <text x="417" y="68" text-anchor="middle" class="sub del">Bug 2: overlay rebuild jump</text>
+  <text x="295" y="86" font-size="9">Animation finishes → correct pos</text>
+  <text x="295" y="100" font-size="9" class="del">transition_complete_run rebuilds</text>
+  <text x="295" y="112" font-size="9" class="del">  overlay → new els at (0,0)</text>
+  <text x="295" y="126" font-size="9" class="del">rAF re-positions → slight diff</text>
+  <text x="295" y="138" font-size="9" class="del">  from animation target = JUMP</text>
+  <text x="295" y="152" font-size="9" class="add">Fix: don't rebuild title overlay</text>
+
+  <!-- Timeline -->
+  <text x="280" y="185" text-anchor="middle" class="sub">Fixed transition flow (deck → project)</text>
+  <rect x="10" y="195" width="540" height="80" rx="6" fill="#d4edda" stroke="#28a745" stroke-width="1.5"/>
+
+  <text x="20" y="215" font-size="9" class="add">Frame 0: titleFrom = deck positions, overlay shown</text>
+  <text x="20" y="230" font-size="9" class="add">Frame 1: view_apply runs (skipTitleUpdate: true) → titles untouched</text>
+  <text x="20" y="245" font-size="9" class="add">Frame 2: animation starts deck → project (520ms)</text>
+  <text x="20" y="260" font-size="9" class="add">Finish: title_rect_state_apply_all(toStates) → no rebuild, no jump</text>
+
+  <!-- Changes -->
+  <rect x="10" y="290" width="540" height="40" rx="4" fill="#f8f9fa" stroke="#dee2e6"/>
+  <text x="20" y="308" font-size="9" font-weight="bold">Changes:</text>
+  <text x="100" y="308" font-size="9">view_apply: +skipTitleUpdate option</text>
+  <text x="100" y="322" font-size="9">transition_complete_run: removed title rebuild + re-show</text>
+</svg>

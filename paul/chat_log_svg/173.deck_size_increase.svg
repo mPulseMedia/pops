@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 340">
+  <rect width="600" height="340" rx="12" fill="#2a2a2a"/>
+
+  <!-- Title -->
+  <text x="300" y="28" text-anchor="middle" font-family="monospace" font-size="13" fill="#e0e0e0" font-weight="700">chat_173: deck_size_increase</text>
+
+  <!-- Before -->
+  <rect x="30" y="50" width="250" height="200" rx="6" fill="#1e2433" stroke="#556" stroke-width="1"/>
+  <text x="155" y="68" text-anchor="middle" font-family="monospace" font-size="9" fill="#c96b6b" font-weight="600">BEFORE</text>
+  <!-- viewport outline -->
+  <rect x="50" y="80" width="210" height="130" rx="3" fill="none" stroke="#555" stroke-width="1" stroke-dasharray="4,3"/>
+  <!-- card (smaller, centered) -->
+  <rect x="75" y="95" width="160" height="100" rx="4" fill="#335" stroke="#668" stroke-width="1"/>
+  <text x="155" y="150" text-anchor="middle" font-family="monospace" font-size="8" fill="#aaa">scale 0.90</text>
+  <!-- margins -->
+  <text x="155" y="226" text-anchor="middle" font-family="monospace" font-size="7" fill="#888">centered vertically</text>
+  <text x="155" y="238" text-anchor="middle" font-family="monospace" font-size="7" fill="#888">96vw max-width</text>
+
+  <!-- After -->
+  <rect x="320" y="50" width="250" height="200" rx="6" fill="#1e332e" stroke="#6bc96b" stroke-width="1"/>
+  <text x="445" y="68" text-anchor="middle" font-family="monospace" font-size="9" fill="#6bc96b" font-weight="600">AFTER</text>
+  <!-- viewport outline -->
+  <rect x="340" y="80" width="210" height="130" rx="3" fill="none" stroke="#555" stroke-width="1" stroke-dasharray="4,3"/>
+  <!-- card (larger, top-anchored) -->
+  <rect x="348" y="82" width="194" height="120" rx="4" fill="#253" stroke="#6bc96b" stroke-width="1"/>
+  <text x="445" y="146" text-anchor="middle" font-family="monospace" font-size="8" fill="#aaa">scale 0.98</text>
+  <!-- annotations -->
+  <text x="445" y="226" text-anchor="middle" font-family="monospace" font-size="7" fill="#888">top-anchored (no upward shift)</text>
+  <text x="445" y="238" text-anchor="middle" font-family="monospace" font-size="7" fill="#888">99vw max-width</text>
+
+  <!-- Arrow -->
+  <line x1="285" y1="150" x2="315" y2="150" stroke="#888" stroke-width="2" marker-end="url(#arr)"/>
+  <defs><marker id="arr" markerWidth="6" markerHeight="4" refX="5" refY="2" orient="auto"><path d="M0,0 L6,2 L0,4" fill="#888"/></marker></defs>
+
+  <!-- Also removed B link -->
+  <rect x="30" y="270" width="540" height="50" rx="6" fill="#3d2020" stroke="#c96b6b" stroke-width="1"/>
+  <text x="300" y="292" text-anchor="middle" font-family="monospace" font-size="9" fill="#c96b6b">Removed bottom-right "B" link box (page-link-box)</text>
+  <text x="300" y="306" text-anchor="middle" font-family="monospace" font-size="8" fill="#888">was: &lt;a href="buddy.html" class="page-link-box"&gt;B&lt;/a&gt;</text>
+</svg>

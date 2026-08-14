@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 560 360" style="background: white;">
+  <style>
+    text { font-family: monospace; font-size: 10px; }
+    .heading { font-size: 13px; font-weight: bold; }
+    .sub { font-size: 11px; font-weight: bold; }
+    .add { fill: #28a745; }
+    .del { fill: #dc3545; }
+    .rule { fill: #0366d6; }
+  </style>
+  <text x="280" y="20" text-anchor="middle" class="heading">147. Title Natural Width Fix</text>
+  <text x="280" y="36" text-anchor="middle" font-size="9" fill="#666">Context: entries 140 (spatial titles) + 145 (settle jump fix)</text>
+
+  <!-- Bug -->
+  <rect x="10" y="50" width="540" height="85" rx="6" fill="#fce4ec" stroke="#dc3545" stroke-width="1.5"/>
+  <text x="280" y="68" text-anchor="middle" class="sub del">Bug: centering with scale(0) widths</text>
+  <text x="20" y="86" font-size="9">title_rect_cache_build measures overlay elements via getBoundingClientRect</text>
+  <text x="20" y="100" font-size="9" class="del">Elements at horizon have scale(0) → getBoundingClientRect().width = 0</text>
+  <text x="20" y="114" font-size="9" class="del">Centering: x = realCenter - overlayWidth/2 → x = realCenter - 0/2 → off-center!</text>
+  <text x="20" y="128" font-size="9">Active deck unaffected: was at scale(1) → correct width measured live</text>
+
+  <!-- Fix -->
+  <rect x="10" y="150" width="540" height="85" rx="6" fill="#d4edda" stroke="#28a745" stroke-width="1.5"/>
+  <text x="280" y="168" text-anchor="middle" class="sub add">Fix: cache natural widths at build time</text>
+  <text x="20" y="186" font-size="9" class="add">title_rect_overlay_build: measure width/height before any transforms</text>
+  <text x="20" y="200" font-size="9" class="add">Store in title_rect_natural{} keyed by "page" / "deck-0" / "deck-1" / "deck-2"</text>
+  <text x="20" y="214" font-size="9" class="add">title_state_list_get: use title_rect_natural for centering math (always correct)</text>
+  <text x="20" y="228" font-size="9" class="add">Removed overlay measurement from title_rect_cache_build (no longer needed)</text>
+
+  <!-- Timeline -->
+  <text x="280" y="258" text-anchor="middle" class="sub">Title centering bug history (entries 114 → 145 → 147)</text>
+  <rect x="10" y="268" width="540" height="80" rx="6" fill="#f8f9fa" stroke="#dee2e6"/>
+  <text x="20" y="286" font-size="9">114: overlay at receded state → offsetWidth 0 (fixed with temp transform)</text>
+  <text x="20" y="300" font-size="9">145: view_apply snap + overlay rebuild jump (fixed with skipTitleUpdate)</text>
+  <text x="20" y="314" font-size="9" class="add">147: cache_build measured at scale(0) → width 0 (fixed with build-time cache)</text>
+  <text x="20" y="328" font-size="9" class="rule">Pattern: never measure scaled elements; cache natural dimensions at creation</text>
+</svg>

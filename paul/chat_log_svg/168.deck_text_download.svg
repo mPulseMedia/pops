@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 280" style="background:#fff">
+  <style>
+    text { font-family: monospace; font-size: 12px; fill: #222; }
+    .title { font-size: 14px; font-weight: bold; }
+    .old { fill: #fce4ec; stroke: #c62828; stroke-width: 1.5; rx: 6; }
+    .new { fill: #e8f5e9; stroke: #2e7d32; stroke-width: 2; rx: 6; }
+    .sample { fill: #f5f5f5; stroke: #999; stroke-width: 1; rx: 4; }
+  </style>
+  <text x="240" y="22" text-anchor="middle" class="title">chat_168: deck_text_download</text>
+  <text x="240" y="40" text-anchor="middle" font-size="11" fill="#666">Replaced 2 buttons with 1 text download</text>
+
+  <!-- Removed -->
+  <rect x="20" y="56" width="140" height="36" class="old"/>
+  <text x="90" y="79" text-anchor="middle" font-size="10">↓ export JSON</text>
+  <rect x="20" y="100" width="140" height="36" class="old"/>
+  <text x="90" y="123" text-anchor="middle" font-size="10">↑ reload index.txt</text>
+  <text x="90" y="150" text-anchor="middle" font-size="10" fill="#c62828">removed</text>
+
+  <!-- New -->
+  <rect x="200" y="56" width="140" height="36" class="new"/>
+  <text x="270" y="79" text-anchor="middle" font-size="10">↓ download decks.txt</text>
+  <text x="270" y="105" text-anchor="middle" font-size="10" fill="#2e7d32">readable text file</text>
+
+  <!-- Sample output -->
+  <rect x="20" y="165" width="440" height="100" class="sample"/>
+  <text x="30" y="182" font-size="11">Barbershop</text>
+  <text x="30" y="198" font-size="11">    Basic Information</text>
+  <text x="30" y="214" font-size="11">        Title</text>
+  <text x="30" y="230" font-size="11">            "Half a Chair's Worth"</text>
+  <text x="30" y="246" font-size="11">        [What is it]</text>
+  <text x="30" y="262" font-size="11">            Amusing dialog on a heavy subject</text>
+</svg>

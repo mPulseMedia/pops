@@ -1,0 +1,82 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 440" style="background: white;">
+  <style>
+    text { font-family: monospace; font-size: 10px; }
+    .heading { font-size: 13px; font-weight: bold; }
+    .sub { font-size: 11px; font-weight: bold; }
+    .add { fill: #28a745; }
+    .del { fill: #dc3545; }
+    .rule { fill: #0366d6; }
+    .label { fill: #666; font-size: 9px; }
+  </style>
+
+  <text x="300" y="20" text-anchor="middle" class="heading">140. Spatial Title Animation</text>
+
+  <!-- Before -->
+  <rect x="10" y="38" width="185" height="120" rx="6" fill="#fce4ec" stroke="#dc3545" stroke-width="1.5"/>
+  <text x="102" y="56" text-anchor="middle" class="sub del">Before (removed)</text>
+  <text x="20" y="74" font-size="9" class="del">title_crossfade</text>
+  <text x="20" y="88" font-size="8">- CSS opacity fade only</text>
+  <text x="20" y="100" font-size="8">- No position animation</text>
+  <text x="20" y="112" font-size="8">- setTimeout swap text</text>
+  <text x="20" y="128" font-size="9" class="del">deck_title_fade</text>
+  <text x="20" y="140" font-size="8">- Add/remove .title-fading</text>
+  <text x="20" y="152" font-size="8" class="label">2 functions, ~20 lines</text>
+
+  <!-- After -->
+  <rect x="210" y="38" width="380" height="120" rx="6" fill="#d4edda" stroke="#28a745" stroke-width="1.5"/>
+  <text x="400" y="56" text-anchor="middle" class="sub add">After (new system)</text>
+  <text x="220" y="74" font-size="9" class="add">Title rect overlay (4 elements)</text>
+  <text x="220" y="88" font-size="8">"Projects" + 3 deck titles</text>
+  <text x="220" y="102" font-size="8">Cached positions at rest (no measure during anim)</text>
+  <text x="220" y="116" font-size="8">Web Animations API: translate + scale + opacity</text>
+  <text x="220" y="130" font-size="8">Wired into all 3 transitions + view_apply + resize</text>
+  <text x="220" y="148" font-size="8" class="label">11 functions, ~200 lines</text>
+  <text x="420" y="74" font-size="9" class="add">Key functions:</text>
+  <text x="420" y="88" font-size="8">title_rect_overlay_build</text>
+  <text x="420" y="100" font-size="8">title_rect_cache_build</text>
+  <text x="420" y="112" font-size="8">title_state_list_get</text>
+  <text x="420" y="124" font-size="8">title_rect_animate</text>
+  <text x="420" y="136" font-size="8">title_rect_overlay_show</text>
+
+  <!-- Project view -->
+  <text x="300" y="185" text-anchor="middle" class="sub">Project View</text>
+  <rect x="30" y="195" width="160" height="80" rx="4" fill="#e8f4fd" stroke="#0366d6"/>
+  <text x="110" y="215" text-anchor="middle" font-size="12" font-weight="bold">Projects</text>
+  <text x="110" y="232" text-anchor="middle" font-size="8">scale 1, opacity 1</text>
+  <text x="110" y="244" text-anchor="middle" font-size="8">at page-title position</text>
+  <text x="110" y="260" text-anchor="middle" font-size="8" class="label">cached from .page-title rect</text>
+
+  <text x="250" y="225" font-size="8">1) Half a Chair</text>
+  <text x="250" y="240" font-size="8" class="label">scale 0.76</text>
+  <text x="370" y="225" font-size="8">2) Away We Go</text>
+  <text x="370" y="240" font-size="8" class="label">scale 0.76</text>
+  <text x="490" y="225" font-size="8">3) Title</text>
+  <text x="490" y="240" font-size="8" class="label">scale 0.76</text>
+
+  <!-- Deck view -->
+  <text x="300" y="290" text-anchor="middle" class="sub">Deck View (active = deck 1)</text>
+  <rect x="30" y="300" width="540" height="50" rx="4" fill="#fff3cd" stroke="#ffc107"/>
+  <text x="50" y="318" font-size="8" class="del">Projects: scale 0, opacity 0 (horizon)</text>
+  <text x="50" y="332" font-size="8" class="del">Deck 2,3: scale 0, opacity 0 (horizon)</text>
+  <text x="300" y="318" font-size="12" font-weight="bold" text-anchor="middle" class="add">1) Half a Chair's Worth</text>
+  <text x="300" y="335" text-anchor="middle" font-size="8" class="add">scale 1, at page-title center</text>
+
+  <!-- Arrows -->
+  <defs>
+    <marker id="arr" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L8,3 L0,6" fill="#333"/>
+    </marker>
+  </defs>
+  <line x1="110" y1="275" x2="200" y2="302" stroke="#333" stroke-width="1.5" marker-end="url(#arr)"/>
+  <text x="120" y="292" font-size="8" fill="#333">animate 520ms</text>
+
+  <!-- Codenames -->
+  <rect x="30" y="365" width="540" height="65" rx="4" fill="#f8f9fa" stroke="#dee2e6"/>
+  <text x="40" y="383" font-size="9" font-weight="bold">New codenames (11):</text>
+  <text x="40" y="397" font-size="8" class="add">title_rect_state, title_rect_overlay_build, title_rect_overlay_get,</text>
+  <text x="40" y="409" font-size="8" class="add">title_rect_overlay_show, title_rect_list_get, title_rect_animate,</text>
+  <text x="40" y="421" font-size="8" class="add">title_rect_state_apply, title_rect_state_apply_all, title_rect_cache_build,</text>
+  <text x="350" y="421" font-size="8" class="add">title_state_list_get, title_registry_update</text>
+  <text x="350" y="383" font-size="9">Removed: title_crossfade, deck_title_fade</text>
+  <text x="350" y="397" font-size="9">Total: 116 codenames</text>
+</svg>

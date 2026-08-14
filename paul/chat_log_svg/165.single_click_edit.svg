@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 180" style="background:#fff">
+  <style>
+    text { font-family: monospace; font-size: 12px; fill: #222; }
+    .title { font-size: 14px; font-weight: bold; }
+    .old { fill: #fce4ec; stroke: #c62828; stroke-width: 1.5; rx: 6; }
+    .new { fill: #e8f5e9; stroke: #2e7d32; stroke-width: 2; rx: 6; }
+  </style>
+  <text x="200" y="22" text-anchor="middle" class="title">chat_165: single_click_edit</text>
+
+  <rect x="20" y="44" width="170" height="56" class="old"/>
+  <text x="105" y="64" text-anchor="middle" font-weight="bold">Before: dblclick</text>
+  <text x="105" y="80" text-anchor="middle" font-size="10">preventDefault + manual</text>
+  <text x="105" y="92" text-anchor="middle" font-size="10">caretRangeFromPoint</text>
+
+  <rect x="210" y="44" width="170" height="56" class="new"/>
+  <text x="295" y="64" text-anchor="middle" font-weight="bold">After: mousedown</text>
+  <text x="295" y="80" text-anchor="middle" font-size="10">no preventDefault; browser</text>
+  <text x="295" y="92" text-anchor="middle" font-size="10">handles caret + drag-select</text>
+
+  <rect x="60" y="116" width="280" height="40" rx="6" fill="#e3f2fd" stroke="#1565c0" stroke-width="1.5"/>
+  <text x="200" y="136" text-anchor="middle" font-size="11" fill="#1565c0">Single click places i-beam</text>
+  <text x="200" y="150" text-anchor="middle" font-size="11" fill="#1565c0">Click-drag selects text range</text>
+</svg>

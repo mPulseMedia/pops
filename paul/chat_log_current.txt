@@ -1,0 +1,18 @@
+chat_170  svg_text_size_rule -- 2026-02-24 01:42:09 PM
+    A.  Prompt
+        a.  "update the markdown config prompt
+            file to insist that the text on the
+            SVG be smaller because it
+            consistently is too big and bleeds
+            outside of the bounding rectangles
+            sometimes contains"
+    B.  Response
+        a.  Replaced single vague hint in F.5
+            with new sub-rule F.6 (a-e):
+            10-11px max in boxes, ~7px/char
+            width math, 80% box-width gate,
+            13px title cap, assume-50%-larger
+            mental test. Renumbered F.7, F.8.
+        b.  file:///Users/pauldsmith/Desktop/pops/paul/chat_log_svg/170.svg_text_size_rule.svg
+    C.  Codenames
+        a.  chat_170, svg_text_size_rule (new).

@@ -1,0 +1,330 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 920 870" style="background: white;">
+  <style>
+    text { font-family: monospace; font-size: 8px; }
+    .heading { font-size: 14px; font-weight: bold; }
+    .sub { font-size: 11px; font-weight: bold; }
+    .inner-label { font-size: 9px; font-weight: bold; }
+    .fn { font-size: 7.5px; fill: #444; }
+  </style>
+  <text x="460" y="20" text-anchor="middle" class="heading">Pops Architecture — 8 Subsystems (Detail)</text>
+
+  <!-- ======================== -->
+  <!-- ROW 1                    -->
+  <!-- ======================== -->
+
+  <!-- 1. DATA LAYER -->
+  <rect x="10" y="35" width="219" height="395" rx="6" fill="#e8f4f8" stroke="#0366d6" stroke-width="1.5"/>
+  <text x="120" y="54" text-anchor="middle" class="sub" fill="#0366d6">1. Data Layer</text>
+
+  <rect x="20" y="63" width="199" height="60" rx="4" fill="white" stroke="#0366d6" stroke-width="0.8"/>
+  <text x="120" y="76" text-anchor="middle" class="inner-label" fill="#0366d6">Source Chain</text>
+  <text x="28" y="88" class="fn">deck_data_embed_get → embedded JSON</text>
+  <text x="28" y="98" class="fn">deck_data_load → external index.txt</text>
+  <text x="28" y="108" class="fn">deck_data_file_load → user file picker</text>
+  <text x="28" y="118" class="fn">Fallback: embedded → external → default</text>
+
+  <rect x="20" y="131" width="199" height="60" rx="4" fill="white" stroke="#0366d6" stroke-width="0.8"/>
+  <text x="120" y="144" text-anchor="middle" class="inner-label" fill="#0366d6">Schema Normalizer</text>
+  <text x="28" y="156" class="fn">deck_data_normalize(rawData)</text>
+  <text x="28" y="166" class="fn">Supports "decks" + legacy formats</text>
+  <text x="28" y="176" class="fn">Validates card/item structure</text>
+  <text x="28" y="186" class="fn">→ { id, title, miniTitle, cards[] }</text>
+
+  <rect x="20" y="199" width="199" height="60" rx="4" fill="white" stroke="#0366d6" stroke-width="0.8"/>
+  <text x="120" y="212" text-anchor="middle" class="inner-label" fill="#0366d6">Edit Merger</text>
+  <text x="28" y="224" class="fn">Applies localStorage edits to model</text>
+  <text x="28" y="234" class="fn">item text + card titles + deck titles</text>
+  <text x="28" y="244" class="fn">edit_store_get / item_store_get</text>
+  <text x="28" y="254" class="fn">Merges on every render cycle</text>
+
+  <rect x="20" y="267" width="199" height="60" rx="4" fill="white" stroke="#0366d6" stroke-width="0.8"/>
+  <text x="120" y="280" text-anchor="middle" class="inner-label" fill="#0366d6">Persistence Store</text>
+  <text x="28" y="292" class="fn">CARD_EDITS  → text + titles</text>
+  <text x="28" y="302" class="fn">CARD_ITEMS  → structural inserts</text>
+  <text x="28" y="312" class="fn">DECK_TITLES → deck name overrides</text>
+  <text x="28" y="322" class="fn">VIEW / ACTIVE / SELECT keys</text>
+
+  <rect x="20" y="335" width="199" height="60" rx="4" fill="white" stroke="#0366d6" stroke-width="0.8"/>
+  <text x="120" y="348" text-anchor="middle" class="inner-label" fill="#0366d6">DOM Builder</text>
+  <text x="28" y="360" class="fn">deck_data_render(data, fromFile)</text>
+  <text x="28" y="370" class="fn">Calls deck_build() per deck</text>
+  <text x="28" y="380" class="fn">Creates .deck + .deck-viewport</text>
+  <text x="28" y="390" class="fn">Triggers overlay framework build</text>
+
+  <!-- 2. DOM LAYERS -->
+  <rect x="237" y="35" width="219" height="395" rx="6" fill="#fff3cd" stroke="#ffc107" stroke-width="1.5"/>
+  <text x="347" y="54" text-anchor="middle" class="sub" fill="#856404">2. DOM Layers</text>
+
+  <rect x="247" y="63" width="199" height="60" rx="4" fill="white" stroke="#ffc107" stroke-width="0.8"/>
+  <text x="347" y="76" text-anchor="middle" class="inner-label" fill="#856404">Real Deck Structure</text>
+  <text x="255" y="88" class="fn">.deck → .deck-title + .deck-viewport</text>
+  <text x="255" y="98" class="fn">.deck-viewport → .deck-scale</text>
+  <text x="255" y="108" class="fn">.deck-stack-wrap → .card-scene</text>
+  <text x="255" y="118" class="fn">Real elements visibility:hidden</text>
+
+  <rect x="247" y="131" width="199" height="60" rx="4" fill="white" stroke="#ffc107" stroke-width="0.8"/>
+  <text x="347" y="144" text-anchor="middle" class="inner-label" fill="#856404">Card Rect Overlay</text>
+  <text x="255" y="156" class="fn">#cardRectOverlay (z-index: 5500)</text>
+  <text x="255" y="166" class="fn">.card-rect[data-deck-index][data-index]</text>
+  <text x="255" y="176" class="fn">3 rects per deck (one per card)</text>
+  <text x="255" y="186" class="fn">card_rect_overlay_build() creates all</text>
+
+  <rect x="247" y="199" width="199" height="60" rx="4" fill="white" stroke="#ffc107" stroke-width="0.8"/>
+  <text x="347" y="212" text-anchor="middle" class="inner-label" fill="#856404">Card Layers</text>
+  <text x="255" y="224" class="fn">3 per rect: yellow / red / green</text>
+  <text x="255" y="234" class="fn">.card-layer--overlay positioned</text>
+  <text x="255" y="244" class="fn">layerLayouts[] → CSS custom props</text>
+  <text x="255" y="254" class="fn">card_layer_build(config, data, id, i)</text>
+
+  <rect x="247" y="267" width="199" height="60" rx="4" fill="white" stroke="#ffc107" stroke-width="0.8"/>
+  <text x="347" y="280" text-anchor="middle" class="inner-label" fill="#856404">Title Rect Overlay</text>
+  <text x="255" y="292" class="fn">#titleRectOverlay (z-index: 5600)</text>
+  <text x="255" y="302" class="fn">.title-rect[data-title-type]</text>
+  <text x="255" y="312" class="fn">1 page title + 3 deck titles</text>
+  <text x="255" y="322" class="fn">title_rect_overlay_build() creates</text>
+
+  <rect x="247" y="335" width="199" height="60" rx="4" fill="white" stroke="#ffc107" stroke-width="0.8"/>
+  <text x="347" y="348" text-anchor="middle" class="inner-label" fill="#856404">Content Shells</text>
+  <text x="255" y="360" class="fn">.tab → tab label per card</text>
+  <text x="255" y="370" class="fn">.card-text-title + .card-text-list</text>
+  <text x="255" y="380" class="fn">.card-text-item[data-item-index]</text>
+  <text x="255" y="390" class="fn">Hosts contentEditable during edits</text>
+
+  <!-- 3. STATE MANAGEMENT -->
+  <rect x="464" y="35" width="219" height="395" rx="6" fill="#d4edda" stroke="#28a745" stroke-width="1.5"/>
+  <text x="574" y="54" text-anchor="middle" class="sub" fill="#28a745">3. State Management</text>
+
+  <rect x="474" y="63" width="199" height="60" rx="4" fill="white" stroke="#28a745" stroke-width="0.8"/>
+  <text x="574" y="76" text-anchor="middle" class="inner-label" fill="#28a745">Active Deck Tracker</text>
+  <text x="482" y="88" class="fn">deck_active_get() → .is-active deck</text>
+  <text x="482" y="98" class="fn">deck_active_set(id) → class + store</text>
+  <text x="482" y="108" class="fn">deck_active_index_set(idx, front)</text>
+  <text x="482" y="118" class="fn">Persists to localStorage ACTIVE_KEY</text>
+
+  <rect x="474" y="131" width="199" height="60" rx="4" fill="white" stroke="#28a745" stroke-width="0.8"/>
+  <text x="574" y="144" text-anchor="middle" class="inner-label" fill="#28a745">View State Calculator</text>
+  <text x="482" y="156" class="fn">view_state_list_get(view)</text>
+  <text x="482" y="166" class="fn">view_state_deck_get(deck, view)</text>
+  <text x="482" y="176" class="fn">view_state_current_get() → snapshot</text>
+  <text x="482" y="186" class="fn">view_expanded_collapse_get()</text>
+
+  <rect x="474" y="199" width="199" height="60" rx="4" fill="white" stroke="#28a745" stroke-width="0.8"/>
+  <text x="574" y="212" text-anchor="middle" class="inner-label" fill="#28a745">Viewport Geometry</text>
+  <text x="482" y="224" class="fn">deck_stack_layout_get()</text>
+  <text x="482" y="234" class="fn">Reads .deck-viewport bounding rect</text>
+  <text x="482" y="244" class="fn">view_expanded_layout_get()</text>
+  <text x="482" y="254" class="fn">Scales cards to fit available space</text>
+
+  <rect x="474" y="267" width="199" height="60" rx="4" fill="white" stroke="#28a745" stroke-width="0.8"/>
+  <text x="574" y="280" text-anchor="middle" class="inner-label" fill="#28a745">Z-Order Manager</text>
+  <text x="482" y="292" class="fn">view_project_stack_set(deckIdx)</text>
+  <text x="482" y="302" class="fn">z-index per deck + card position</text>
+  <text x="482" y="312" class="fn">.is-front class on top card</text>
+  <text x="482" y="322" class="fn">Active deck always on top layer</text>
+
+  <rect x="474" y="335" width="199" height="60" rx="4" fill="white" stroke="#28a745" stroke-width="0.8"/>
+  <text x="574" y="348" text-anchor="middle" class="inner-label" fill="#28a745">State Cache</text>
+  <text x="482" y="360" class="fn">lastStackedStates → deck-view snap</text>
+  <text x="482" y="370" class="fn">lastProjectStatesByDeckIndex[]</text>
+  <text x="482" y="380" class="fn">lastDeckViewStates → pre-expand</text>
+  <text x="482" y="390" class="fn">Preserves positions across views</text>
+
+  <!-- 4. TRANSITION SYSTEM -->
+  <rect x="691" y="35" width="219" height="395" rx="6" fill="#fce4ec" stroke="#dc3545" stroke-width="1.5"/>
+  <text x="801" y="54" text-anchor="middle" class="sub" fill="#dc3545">4. Transition System</text>
+
+  <rect x="701" y="63" width="199" height="60" rx="4" fill="white" stroke="#dc3545" stroke-width="0.8"/>
+  <text x="801" y="76" text-anchor="middle" class="inner-label" fill="#dc3545">View Router</text>
+  <text x="709" y="88" class="fn">view_set(view) → pick transition fn</text>
+  <text x="709" y="98" class="fn">project↔deck: transition_project_deck</text>
+  <text x="709" y="108" class="fn">deck↔expanded: transition_deck_expanded</text>
+  <text x="709" y="118" class="fn">project↔expanded: two-step via deck</text>
+
+  <rect x="701" y="131" width="199" height="60" rx="4" fill="white" stroke="#dc3545" stroke-width="0.8"/>
+  <text x="801" y="144" text-anchor="middle" class="inner-label" fill="#dc3545">State Snapshot</text>
+  <text x="709" y="156" class="fn">Capture fromStates before change</text>
+  <text x="709" y="166" class="fn">title_rect_overlay_show(titleFrom)</text>
+  <text x="709" y="176" class="fn">view_apply(skipCard + skipTitle)</text>
+  <text x="709" y="186" class="fn">rAF: compute toStates after layout</text>
+
+  <rect x="701" y="199" width="199" height="60" rx="4" fill="white" stroke="#dc3545" stroke-width="0.8"/>
+  <text x="801" y="212" text-anchor="middle" class="inner-label" fill="#dc3545">Animation Executor</text>
+  <text x="709" y="224" class="fn">view_rect_animate(from, to, 520ms)</text>
+  <text x="709" y="234" class="fn">title_rect_animate(from, to, 520ms)</text>
+  <text x="709" y="244" class="fn">Web Animations API + cubic-bezier</text>
+  <text x="709" y="254" class="fn">card_rect_state_apply per element</text>
+
+  <rect x="701" y="267" width="199" height="60" rx="4" fill="white" stroke="#dc3545" stroke-width="0.8"/>
+  <text x="801" y="280" text-anchor="middle" class="inner-label" fill="#dc3545">Spatial Validation</text>
+  <text x="709" y="292" class="fn">spatial_contract_validate(from, to)</text>
+  <text x="709" y="302" class="fn">Verify array lengths match rects</text>
+  <text x="709" y="312" class="fn">Warn on count mismatch</text>
+  <text x="709" y="322" class="fn">Prevents corrupt animations</text>
+
+  <rect x="701" y="335" width="199" height="60" rx="4" fill="white" stroke="#dc3545" stroke-width="0.8"/>
+  <text x="801" y="348" text-anchor="middle" class="inner-label" fill="#dc3545">Frame Finalizer</text>
+  <text x="709" y="360" class="fn">transition_complete_run(view)</text>
+  <text x="709" y="370" class="fn">Rebuild card_rect_overlay</text>
+  <text x="709" y="380" class="fn">Update spatial_registry</text>
+  <text x="709" y="390" class="fn">Show final framework state</text>
+
+  <!-- ======================== -->
+  <!-- ROW 2                    -->
+  <!-- ======================== -->
+
+  <!-- 5. CLICK DISPATCH -->
+  <rect x="10" y="445" width="219" height="395" rx="6" fill="#f3e5f5" stroke="#9c27b0" stroke-width="1.5"/>
+  <text x="120" y="464" text-anchor="middle" class="sub" fill="#9c27b0">5. Click Dispatch</text>
+
+  <rect x="20" y="473" width="199" height="60" rx="4" fill="white" stroke="#9c27b0" stroke-width="0.8"/>
+  <text x="120" y="486" text-anchor="middle" class="inner-label" fill="#9c27b0">Event Gating</text>
+  <text x="28" y="498" class="fn">click_dispatch(e) on document</text>
+  <text x="28" y="508" class="fn">Skip: contenteditable elements</text>
+  <text x="28" y="518" class="fn">Skip: .image-lightbox, #reloadRow</text>
+  <text x="28" y="528" class="fn">Skip: #titleRow, UI controls</text>
+
+  <rect x="20" y="541" width="199" height="60" rx="4" fill="white" stroke="#9c27b0" stroke-width="0.8"/>
+  <text x="120" y="554" text-anchor="middle" class="inner-label" fill="#9c27b0">Hit-Test Engine</text>
+  <text x="28" y="566" class="fn">elementsFromPoint(e.x, e.y)</text>
+  <text x="28" y="576" class="fn">Walk hit stack with .closest()</text>
+  <text x="28" y="586" class="fn">Resolve to .card-rect or .title-rect</text>
+  <text x="28" y="596" class="fn">Extract data-deck-index, data-index</text>
+
+  <rect x="20" y="609" width="199" height="60" rx="4" fill="white" stroke="#9c27b0" stroke-width="0.8"/>
+  <text x="120" y="622" text-anchor="middle" class="inner-label" fill="#9c27b0">Target Resolver</text>
+  <text x="28" y="634" class="fn">click_target_resolve(hits, view)</text>
+  <text x="28" y="644" class="fn">Types: tab | card-image</text>
+  <text x="28" y="654" class="fn">Types: card-content | card-body</text>
+  <text x="28" y="664" class="fn">→ { type, deckIndex, cardIndex, el }</text>
+
+  <rect x="20" y="677" width="199" height="60" rx="4" fill="white" stroke="#9c27b0" stroke-width="0.8"/>
+  <text x="120" y="690" text-anchor="middle" class="inner-label" fill="#9c27b0">View Determiner</text>
+  <text x="28" y="702" class="fn">click_view_get() → current view</text>
+  <text x="28" y="712" class="fn">Reads body.classList</text>
+  <text x="28" y="722" class="fn">project-view | deck-view</text>
+  <text x="28" y="732" class="fn">expanded-view</text>
+
+  <rect x="20" y="745" width="199" height="60" rx="4" fill="white" stroke="#9c27b0" stroke-width="0.8"/>
+  <text x="120" y="758" text-anchor="middle" class="inner-label" fill="#9c27b0">Action Router</text>
+  <text x="28" y="770" class="fn">click_route(hit, view, e)</text>
+  <text x="28" y="780" class="fn">tab → switch card / select deck</text>
+  <text x="28" y="790" class="fn">card-content → enter deck / promote</text>
+  <text x="28" y="800" class="fn">→ view_set() or card_promote()</text>
+
+  <!-- 6. SPATIAL PERSISTENCE -->
+  <rect x="237" y="445" width="219" height="395" rx="6" fill="#e0f2f1" stroke="#009688" stroke-width="1.5"/>
+  <text x="347" y="464" text-anchor="middle" class="sub" fill="#009688">6. Spatial Persistence</text>
+
+  <rect x="247" y="473" width="199" height="60" rx="4" fill="white" stroke="#009688" stroke-width="0.8"/>
+  <text x="347" y="486" text-anchor="middle" class="inner-label" fill="#009688">Registry Store</text>
+  <text x="255" y="498" class="fn">spatial_registry{} object</text>
+  <text x="255" y="508" class="fn">Key: "deckIndex-cardIndex"</text>
+  <text x="255" y="518" class="fn">Val: { x, y, scaleX, scaleY, opacity }</text>
+  <text x="255" y="528" class="fn">spatial_registry_update(states)</text>
+
+  <rect x="247" y="541" width="199" height="60" rx="4" fill="white" stroke="#009688" stroke-width="0.8"/>
+  <text x="347" y="554" text-anchor="middle" class="inner-label" fill="#009688">State Retrieval</text>
+  <text x="255" y="566" class="fn">spatial_registry_get() → array</text>
+  <text x="255" y="576" class="fn">Converts keyed map to linear array</text>
+  <text x="255" y="586" class="fn">Fills missing entries with zeros</text>
+  <text x="255" y="596" class="fn">Matches card_rect_list_get order</text>
+
+  <rect x="247" y="609" width="199" height="60" rx="4" fill="white" stroke="#009688" stroke-width="0.8"/>
+  <text x="347" y="622" text-anchor="middle" class="inner-label" fill="#009688">Contract Validator</text>
+  <text x="255" y="634" class="fn">spatial_contract_validate(from, to)</text>
+  <text x="255" y="644" class="fn">from.length === to.length === rects</text>
+  <text x="255" y="654" class="fn">Console.warn on mismatch</text>
+  <text x="255" y="664" class="fn">Guards against corrupt transitions</text>
+
+  <rect x="247" y="677" width="199" height="60" rx="4" fill="white" stroke="#009688" stroke-width="0.8"/>
+  <text x="347" y="690" text-anchor="middle" class="inner-label" fill="#009688">Natural Size Cache</text>
+  <text x="255" y="702" class="fn">title_rect_natural{}</text>
+  <text x="255" y="712" class="fn">Measures unscaled title dimensions</text>
+  <text x="255" y="722" class="fn">title_rect_cache{} → real positions</text>
+  <text x="255" y="732" class="fn">Captured before transforms applied</text>
+
+  <rect x="247" y="745" width="199" height="60" rx="4" fill="white" stroke="#009688" stroke-width="0.8"/>
+  <text x="347" y="758" text-anchor="middle" class="inner-label" fill="#009688">Receded Generator</text>
+  <text x="255" y="770" class="fn">Beyond-the-horizon positioning</text>
+  <text x="255" y="780" class="fn">Center of viewport, scale(0)</text>
+  <text x="255" y="790" class="fn">opacity(0), pointer-events: none</text>
+  <text x="255" y="800" class="fn">Cards never appear/disappear</text>
+
+  <!-- 7. EDIT SYSTEM -->
+  <rect x="464" y="445" width="219" height="395" rx="6" fill="#fff8e1" stroke="#ff8f00" stroke-width="1.5"/>
+  <text x="574" y="464" text-anchor="middle" class="sub" fill="#ff8f00">7. Edit System</text>
+
+  <rect x="474" y="473" width="199" height="60" rx="4" fill="white" stroke="#ff8f00" stroke-width="0.8"/>
+  <text x="574" y="486" text-anchor="middle" class="inner-label" fill="#ff8f00">Edit Binders</text>
+  <text x="482" y="498" class="fn">item_edit_setup() → dblclick items</text>
+  <text x="482" y="508" class="fn">tab_title_edit_setup() → dblclick tabs</text>
+  <text x="482" y="518" class="fn">deck_title_edit_setup() → deck names</text>
+  <text x="482" y="528" class="fn">Sets contentEditable + .is-editing</text>
+
+  <rect x="474" y="541" width="199" height="60" rx="4" fill="white" stroke="#ff8f00" stroke-width="0.8"/>
+  <text x="574" y="554" text-anchor="middle" class="inner-label" fill="#ff8f00">Text Savers</text>
+  <text x="482" y="566" class="fn">item_text_save(deck, card, item, txt)</text>
+  <text x="482" y="576" class="fn">card_title_save(deck, card, txt)</text>
+  <text x="482" y="586" class="fn">deck_title_edit_save(deck, txt)</text>
+  <text x="482" y="596" class="fn">tab_sync → update tab from title</text>
+
+  <rect x="474" y="609" width="199" height="60" rx="4" fill="white" stroke="#ff8f00" stroke-width="0.8"/>
+  <text x="574" y="622" text-anchor="middle" class="inner-label" fill="#ff8f00">Storage Shifters</text>
+  <text x="482" y="634" class="fn">item_insert(deck, card, atIndex)</text>
+  <text x="482" y="644" class="fn">item_delete(deck, card, index)</text>
+  <text x="482" y="654" class="fn">Rekeys localStorage on shift</text>
+  <text x="482" y="664" class="fn">Returns focus index after delete</text>
+
+  <rect x="474" y="677" width="199" height="60" rx="4" fill="white" stroke="#ff8f00" stroke-width="0.8"/>
+  <text x="574" y="690" text-anchor="middle" class="inner-label" fill="#ff8f00">DOM Rebuilders</text>
+  <text x="482" y="702" class="fn">item_text_rebuild(deck, card)</text>
+  <text x="482" y="712" class="fn">item_list_build(items, deck, card)</text>
+  <text x="482" y="722" class="fn">Replaces .card-text-list contents</text>
+  <text x="482" y="732" class="fn">Re-binds edit listeners after build</text>
+
+  <rect x="474" y="745" width="199" height="60" rx="4" fill="white" stroke="#ff8f00" stroke-width="0.8"/>
+  <text x="574" y="758" text-anchor="middle" class="inner-label" fill="#ff8f00">Cursor Persistence</text>
+  <text x="482" y="770" class="fn">edit_state_save(opts) → ACTIVE_EDIT</text>
+  <text x="482" y="780" class="fn">Saves cursor pos + element ref</text>
+  <text x="482" y="790" class="fn">edit_state_clear() on blur</text>
+  <text x="482" y="800" class="fn">Restores focus after page reload</text>
+
+  <!-- 8. VIEW SYSTEM -->
+  <rect x="691" y="445" width="219" height="395" rx="6" fill="#e8eaf6" stroke="#3f51b5" stroke-width="1.5"/>
+  <text x="801" y="464" text-anchor="middle" class="sub" fill="#3f51b5">8. View System</text>
+
+  <rect x="701" y="473" width="199" height="60" rx="4" fill="white" stroke="#3f51b5" stroke-width="0.8"/>
+  <text x="801" y="486" text-anchor="middle" class="inner-label" fill="#3f51b5">CSS Class Toggle</text>
+  <text x="709" y="498" class="fn">body.project-view</text>
+  <text x="709" y="508" class="fn">body.deck-view</text>
+  <text x="709" y="518" class="fn">body.expanded-view</text>
+  <text x="709" y="528" class="fn">.expand-animating / .expand-collapsing</text>
+
+  <rect x="701" y="541" width="199" height="60" rx="4" fill="white" stroke="#3f51b5" stroke-width="0.8"/>
+  <text x="801" y="554" text-anchor="middle" class="inner-label" fill="#3f51b5">Layout Calculators</text>
+  <text x="709" y="566" class="fn">Project: 3-card stacks, STACK_OFFSETS</text>
+  <text x="709" y="576" class="fn">Deck: front(0,0) mid(-8) back(-24)</text>
+  <text x="709" y="586" class="fn">Expanded: 1 top + 2 bottom grid</text>
+  <text x="709" y="596" class="fn">CARD_RECT: 1200×728, scale 0.9</text>
+
+  <rect x="701" y="609" width="199" height="60" rx="4" fill="white" stroke="#3f51b5" stroke-width="0.8"/>
+  <text x="801" y="622" text-anchor="middle" class="inner-label" fill="#3f51b5">Title Positioner</text>
+  <text x="709" y="634" class="fn">title_state_list_get(view)</text>
+  <text x="709" y="644" class="fn">Page title: centered top (all views)</text>
+  <text x="709" y="654" class="fn">Deck titles: scaled 32/42 in project</text>
+  <text x="709" y="664" class="fn">Active deck title → full scale in deck</text>
+
+  <rect x="701" y="677" width="199" height="60" rx="4" fill="white" stroke="#3f51b5" stroke-width="0.8"/>
+  <text x="801" y="690" text-anchor="middle" class="inner-label" fill="#3f51b5">Framework Visibility</text>
+  <text x="709" y="702" class="fn">view_framework_show(states)</text>
+  <text x="709" y="712" class="fn">view_framework_hide()</text>
+  <text x="709" y="722" class="fn">Toggles overlay display property</text>
+  <text x="709" y="732" class="fn">.card-rect-framework class toggle</text>
+
+  <rect x="701" y="745" width="199" height="60" rx="4" fill="white" stroke="#3f51b5" stroke-width="0.8"/>
+  <text x="801" y="758" text-anchor="middle" class="inner-label" fill="#3f51b5">View Entry Point</text>
+  <text x="709" y="770" class="fn">view_set(view) → save + transition</text>
+  <text x="709" y="780" class="fn">view_apply(view, opts) → CSS + DOM</text>
+  <text x="709" y="790" class="fn">opts: skipCard, skipTitle flags</text>
+  <text x="709" y="800" class="fn">Persists view to localStorage</text>
+</svg>

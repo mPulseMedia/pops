@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 200" style="background: white;">
+  <style>
+    text { font-family: monospace; font-size: 10px; }
+    .heading { font-size: 13px; font-weight: bold; }
+    .add { fill: #28a745; }
+    .rule { fill: #0366d6; }
+  </style>
+  <text x="200" y="20" text-anchor="middle" class="heading">142. Chat Log Current</text>
+  <rect x="20" y="40" width="360" height="60" rx="6" fill="#e8f4fd" stroke="#0366d6" stroke-width="1.5"/>
+  <text x="200" y="60" text-anchor="middle" font-size="11" font-weight="bold" class="rule">paul/chat_log.txt</text>
+  <text x="200" y="78" text-anchor="middle" font-size="9">Full chat log (entries 1-143+)</text>
+  <line x1="200" y1="105" x2="200" y2="120" stroke="#333" stroke-width="1.5" marker-end="url(#arr)"/>
+  <text x="220" y="116" font-size="8">copy latest entry</text>
+  <rect x="20" y="125" width="360" height="55" rx="6" fill="#d4edda" stroke="#28a745" stroke-width="1.5"/>
+  <text x="200" y="145" text-anchor="middle" font-size="11" font-weight="bold" class="add">paul/chat_log_current.txt</text>
+  <text x="200" y="162" text-anchor="middle" font-size="9">Only the most recently added entry</text>
+  <defs>
+    <marker id="arr" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L8,3 L0,6" fill="#333"/>
+    </marker>
+  </defs>
+</svg>

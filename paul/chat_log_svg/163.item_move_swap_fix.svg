@@ -1,0 +1,67 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 320" style="background:#fff">
+  <style>
+    text { font-family: monospace; font-size: 12px; fill: #222; }
+    .title { font-size: 14px; font-weight: bold; }
+    .bug { fill: #fce4ec; stroke: #c62828; stroke-width: 1.5; rx: 6; }
+    .fix { fill: #e8f5e9; stroke: #2e7d32; stroke-width: 2; rx: 6; }
+    .item { fill: #e3f2fd; stroke: #1565c0; stroke-width: 1; rx: 4; }
+    .arrow { stroke: #555; stroke-width: 1.5; fill: none; marker-end: url(#ah); }
+  </style>
+  <defs>
+    <marker id="ah" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L8,3 L0,6" fill="#555"/>
+    </marker>
+  </defs>
+  <text x="250" y="22" text-anchor="middle" class="title">chat_163: item_move_swap_fix</text>
+
+  <!-- Bug 1: upward scan -->
+  <rect x="15" y="40" width="225" height="80" class="bug"/>
+  <text x="127" y="58" text-anchor="middle" font-weight="bold">Bug 1: upward scan</text>
+  <text x="127" y="74" text-anchor="middle" font-size="10">Scan found SIBLING above other,</text>
+  <text x="127" y="88" text-anchor="middle" font-size="10">making otherBlock = [A,B] not [B].</text>
+  <text x="127" y="102" text-anchor="middle" font-size="10">Move UP jumped 2 steps.</text>
+  <text x="127" y="114" text-anchor="middle" font-size="10" fill="#c62828">Fix: removed scan entirely</text>
+
+  <!-- Bug 2: edit mapping -->
+  <rect x="260" y="40" width="225" height="80" class="bug"/>
+  <text x="372" y="58" text-anchor="middle" font-weight="bold">Bug 2: edit oldToNew</text>
+  <text x="372" y="74" text-anchor="middle" font-size="10">Swapped formulas: line 728 used</text>
+  <text x="372" y="88" text-anchor="middle" font-size="10">ourStart+otherLen (wrong), line</text>
+  <text x="372" y="102" text-anchor="middle" font-size="10">731 used otherStart+ourLen (wrong).</text>
+  <text x="372" y="114" text-anchor="middle" font-size="10" fill="#c62828">Fix: swapped the formulas</text>
+
+  <!-- Bug 3: newIdx -->
+  <rect x="100" y="135" width="300" height="40" class="bug"/>
+  <text x="250" y="155" text-anchor="middle" font-weight="bold">Bug 3: newIdx for move down</text>
+  <text x="250" y="168" text-anchor="middle" font-size="10" fill="#c62828">otherStart+otherLen → ourStart+otherLen</text>
+
+  <!-- Before/After diagram -->
+  <text x="80" y="200" text-anchor="middle" font-size="11" font-weight="bold">Move C up (before)</text>
+  <rect x="30" y="208" width="100" height="20" class="item"/>
+  <text x="80" y="222" text-anchor="middle">0: A</text>
+  <rect x="30" y="230" width="100" height="20" class="item"/>
+  <text x="80" y="244" text-anchor="middle">1: B</text>
+  <rect x="30" y="252" width="100" height="20" class="bug"/>
+  <text x="80" y="266" text-anchor="middle">2: C *</text>
+
+  <text x="250" y="200" text-anchor="middle" font-size="11" font-weight="bold" fill="#c62828">Old: jumped 2</text>
+  <rect x="200" y="208" width="100" height="20" class="bug"/>
+  <text x="250" y="222" text-anchor="middle">0: C</text>
+  <rect x="200" y="230" width="100" height="20" class="item"/>
+  <text x="250" y="244" text-anchor="middle">1: A</text>
+  <rect x="200" y="252" width="100" height="20" class="item"/>
+  <text x="250" y="266" text-anchor="middle">2: B</text>
+
+  <text x="420" y="200" text-anchor="middle" font-size="11" font-weight="bold" fill="#2e7d32">Fixed: 1 step</text>
+  <rect x="370" y="208" width="100" height="20" class="item"/>
+  <text x="420" y="222" text-anchor="middle">0: A</text>
+  <rect x="370" y="230" width="100" height="20" class="fix"/>
+  <text x="420" y="244" text-anchor="middle">1: C</text>
+  <rect x="370" y="252" width="100" height="20" class="item"/>
+  <text x="420" y="266" text-anchor="middle">2: B</text>
+
+  <line x1="135" y1="245" x2="198" y2="235" class="arrow"/>
+  <line x1="305" y1="245" x2="368" y2="245" class="arrow"/>
+
+  <text x="250" y="305" text-anchor="middle" font-size="10" fill="#888">3 bugs in item_move_swap: wrong scan, swapped formulas, wrong return index</text>
+</svg>

@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 560 320" style="background: white;">
+  <style>
+    text { font-family: monospace; font-size: 10px; }
+    .heading { font-size: 13px; font-weight: bold; }
+    .sub { font-size: 11px; font-weight: bold; }
+    .add { fill: #28a745; }
+    .del { fill: #dc3545; }
+    .rule { fill: #0366d6; }
+  </style>
+  <text x="280" y="20" text-anchor="middle" class="heading">150. Deck Title Edit</text>
+  <text x="280" y="36" text-anchor="middle" font-size="9" fill="#666">Context: entry 140 spatial title overlay, entry 111 tab read-only</text>
+
+  <!-- Feature -->
+  <rect x="10" y="50" width="540" height="75" rx="6" fill="#d4edda" stroke="#28a745" stroke-width="1.5"/>
+  <text x="280" y="68" text-anchor="middle" class="sub add">Double-click deck title to edit</text>
+  <text x="20" y="86" font-size="9" class="add">Project view: dblclick title above deck → edit miniTitle</text>
+  <text x="20" y="100" font-size="9" class="add">Deck/expanded view: dblclick title at top center → edit miniTitle</text>
+  <text x="20" y="114" font-size="9" class="add">Number prefix (1)/2)/3)) stripped during edit, restored on blur</text>
+
+  <!-- Data flow -->
+  <rect x="10" y="140" width="540" height="90" rx="6" fill="#f8f9fa" stroke="#dee2e6"/>
+  <text x="280" y="158" text-anchor="middle" class="sub">Data flow on blur</text>
+  <text x="20" y="176" font-size="9">1. deck_title_edit_save(deckId, text) → localStorage[DECK_TITLE_KEY]</text>
+  <text x="20" y="190" font-size="9">2. decksData[i].miniTitle = text, decksData[i].title = text</text>
+  <text x="20" y="204" font-size="9">3. Overlay el.textContent = "N) text", real .deck-title updated</text>
+  <text x="20" y="218" font-size="9">4. title_rect_natural recached (text width may have changed)</text>
+
+  <!-- Persistence -->
+  <rect x="10" y="245" width="540" height="60" rx="6" fill="#e8f4f8" stroke="#0366d6"/>
+  <text x="280" y="263" text-anchor="middle" class="sub rule">Persistence on reload</text>
+  <text x="20" y="281" font-size="9" class="rule">deck_data_render: after normalize, apply stored titles from localStorage</text>
+  <text x="20" y="295" font-size="9" class="rule">Edits survive page reload. Same pattern as card_title_save.</text>
+</svg>

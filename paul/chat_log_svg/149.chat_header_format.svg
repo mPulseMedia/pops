@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 560 240" style="background: white;">
+  <style>
+    text { font-family: monospace; font-size: 10px; }
+    .heading { font-size: 13px; font-weight: bold; }
+    .sub { font-size: 11px; font-weight: bold; }
+    .add { fill: #28a745; }
+    .del { fill: #dc3545; }
+    .rule { fill: #0366d6; }
+  </style>
+  <text x="280" y="20" text-anchor="middle" class="heading">149. Chat Header Format</text>
+  <text x="280" y="36" text-anchor="middle" font-size="9" fill="#666">Context: entry 143 introduced chat_NNN codenames</text>
+
+  <!-- Before -->
+  <rect x="10" y="50" width="540" height="50" rx="6" fill="#fce4ec" stroke="#dc3545" stroke-width="1.5"/>
+  <text x="280" y="68" text-anchor="middle" class="sub del">Before</text>
+  <text x="20" y="88" font-size="9" class="del">148.  TRANSITION FLASH FIX -- 2026-02-19 12:25:00 PM</text>
+
+  <!-- After -->
+  <rect x="10" y="115" width="540" height="50" rx="6" fill="#d4edda" stroke="#28a745" stroke-width="1.5"/>
+  <text x="280" y="133" text-anchor="middle" class="sub add">After</text>
+  <text x="20" y="153" font-size="9" class="add">chat_148  transition_flash_fix -- 2026-02-19 12:25:00 PM</text>
+
+  <!-- Rule -->
+  <rect x="10" y="180" width="540" height="45" rx="4" fill="#f8f9fa" stroke="#dee2e6"/>
+  <text x="20" y="198" font-size="9" font-weight="bold" class="rule">Format: chat_NNN  short_label -- YYYY-MM-DD HH:MM:SS AM</text>
+  <text x="20" y="214" font-size="9">chat_NNN = entry codename. short_label = snake_case summary. Both are codenames.</text>
+</svg>

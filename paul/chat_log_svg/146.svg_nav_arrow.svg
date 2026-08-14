@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 560 280" style="background: white;">
+  <style>
+    text { font-family: monospace; font-size: 10px; }
+    .heading { font-size: 13px; font-weight: bold; }
+    .sub { font-size: 11px; font-weight: bold; }
+    .add { fill: #28a745; }
+    .del { fill: #dc3545; }
+    .rule { fill: #0366d6; }
+  </style>
+  <text x="280" y="20" text-anchor="middle" class="heading">146. SVG Nav Arrows</text>
+  <text x="280" y="36" text-anchor="middle" font-size="9" fill="#666">Context: entry 141 created current.html SVG viewer</text>
+
+  <!-- Before -->
+  <rect x="10" y="50" width="260" height="80" rx="6" fill="#fce4ec" stroke="#dc3545" stroke-width="1.5"/>
+  <text x="140" y="68" text-anchor="middle" class="sub del">Before: viewer only</text>
+  <text x="20" y="88" font-size="9">current.html shows current.svg</text>
+  <text x="20" y="102" font-size="9">Auto-reload every 4 seconds</text>
+  <text x="20" y="116" font-size="9" class="del">No way to browse history</text>
+
+  <!-- After -->
+  <rect x="290" y="50" width="260" height="80" rx="6" fill="#d4edda" stroke="#28a745" stroke-width="1.5"/>
+  <text x="420" y="68" text-anchor="middle" class="sub add">After: full navigation</text>
+  <text x="300" y="88" font-size="9" class="add">&#9664; prev | label | next &#9654;</text>
+  <text x="300" y="102" font-size="9" class="add">&#9654;&#9654; jump to current</text>
+  <text x="300" y="116" font-size="9" class="add">Label shows NNN / max or "current"</text>
+
+  <!-- Technical -->
+  <rect x="10" y="145" width="540" height="60" rx="6" fill="#f8f9fa" stroke="#dee2e6"/>
+  <text x="20" y="163" font-size="9" font-weight="bold">Implementation:</text>
+  <text x="20" y="178" font-size="9">Hardcoded SVG file list (131-145) since file:// cannot list directories</text>
+  <text x="20" y="193" font-size="9">Navigate: prev (&#9664;), next (&#9654;), latest (&#9654;&#9654;). currentIndex = -1 means current.svg</text>
+
+  <!-- Constraint -->
+  <rect x="10" y="220" width="540" height="45" rx="4" fill="#fff3cd" stroke="#ffc107"/>
+  <text x="20" y="240" font-size="9" font-weight="bold" fill="#856404">Constraint:</text>
+  <text x="100" y="240" font-size="9" fill="#856404">file:// protocol cannot list directory contents from JS</text>
+  <text x="20" y="254" font-size="9" fill="#856404">Solution: maintain hardcoded array, update when new SVGs created</text>
+</svg>

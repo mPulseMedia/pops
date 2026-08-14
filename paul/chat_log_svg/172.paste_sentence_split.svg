@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 340">
+  <rect width="600" height="340" rx="12" fill="#2a2a2a"/>
+
+  <!-- Title -->
+  <text x="300" y="28" text-anchor="middle" font-family="monospace" font-size="13" fill="#e0e0e0" font-weight="700">chat_172: paste_sentence_split</text>
+
+  <!-- Clipboard input -->
+  <rect x="30" y="50" width="540" height="55" rx="6" fill="#1e2433" stroke="#556" stroke-width="1"/>
+  <text x="300" y="68" text-anchor="middle" font-family="monospace" font-size="9" fill="#8ac" font-weight="600">Clipboard (pasted paragraph)</text>
+  <text x="42" y="88" font-family="monospace" font-size="8" fill="#ccc">"First sentence here. Second one follows. And a third."</text>
+
+  <!-- Arrow down -->
+  <line x1="300" y1="108" x2="300" y2="128" stroke="#888" stroke-width="2" marker-end="url(#arr)"/>
+  <defs><marker id="arr" markerWidth="6" markerHeight="4" refX="5" refY="2" orient="auto"><path d="M0,0 L6,2 L0,4" fill="#888"/></marker></defs>
+
+  <!-- Sentence splitter box -->
+  <rect x="180" y="130" width="240" height="35" rx="6" fill="#335" stroke="#668" stroke-width="1"/>
+  <text x="300" y="152" text-anchor="middle" font-family="monospace" font-size="9" fill="#adf">regex: /[^.!?]*[.!?]+/g</text>
+
+  <!-- Arrow down -->
+  <line x1="300" y1="168" x2="300" y2="188" stroke="#888" stroke-width="2" marker-end="url(#arr)"/>
+
+  <!-- Result: three items -->
+  <rect x="30" y="190" width="540" height="130" rx="6" fill="#1e332e" stroke="#6bc96b" stroke-width="1"/>
+  <text x="300" y="210" text-anchor="middle" font-family="monospace" font-size="9" fill="#6bc96b" font-weight="600">Card items (one per sentence)</text>
+
+  <rect x="50" y="222" width="500" height="24" rx="4" fill="#253"/>
+  <text x="60" y="238" font-family="monospace" font-size="8" fill="#aaa">A)</text>
+  <text x="82" y="238" font-family="monospace" font-size="8" fill="#ddd">First sentence here.</text>
+
+  <rect x="50" y="252" width="500" height="24" rx="4" fill="#253"/>
+  <text x="60" y="268" font-family="monospace" font-size="8" fill="#aaa">B)</text>
+  <text x="82" y="268" font-family="monospace" font-size="8" fill="#ddd">Second one follows.</text>
+
+  <rect x="50" y="282" width="500" height="24" rx="4" fill="#253"/>
+  <text x="60" y="298" font-family="monospace" font-size="8" fill="#aaa">C)</text>
+  <text x="82" y="298" font-family="monospace" font-size="8" fill="#ddd">And a third.</text>
+
+  <text x="300" y="326" text-anchor="middle" font-family="monospace" font-size="8" fill="#888">Inherits indent level from paste target item</text>
+</svg>

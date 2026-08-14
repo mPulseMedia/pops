@@ -1,3 +1,4 @@
+<!-- https://mpulsemedia.github.io/pops/index.html -->
 <!doctype html>
 <html lang="en">
   <head>
@@ -9,27 +10,29 @@
   <body class="project-view">
     <div class="title-row">
       <button type="button" class="title-row-back" id="titleRowBackBtn" title="Back to Project" aria-label="Back to Project"><span aria-hidden="true">←</span></button>
-      <h1 class="page-title" id="pageTitle">Project</h1>
-      <button type="button" class="title-row-btn load-deck-data" id="loadDeckDataFileBtn" title="Load index.txt from file" aria-label="Load from file">📂</button>
-      <button type="button" class="title-row-btn export-deck-data" id="exportDeckDataBtn" title="Export deck data" aria-label="Export deck data"><span class="title-row-btn-icon" aria-hidden="true">↓</span></button>
-      <button type="button" class="title-row-btn reload-deck-data" id="reloadDeckDataBtn" title="Reload data from index.txt" aria-label="Reload data from index.txt"><span class="title-row-btn-icon" aria-hidden="true">↑</span></button>
+      <h1 class="page-title" id="pageTitle">Projects</h1>
+      <button type="button" class="title-row-btn export-deck-data" id="exportDeckDataBtn" title="Download deck JSON" aria-label="Download deck JSON"><span class="title-row-btn-icon" aria-hidden="true">↓</span></button>
+      <button type="button" class="title-row-btn load-deck-data" id="deck_data_loadFileBtn" title="Load deck JSON from file" aria-label="Load deck JSON from file"><span class="title-row-btn-icon" aria-hidden="true">↑</span></button>
       <button type="button" class="title-row-expand" id="titleRowExpandBtn" title="Expand" aria-label="Expand"></button>
       <span class="reload_switch_wrap" title="Page auto-reload">
-        <button type="button" class="reload_switch" id="reload_switch" role="switch" aria-label="Auto-reload page" title="Toggle auto-reload"><span class="reload_switch_label">Reload</span> <span class="reload_switch_status" id="reload_switch_status">on</span></button>
+        <button type="button" class="reload_switch" id="reload_switch" role="switch" aria-checked="false" aria-label="Auto-reload off" title="Toggle auto-reload"><span class="reload_switch_label">Reload</span> <span class="reload_switch_status" id="reload_switch_status">off</span></button>
       </span>
     </div>
-    <input type="file" id="loadDeckDataFileInput" accept=".txt,.json,application/json" hidden />
+    <input type="file" id="deck_data_loadFileInput" accept=".txt,.json,application/json" hidden />
     <div class="view-backdrop" id="viewBackdrop" aria-hidden="true"></div>
     <div class="image-lightbox" id="imageLightbox" aria-hidden="true">
       <img alt="" src="" />
     </div>
     <div id="deckProxy" class="deck-proxy" aria-hidden="true"></div>
-    <div id="cardRectOverlay" class="card-rect-overlay" aria-hidden="true"></div>
-    <div id="titleOverlay" class="title-overlay" aria-hidden="true"></div>
+    <div id="cardRectOverlay" class="card-rect-overlay"></div>
+    <div id="titleRectOverlay" class="title-rect-overlay"></div>
     <main class="decks" id="decksRoot" aria-label="Decks"></main>
 
-    <a href="buddy.html" class="page-link-box" title="Buddy (LLM &amp; transcription)">B</a>
 
+    <!-- __deck_data_embed -->
+    <script type="application/json" id="deck-data-embed">
+{"decks":[{"id":"barbershop","title":"Half a Chair's Worth","miniTitle":"Half a Chair's Worth","cards":[{"tabLabel":"Basic<br />Information","title":"Basic Information","image":"png/half a chairs worth.png","imageAlt":"Half a Chair's Worth","items":[{"text":"Title"},{"text":"\"Half a Chair's Worth\"","classes":["level-2"]},{"text":"Old titles","classes":["level-2"]},{"text":"\"What We Know, How Do We Know It\"","classes":["level-3"]},{"text":"What is it","classes":["section"]},{"text":"Amusing dialog on a heavy subject","classes":["level-2"]},{"text":"Message","classes":["section"]},{"text":"Know thy self","classes":["level-2"]}]},{"tabLabel":"Main<br />Characters","title":"Main Characters","image":"png/vision.png","imageAlt":"Vision","imageClass":"card-text-image-small card-text-image-narrow","items":[{"text":"George Weatherby"},{"text":"Poetic, \"by the time we published this book, people won't be reading books anymore.\"","classes":["level-2"]},{"text":"Bad barber","classes":["level-2"]},{"text":"Aubrey Frick","classes":["section"]},{"text":"Practical, \"nobody cares anyway.\" Has Bad haircut.","classes":["level-2"]},{"text":"Has Deep cut in conscience","classes":["level-2"]},{"text":"Commonalities","classes":["section"]},{"text":"Assistant professors of mathematics (cover for math).","classes":["level-2"]},{"text":"Floridian","classes":["level-2"]},{"text":"40 year olds","classes":["level-2"]},{"text":"Don't speak Spanish, likely not Cuban, white vs Indian debate (undecided).","classes":["level-2"]},{"text":"Will misinformed and lie while deciding","classes":["level-2"]}]},{"tabLabel":"Setting<br />&amp; Story","title":"Setting & Story","image":"png/shape.png","imageAlt":"Story shape","imageClass":"card-text-image-small card-text-image-narrow","items":[{"text":"Setting"},{"text":"Cuba, before Castro died","classes":["level-2"]},{"text":"One barbershop chair (half a chair's worth)","classes":["level-2"]},{"text":"Missed cruise return; ship flagged Uganda; seven years","classes":["level-2"]},{"text":"Setup","classes":["section"]},{"text":"Aubrey's adult child (20) is visiting","classes":["level-2"]},{"text":"He prepares the wisdom he'll say","classes":["level-2"]},{"text":"Issue (missed cruise or weren't allowed back; got drunk/drugged/illegal; may not be revealed early)","classes":["level-2"]},{"text":"Story flow","classes":["section"]},{"text":"Action rises, drops, then spikes at end","classes":["level-2"]},{"text":"Decide peak and trough","classes":["level-2"]},{"text":"By Act 1 Scene 1 end, we know who they are","classes":["level-2"]}]}]},{"id":"new","title":"Away We Go","miniTitle":"Away We Go","cards":[{"tabLabel":"Herodotus","title":"Herodotus","items":[{"text":"The Greek historian Herodotus believed that we are what we do, not what we say."},{"text":"According to him, our worth does not rely upon our appearance or the wardrobe we carry."},{"text":"Furthermore, our evaluation of moral behavior sometimes lies outside the scope of due diligence."},{"text":"The inevitability of conflict was evident from the start."}]},{"tabLabel":"Example","title":"Example","items":[{"text":"A story comes to mind from my operations days at AT&T in which I ran into a clash of cultures that caused confusion daily."},{"text":"For example, a driver was sent to our location in West Virginia in a super-long limousine, inappropriate in scruffy West Virginia."},{"text":"I could not convince the driver that money was not the sole criteria for evaluation."},{"text":"\"It's free. They give you the limo for free!\""},{"text":"Again and again, she demonstrated that money was the only criteria she considered."}]},{"tabLabel":"Conflicts","title":"Conflicts","items":[{"text":"Conflicts are inevitable; we all have to navigate backgrounds and situations in the early part of our career."},{"text":"There are differences in the meaning of words, phrases, and gestures."},{"text":"It takes repetition to wipe out the past."},{"classes":["line-break"]},{"text":"He had a way that permitted, etc."}]},{"tabLabel":"","title":"","items":[]}]},{"id":"third","title":"Title","miniTitle":"Title","cards":[{"tabLabel":"Too cheap","title":"Too cheap","items":[{"text":""}]},{"tabLabel":"","title":"","items":[]},{"tabLabel":"","title":"","items":[]},{"tabLabel":"","title":"","items":[]}]}]}
+    </script>
     <script src="shared.js"></script>
     <script>
       PopsShared.setupAutoReload({
@@ -37,7 +40,11 @@
         intervalMs: 4000,
         scrollKey: "scroll-index-card3",
         canReload: function () {
-          return localStorage.getItem("index-card3-auto-reload") !== "0" && !window.__popsIsListening;
+          if (localStorage.getItem("index-card3-auto-reload") !== "1") return false;
+          if (window.__popsIsListening) return false;
+          var el = document.activeElement;
+          if (el && el.contentEditable === "true") return false;
+          return true;
         }
       });
       (function () {
@@ -50,6 +57,7 @@
         const IMAGE_LIGHTBOX_KEY = "index-card3-image-lightbox";
         const CARD_EDITS_KEY = "index-card3-card-edits";
         const ACTIVE_EDIT_KEY = "index-card3-active-edit";
+        const CARD_ITEMS_KEY = "index-card3-card-items";
         const DATA_URL = "index.txt";
         const pageTitle = document.getElementById("pageTitle");
         const decksRoot = document.getElementById("decksRoot");
@@ -84,7 +92,10 @@
         let decksData;
         let decks;
 
-        /* Fallback when index.txt is missing or invalid. Half a Chair's Worth: index 0 = yellow (leftmost), 1 = red, 2 = green */
+        // __spatial_registry
+        var spatial_registry = {};
+
+        /* DEPRECATED: prefer deck-data-embed. Kept as last-resort fallback. */
         const defaultBarbershopCards = [
           {
             tabLabel: "Basic<br />Information",
@@ -174,10 +185,10 @@
               tabLabel: "Herodotus",
               title: "Herodotus",
               items: [
-                { text: "The Greek historian Herodotus believed that we are what we do, not what we say.", classes: ["level-2"] },
-                { text: "According to him, our worth does not rely upon our appearance or the wardrobe we carry.", classes: ["level-2"] },
-                { text: "Furthermore, our evaluation of moral behavior sometimes lies outside the scope of due diligence.", classes: ["level-2"] },
-                { text: "The inevitability of conflict was evident from the start.", classes: ["level-2"] },
+                { text: "The Greek historian Herodotus believed that we are what we do, not what we say." },
+                { text: "According to him, our worth does not rely upon our appearance or the wardrobe we carry." },
+                { text: "Furthermore, our evaluation of moral behavior sometimes lies outside the scope of due diligence." },
+                { text: "The inevitability of conflict was evident from the start." },
               ],
             };
           }
@@ -186,11 +197,11 @@
               tabLabel: "Example",
               title: "Example",
               items: [
-                { text: "A story comes to mind from my operations days at AT&T in which I ran into a clash of cultures that caused confusion daily.", classes: ["level-2"] },
-                { text: "For example, a driver was sent to our location in West Virginia in a super-long limousine, inappropriate in scruffy West Virginia.", classes: ["level-2"] },
-                { text: "I could not convince the driver that money was not the sole criteria for evaluation.", classes: ["level-2"] },
-                { text: "\"It's free. They give you the limo for free!\"", classes: ["level-2"] },
-                { text: "Again and again, she demonstrated that money was the only criteria she considered.", classes: ["level-2"] },
+                { text: "A story comes to mind from my operations days at AT&T in which I ran into a clash of cultures that caused confusion daily." },
+                { text: "For example, a driver was sent to our location in West Virginia in a super-long limousine, inappropriate in scruffy West Virginia." },
+                { text: "I could not convince the driver that money was not the sole criteria for evaluation." },
+                { text: "\"It's free. They give you the limo for free!\"" },
+                { text: "Again and again, she demonstrated that money was the only criteria she considered." },
               ],
             };
           }
@@ -199,11 +210,11 @@
               tabLabel: "Conflicts",
               title: "Conflicts",
               items: [
-                { text: "Conflicts are inevitable; we all have to navigate backgrounds and situations in the early part of our career.", classes: ["level-2"] },
-                { text: "There are differences in the meaning of words, phrases, and gestures.", classes: ["level-2"] },
-                { text: "It takes repetition to wipe out the past.", classes: ["level-2"] },
+                { text: "Conflicts are inevitable; we all have to navigate backgrounds and situations in the early part of our career." },
+                { text: "There are differences in the meaning of words, phrases, and gestures." },
+                { text: "It takes repetition to wipe out the past." },
                 { classes: ["line-break"] },
-                { text: "He had a way that permitted, etc.", classes: ["level-2"] },
+                { text: "He had a way that permitted, etc." },
               ],
             };
           }
@@ -216,7 +227,15 @@
           { id: "third", title: "Title", miniTitle: "Title", isActive: false, cards: comebacksCards },
         ];
 
-        function normalizeToDecksData(data) {
+        // __deck_data_embed_get
+        function deck_data_embed_get() {
+          var el = document.getElementById("deck-data-embed");
+          if (!el) return null;
+          try { return JSON.parse(el.textContent); } catch (e) { return null; }
+        }
+
+        // __deck_data_normalize
+        function deck_data_normalize(data) {
           if (data && Array.isArray(data.decks) && data.decks.length > 0) {
             return data.decks.map((d, i) => ({
               id: d.id != null ? d.id : "deck-" + i,
@@ -236,94 +255,106 @@
           return null;
         }
 
-        function loadDecksFromData(data, fromFile) {
-          // __ux_data_render
-          const list = normalizeToDecksData(data);
-          decksData = list != null ? list : defaultDecksData;
+        function deck_data_render(data, fromFile) {
+          // __deck_data_render
+          const list = deck_data_normalize(data);
+          var embedFallback = list == null ? deck_data_normalize(deck_data_embed_get()) : null;
+          decksData = list != null ? list : (embedFallback != null ? embedFallback : defaultDecksData);
+          item_store_apply(decksData);
+          /* Apply stored deck title edits */
+          decksData.forEach(function (d) {
+            var saved = deck_title_edit_get(d.id);
+            if (saved != null) { d.miniTitle = saved; d.title = saved; }
+          });
           /* Do not clear CARD_EDITS_KEY so title/tab and item edits persist across reloads */
           while (decksRoot.firstChild) {
             decksRoot.removeChild(decksRoot.firstChild);
           }
           decksData.forEach((deck, index) => {
-            decksRoot.appendChild(buildDeck(deck, index));
+            decksRoot.appendChild(deck_build(deck, index));
           });
           decks = Array.from(document.querySelectorAll(".deck"));
-          buildCardRectOverlay();
-          buildTitleOverlay();
-          runDeckInit();
+          card_rect_overlay_build();
+          title_rect_overlay_build();
+          deck_init_run();
         }
 
-        function setDeckDataSource(message) {
+        // __deck_source_set
+        function deck_source_set(message) {
           const el = document.getElementById("deckDataSource");
           if (el) el.textContent = message ? ` ${message}` : "";
         }
 
-        function loadDeckData() {
-          // __ux_data_load
+        function deck_data_load() {
+          // __deck_data_load
+          var embedded = deck_data_embed_get();
           if (location.protocol === "file:") {
-            loadDecksFromData(null, false);
-            setDeckDataSource("(file:// — click 📂 to load index.txt)");
+            deck_data_render(embedded, false);
+            deck_source_set(embedded ? "(embedded data)" : "(file:// — click 📂 to load index.txt)");
             return;
           }
           const url = new URL(DATA_URL + "?t=" + Date.now(), location.href).href;
           fetch(url, { cache: "no-store" })
             .then((r) => (r.ok ? r.json() : Promise.reject()))
             .then((data) => {
-              if (normalizeToDecksData(data) != null) {
-                loadDecksFromData(data, true);
-                setDeckDataSource("(loaded from index.txt)");
+              if (deck_data_normalize(data) != null) {
+                deck_data_render(data, true);
+                deck_source_set("(loaded from index.txt)");
               } else {
-                loadDecksFromData(null, false);
-                setDeckDataSource("(using built-in data; serve over HTTP or use Load from file)");
+                deck_data_render(embedded, false);
+                deck_source_set(embedded ? "(embedded data)" : "(using built-in data)");
               }
             })
             .catch(() => {
-              loadDecksFromData(null, false);
-              setDeckDataSource("(reload failed — click 📂 to load index.txt)");
+              deck_data_render(embedded, false);
+              deck_source_set(embedded ? "(embedded data)" : "(reload failed — click 📂 to load index.txt)");
             });
         }
 
-        function reloadDeckDataFromFile() {
-          // __reload_data_fetch
+        function deck_data_reload() {
+          // __deck_data_reload
+          var embedded = deck_data_embed_get();
           const url = new URL(DATA_URL + "?t=" + Date.now(), location.href).href;
           fetch(url, { cache: "no-store" })
             .then((r) => (r.ok ? r.json() : Promise.reject()))
             .then((data) => {
-              if (normalizeToDecksData(data) != null) {
-                loadDecksFromData(data, true);
-                setDeckDataSource("(loaded from index.txt)");
+              if (deck_data_normalize(data) != null) {
+                deck_data_render(data, true);
+                deck_source_set("(loaded from index.txt)");
               } else {
-                loadDecksFromData(null, false);
-                setDeckDataSource("(reload failed; using built-in data)");
+                deck_data_render(embedded, false);
+                deck_source_set(embedded ? "(embedded data)" : "(reload failed; using built-in data)");
               }
             })
             .catch(() => {
-              loadDecksFromData(null, false);
-              setDeckDataSource("(reload failed, e.g. file:// — use Load from file)");
+              deck_data_render(embedded, false);
+              deck_source_set(embedded ? "(embedded data)" : "(reload failed — use Load from file)");
             });
         }
 
-        function loadDeckDataFromFileInput(file) {
+        // __deck_data_file_load
+        function deck_data_file_load(file) {
           if (!file) return;
           const reader = new FileReader();
           reader.onload = () => {
             try {
               const data = JSON.parse(reader.result);
-              if (normalizeToDecksData(data) != null) {
-                loadDecksFromData(data, true);
-                setDeckDataSource("(loaded from file)");
+              if (deck_data_normalize(data) != null) {
+                deck_data_render(data, true);
+                deck_source_set("(loaded from file)");
               } else {
-                setDeckDataSource("(invalid format: need decks array or barbershopCards + awayWeGoCards)");
+                deck_source_set("(invalid format: need decks array or barbershopCards + awayWeGoCards)");
               }
             } catch (_) {
-              setDeckDataSource("(invalid JSON)");
+              deck_source_set("(invalid JSON)");
             }
           };
-          reader.onerror = () => setDeckDataSource("(could not read file)");
+          reader.onerror = () => deck_source_set("(could not read file)");
           reader.readAsText(file);
         }
 
-        function createEl(tag, className, text) {
+        // __el_create
+        function el_create(tag, className, text) {
           const el = document.createElement(tag);
           if (className) {
             el.className = className;
@@ -334,18 +365,52 @@
           return el;
         }
 
-        function buildLines(container) {
-          const red = createEl("span", "line red");
+        // __card_line_build
+        function card_line_build(container) {
+          const red = el_create("span", "line red");
           red.style.top = "var(--line-offset)";
           container.appendChild(red);
           for (let i = 1; i < LINES_TOTAL; i += 1) {
-            const line = createEl("span", "line blue");
+            const line = el_create("span", "line blue");
             line.style.top = `calc(var(--line-offset) + var(--line-gap) * ${i})`;
             container.appendChild(line);
           }
         }
 
-        function getCardEdits() {
+        // __item_store_get
+        function item_store_get() {
+          try {
+            const raw = localStorage.getItem(CARD_ITEMS_KEY);
+            return raw ? JSON.parse(raw) : {};
+          } catch (_) {
+            return {};
+          }
+        }
+        // __item_store_save
+        function item_store_save(deckId, cardIndex, items) {
+          const stored = item_store_get();
+          stored[deckId + "-" + cardIndex] = items.map(function (item) {
+            return { text: item.text || "", classes: item.classes || [] };
+          });
+          localStorage.setItem(CARD_ITEMS_KEY, JSON.stringify(stored));
+        }
+        // __item_store_apply
+        function item_store_apply(decksDataArr) {
+          var stored = item_store_get();
+          if (!stored || !Object.keys(stored).length) return;
+          decksDataArr.forEach(function (deck) {
+            if (!deck.cards) return;
+            deck.cards.forEach(function (card, ci) {
+              var key = deck.id + "-" + ci;
+              if (stored[key]) {
+                card.items = stored[key];
+              }
+            });
+          });
+        }
+
+        // __edit_store_get
+        function edit_store_get() {
           try {
             const raw = localStorage.getItem(CARD_EDITS_KEY);
             return raw ? JSON.parse(raw) : {};
@@ -353,29 +418,35 @@
             return {};
           }
         }
-        function getEditedText(deckId, cardIndex, itemIndex) {
+        // __item_text_get
+        function item_text_get(deckId, cardIndex, itemIndex) {
           const key = `${deckId}-${cardIndex}-${itemIndex}`;
-          return getCardEdits()[key];
+          return edit_store_get()[key];
         }
-        function saveEditedText(deckId, cardIndex, itemIndex, text) {
-          const edits = getCardEdits();
+        // __item_text_save
+        function item_text_save(deckId, cardIndex, itemIndex, text) {
+          const edits = edit_store_get();
           edits[`${deckId}-${cardIndex}-${itemIndex}`] = text;
           localStorage.setItem(CARD_EDITS_KEY, JSON.stringify(edits));
         }
-        function getEditedTabLabel(deckId, cardIndex) {
-          return getCardEdits()[`${deckId}-${cardIndex}-tabLabel`];
+        // __tab_text_get
+        function tab_text_get(deckId, cardIndex) {
+          return edit_store_get()[`${deckId}-${cardIndex}-tabLabel`];
         }
-        function saveEditedTabLabel(deckId, cardIndex, text) {
-          const edits = getCardEdits();
+        // __tab_text_save
+        function tab_text_save(deckId, cardIndex, text) {
+          const edits = edit_store_get();
           edits[`${deckId}-${cardIndex}-tabLabel`] = text;
           localStorage.setItem(CARD_EDITS_KEY, JSON.stringify(edits));
         }
-        function getEditedCardTitle(deckId, cardIndex) {
-          return getCardEdits()[`${deckId}-${cardIndex}-cardTitle`];
+        // __card_title_get
+        function card_title_get(deckId, cardIndex) {
+          return edit_store_get()[`${deckId}-${cardIndex}-cardTitle`];
         }
-        function saveEditedCardTitle(deckId, cardIndex, text) {
+        // __card_title_save
+        function card_title_save(deckId, cardIndex, text) {
           const key = `${deckId}-${cardIndex}-cardTitle`;
-          const edits = getCardEdits();
+          const edits = edit_store_get();
           edits[key] = text;
           try {
             localStorage.setItem(CARD_EDITS_KEY, JSON.stringify(edits));
@@ -383,16 +454,33 @@
             console.warn("Could not save card title to localStorage", e);
           }
         }
-        /** Single source of truth for card title (used for both title and tab). Same pattern as getEditedText: prefer stored value. */
-        function getDisplayTitle(deckId, cardIndex) {
-          const stored = getEditedCardTitle(deckId, cardIndex);
+        // __deck_title_edit_get __chat_150 __deck_title_edit
+        var DECK_TITLE_KEY = "pops-deck-titles";
+        function deck_title_edit_get(deckId) {
+          try {
+            var stored = JSON.parse(localStorage.getItem(DECK_TITLE_KEY)) || {};
+            return stored[deckId] != null ? stored[deckId] : null;
+          } catch (e) { return null; }
+        }
+        // __deck_title_edit_save __chat_150 __deck_title_edit
+        function deck_title_edit_save(deckId, text) {
+          var stored = {};
+          try { stored = JSON.parse(localStorage.getItem(DECK_TITLE_KEY)) || {}; } catch (e) {}
+          stored[deckId] = text;
+          try { localStorage.setItem(DECK_TITLE_KEY, JSON.stringify(stored)); } catch (e) {}
+        }
+        // __title_display_get
+        /** Single source of truth for card title (used for both title and tab). Same pattern as item_text_get: prefer stored value. */
+        function title_display_get(deckId, cardIndex) {
+          const stored = card_title_get(deckId, cardIndex);
           if (stored != null) return stored;
           const deckData = decksData && decksData.find((d) => d.id === deckId);
           const card = deckData && deckData.cards && deckData.cards[cardIndex];
           return (card && card.title) != null ? card.title : "";
         }
+        // __tab_label_shorten
         /** Shorten title for tab: first few words so tab doesn't overflow. */
-        function shortenForTab(fullTitle) {
+        function tab_label_shorten(fullTitle) {
           if (!fullTitle || typeof fullTitle !== "string") return "";
           const plain = fullTitle.replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim();
           const words = plain ? plain.split(" ") : [];
@@ -400,8 +488,17 @@
           if (words.length <= maxWords) return plain;
           return words.slice(0, maxWords).join(" ") + "…";
         }
+        // __tab_sync
+        /** Update all tab elements matching deckId/cardIndex with shortened title. */
+        function tab_sync(deckId, cardIndex, text) {
+          var short = tab_label_shorten(text) || text || "";
+          document.querySelectorAll('.tab-label[data-deck-id="' + deckId + '"][data-card-index="' + cardIndex + '"]').forEach(function (tab) {
+            tab.textContent = short;
+          });
+        }
+        // __edit_state_save
         /** Save active edit state for reload restore. opts: { type, deckId, cardIndex, selectionStart, selectionEnd, itemIndex? }. type: "item"|"tab"|"cardTitle"; itemIndex only for type "item". */
-        function saveActiveEditState(opts) {
+        function edit_state_save(opts) {
           const type = opts.type;
           const deckId = opts.deckId;
           const cardIndex = opts.cardIndex;
@@ -414,15 +511,266 @@
             localStorage.setItem(ACTIVE_EDIT_KEY, JSON.stringify(payload));
           } catch (_) {}
         }
-        function clearActiveEditState() {
+        // __edit_state_clear
+        function edit_state_clear() {
           localStorage.removeItem(ACTIVE_EDIT_KEY);
         }
 
+        // __item_storage_shift
+        function item_storage_shift(deckId, cardIndex, fromIndex) {
+          const edits = edit_store_get();
+          const prefix = deckId + "-" + cardIndex + "-";
+          /* Collect numeric item keys that need shifting */
+          const toShift = [];
+          Object.keys(edits).forEach(function (k) {
+            if (!k.startsWith(prefix)) return;
+            var suffix = k.slice(prefix.length);
+            var n = parseInt(suffix, 10);
+            if (String(n) === suffix && n >= fromIndex) toShift.push(n);
+          });
+          /* Sort descending so highest index moves first (avoids overwrites) */
+          toShift.sort(function (a, b) { return b - a; });
+          toShift.forEach(function (n) {
+            var oldKey = prefix + n;
+            var newKey = prefix + (n + 1);
+            edits[newKey] = edits[oldKey];
+            delete edits[oldKey];
+          });
+          localStorage.setItem(CARD_EDITS_KEY, JSON.stringify(edits));
+        }
+
+        // __item_storage_shift_down
+        function item_storage_shift_down(deckId, cardIndex, fromIndex) {
+          const edits = edit_store_get();
+          const prefix = deckId + "-" + cardIndex + "-";
+          const toShift = [];
+          Object.keys(edits).forEach(function (k) {
+            if (!k.startsWith(prefix)) return;
+            var suffix = k.slice(prefix.length);
+            var n = parseInt(suffix, 10);
+            if (String(n) === suffix && n > fromIndex) toShift.push(n);
+          });
+          toShift.sort(function (a, b) { return a - b; });
+          toShift.forEach(function (n) {
+            var oldKey = prefix + n;
+            var newKey = prefix + (n - 1);
+            edits[newKey] = edits[oldKey];
+            delete edits[oldKey];
+          });
+          delete edits[prefix + fromIndex];
+          try { localStorage.setItem(CARD_EDITS_KEY, JSON.stringify(edits)); } catch (_) {}
+        }
+
+        // __item_insert
+        function item_insert(deckId, cardIndex, insertAtItemIndex) {
+          var deckData = decksData.find(function (d) { return d.id === deckId; });
+          if (!deckData || !deckData.cards || !deckData.cards[cardIndex]) return;
+          var items = deckData.cards[cardIndex].items;
+          if (!items) {
+            items = [];
+            deckData.cards[cardIndex].items = items;
+          }
+          /* Clamp insert index */
+          var idx = Math.max(0, Math.min(insertAtItemIndex, items.length));
+          /* Shift storage keys before modifying the array */
+          item_storage_shift(deckId, cardIndex, idx);
+          /* Insert empty item into data model */
+          items.splice(idx, 0, { text: "" });
+          /* Persist structural change + new empty item */
+          item_store_save(deckId, cardIndex, items);
+          /* Rebuild DOM */
+          item_text_rebuild(deckId, cardIndex);
+          return idx;
+        }
+
+        // __item_delete
+        function item_delete(deckId, cardIndex, itemIndex) {
+          var deckData = decksData.find(function (d) { return d.id === deckId; });
+          if (!deckData || !deckData.cards || !deckData.cards[cardIndex]) return null;
+          var items = deckData.cards[cardIndex].items;
+          if (!items || itemIndex < 0 || itemIndex >= items.length) return null;
+          item_storage_shift_down(deckId, cardIndex, itemIndex);
+          items.splice(itemIndex, 1);
+          item_store_save(deckId, cardIndex, items);
+          item_text_rebuild(deckId, cardIndex);
+          var focusIdx = itemIndex < items.length ? itemIndex : Math.max(0, items.length - 1);
+          return focusIdx;
+        }
+
+        // __item_level_get
+        function item_level_get(item) {
+          if (!item) return 0;
+          var cls = item.classes || [];
+          if (cls.indexOf("level-4") >= 0) return 3;
+          if (cls.indexOf("level-3") >= 0) return 2;
+          if (cls.indexOf("level-2") >= 0) return 1;
+          return 0;
+        }
+
+        // __item_level_set
+        function item_level_set(item, level) {
+          if (!item.classes) item.classes = [];
+          item.classes = item.classes.filter(function (c) {
+            return c !== "level-2" && c !== "level-3" && c !== "level-4";
+          });
+          if (level === 1) item.classes.push("level-2");
+          else if (level === 2) item.classes.push("level-3");
+          else if (level === 3) item.classes.push("level-4");
+        }
+
+        // __item_indent
+        function item_indent(deckId, cardIndex, itemIndex, direction) {
+          var deckData = decksData.find(function (d) { return d.id === deckId; });
+          if (!deckData || !deckData.cards || !deckData.cards[cardIndex]) return false;
+          var items = deckData.cards[cardIndex].items;
+          if (!items || !items[itemIndex]) return false;
+          var currentLevel = item_level_get(items[itemIndex]);
+          var newLevel = currentLevel + direction;
+          if (newLevel < 0 || newLevel > 3) return false;
+          /* Collect children: items below at deeper level */
+          var children = [];
+          for (var i = itemIndex + 1; i < items.length; i++) {
+            var cls = items[i].classes || [];
+            if (cls.indexOf("line-break") >= 0) continue;
+            var childLevel = item_level_get(items[i]);
+            if (childLevel > currentLevel) {
+              children.push(i);
+            } else {
+              break;
+            }
+          }
+          /* Apply level change */
+          item_level_set(items[itemIndex], newLevel);
+          children.forEach(function (ci) {
+            var childLevel = item_level_get(items[ci]);
+            var newChildLevel = childLevel + direction;
+            if (newChildLevel >= 0 && newChildLevel <= 3) {
+              item_level_set(items[ci], newChildLevel);
+            }
+          });
+          /* Persist and rebuild */
+          item_store_save(deckId, cardIndex, items);
+          item_text_rebuild(deckId, cardIndex);
+          return true;
+        }
+
+        // __item_move
+        function item_move(deckId, cardIndex, itemIndex, direction) {
+          return item_move_swap(deckId, cardIndex, itemIndex, direction);
+        }
+        function item_move_left(deckId, cardIndex, itemIndex) {
+          return item_move_swap(deckId, cardIndex, itemIndex, -1);
+        }
+        function item_move_right(deckId, cardIndex, itemIndex) {
+          return item_move_swap(deckId, cardIndex, itemIndex, 1);
+        }
+        function item_move_up(deckId, cardIndex, itemIndex) {
+          return item_move_left(deckId, cardIndex, itemIndex);
+        }
+        function item_move_down(deckId, cardIndex, itemIndex) {
+          return item_move_right(deckId, cardIndex, itemIndex);
+        }
+        function item_move_swap(deckId, cardIndex, itemIndex, direction) {
+          var deckData = decksData.find(function (d) { return d.id === deckId; });
+          if (!deckData || !deckData.cards || !deckData.cards[cardIndex]) return null;
+          var items = deckData.cards[cardIndex].items;
+          if (!items || !items[itemIndex]) return null;
+          var currentLevel = item_level_get(items[itemIndex]);
+          var childCount = 0;
+          for (var i = itemIndex + 1; i < items.length; i++) {
+            var cls = items[i].classes || [];
+            if (cls.indexOf("line-break") >= 0) continue;
+            if (item_level_get(items[i]) > currentLevel) childCount++; else break;
+          }
+          var ourStart = itemIndex;
+          var ourEnd = itemIndex + childCount;
+          var ourLen = childCount + 1;
+          var otherIdx = direction < 0 ? itemIndex - 1 : ourEnd + 1;
+          if (otherIdx < 0 || otherIdx >= items.length) return null;
+          var otherLevel = item_level_get(items[otherIdx]);
+          var otherStart = otherIdx;
+          var otherEnd = otherIdx;
+          if (direction < 0) {
+            /* Moving up: swap past the single item above.
+               No upward scan — children live below their parent,
+               not above, so otherStart = otherEnd = otherIdx. */
+          } else {
+            for (var k = otherIdx + 1; k < items.length; k++) {
+              var c2 = items[k].classes || [];
+              if (c2.indexOf("line-break") >= 0) continue;
+              if (item_level_get(items[k]) <= otherLevel) break;
+              otherEnd = k;
+            }
+          }
+          var otherLen = otherEnd - otherStart + 1;
+          var ourBlock = items.slice(ourStart, ourEnd + 1);
+          var otherBlock = items.slice(otherStart, otherEnd + 1);
+          var before = items.slice(0, Math.min(ourStart, otherStart));
+          var after = items.slice(Math.max(ourEnd, otherEnd) + 1);
+          var newItems;
+          if (direction < 0) {
+            newItems = before.concat(ourBlock).concat(otherBlock).concat(after);
+          } else {
+            newItems = before.concat(otherBlock).concat(ourBlock).concat(after);
+          }
+          deckData.cards[cardIndex].items = newItems;
+          var edits = edit_store_get();
+          var prefix = deckId + "-" + cardIndex + "-";
+          var oldToNew = {};
+          var i, o;
+          for (i = 0; i < before.length; i++) oldToNew[i] = i;
+          if (direction < 0) {
+            for (o = ourStart; o <= ourEnd; o++) oldToNew[o] = otherStart + (o - ourStart);
+            for (o = otherStart; o <= otherEnd; o++) oldToNew[o] = otherStart + ourLen + (o - otherStart);
+          } else {
+            for (o = otherStart; o <= otherEnd; o++) oldToNew[o] = ourStart + (o - otherStart);
+            for (o = ourStart; o <= ourEnd; o++) oldToNew[o] = ourStart + otherLen + (o - ourStart);
+          }
+          for (i = Math.max(ourEnd, otherEnd) + 1; i < items.length; i++) oldToNew[i] = i;
+          var newEdits = {};
+          Object.keys(edits).forEach(function (k) {
+            if (!k.startsWith(prefix)) { newEdits[k] = edits[k]; return; }
+            var suffix = k.slice(prefix.length);
+            var n = parseInt(suffix, 10);
+            if (String(n) !== suffix) { newEdits[k] = edits[k]; return; }
+            if (oldToNew[n] != null) {
+              newEdits[prefix + oldToNew[n]] = edits[k];
+            }
+          });
+          try { localStorage.setItem(CARD_EDITS_KEY, JSON.stringify(newEdits)); } catch (_) {}
+          item_store_save(deckId, cardIndex, newItems);
+          item_text_rebuild(deckId, cardIndex);
+          var newIdx = direction < 0 ? otherStart : ourStart + otherLen;
+          return newIdx;
+        }
+
+        // __item_text_rebuild
+        function item_text_rebuild(deckId, cardIndex) {
+          var title = document.querySelector(
+            '.card-text-title[data-deck-id="' + deckId + '"][data-card-index="' + cardIndex + '"]'
+          );
+          if (!title) return;
+          var cardText = title.closest(".card-text");
+          if (!cardText) return;
+          var oldList = cardText.querySelector(".card-text-list");
+          if (!oldList) return;
+          var deckData = decksData.find(function (d) { return d.id === deckId; });
+          if (!deckData || !deckData.cards || !deckData.cards[cardIndex]) return;
+          var newList = item_list_build(deckData.cards[cardIndex].items || [], deckId, cardIndex);
+          cardText.replaceChild(newList, oldList);
+          /* Re-apply line numbers on the card layer host */
+          var host = cardText.closest(".card-layer") || cardText.closest(".card-rect");
+          if (host) card_outline_apply(host);
+          item_edit_setup();
+          item_insert_setup();
+        }
+
+        // __edit_state_save_current
         /** Save current selection/cursor when still editing (e.g. before reload without blur). */
-        function saveCurrentEditStateIfActive() {
+        function edit_state_save_current() {
           const el = document.activeElement;
           if (!el || el.contentEditable !== "true") return;
-          const { start, end } = getSelectionOffsets(el);
+          const { start, end } = edit_selection_get(el);
 
           if (el.classList && el.classList.contains("card-text-item-text")) {
             const item = el.closest(".card-text-item");
@@ -430,29 +778,26 @@
             const deckId = item.dataset.deckId;
             const cardIndex = parseInt(item.dataset.cardIndex, 10);
             const itemIndex = parseInt(item.dataset.itemIndex, 10);
-            saveActiveEditState({ type: "item", deckId, cardIndex, selectionStart: start, selectionEnd: end, itemIndex });
-            return;
-          }
-          if (el.classList && el.classList.contains("card-tab-editable") && el.dataset.deckId) {
-            saveActiveEditState({ type: "tab", deckId: el.dataset.deckId, cardIndex: parseInt(el.dataset.cardIndex, 10), selectionStart: start, selectionEnd: end });
+            edit_state_save({ type: "item", deckId, cardIndex, selectionStart: start, selectionEnd: end, itemIndex });
             return;
           }
           if (el.classList && el.classList.contains("card-title-editable") && el.dataset.deckId) {
-            saveActiveEditState({ type: "cardTitle", deckId: el.dataset.deckId, cardIndex: parseInt(el.dataset.cardIndex, 10), selectionStart: start, selectionEnd: end });
+            edit_state_save({ type: "cardTitle", deckId: el.dataset.deckId, cardIndex: parseInt(el.dataset.cardIndex, 10), selectionStart: start, selectionEnd: end });
             return;
           }
         }
 
+        // __export_data_get
         /** Build deck data with all localStorage edits applied, for export as index.txt. */
-        function getExportDeckData() {
+        function export_data_get() {
           if (!decksData || decksData.length < 1) return null;
-          const edits = getCardEdits();
-          function applyEditsToCards(deckId, cards) {
+          const edits = edit_store_get();
+          function card_edit_apply(deckId, cards) {
             const out = JSON.parse(JSON.stringify(cards));
             out.forEach((card, cardIndex) => {
               const titleKey = `${deckId}-${cardIndex}-cardTitle`;
               if (edits[titleKey] != null) card.title = edits[titleKey];
-              card.tabLabel = shortenForTab(card.title) || card.title || "";
+              card.tabLabel = tab_label_shorten(card.title) || card.title || "";
               (card.items || []).forEach((item, itemIndex) => {
                 const key = `${deckId}-${cardIndex}-${itemIndex}`;
                 if (edits[key] != null) {
@@ -467,13 +812,14 @@
               id: d.id,
               title: d.title,
               miniTitle: d.miniTitle,
-              cards: applyEditsToCards(d.id, d.cards),
+              cards: card_edit_apply(d.id, d.cards),
             })),
           };
         }
 
-        function exportDeckDataToFile() {
-          const data = getExportDeckData();
+        // __export_file_save
+        function export_file_save() {
+          const data = export_data_get();
           if (!data) return;
           const json = JSON.stringify(data, null, 2);
           const blob = new Blob([json], { type: "application/json" });
@@ -484,9 +830,49 @@
           URL.revokeObjectURL(a.href);
         }
 
-        function buildTextList(items, deckId, cardIndex) {
-          // __ux_card_items_build
-          const list = createEl("div", "card-text-list");
+        // __export_text_save __chat_168 __deck_text_download
+        function export_text_save() {
+          var data = export_data_get();
+          if (!data || !data.decks) return;
+          var lines = [];
+          data.decks.forEach(function (deck) {
+            lines.push(deck.title || deck.id);
+            lines.push("");
+            (deck.cards || []).forEach(function (card) {
+              lines.push("    " + (card.title || "Untitled"));
+              lines.push("");
+              (card.items || []).forEach(function (item) {
+                var cls = item.classes || [];
+                if (cls.indexOf("line-break") >= 0) {
+                  lines.push("");
+                  return;
+                }
+                var level = 0;
+                if (cls.indexOf("level-4") >= 0) level = 3;
+                else if (cls.indexOf("level-3") >= 0) level = 2;
+                else if (cls.indexOf("level-2") >= 0) level = 1;
+                var indent = "        ";
+                for (var i = 0; i < level; i++) indent += "    ";
+                var text = item.text || "";
+                if (cls.indexOf("section") >= 0) text = "[" + text + "]";
+                lines.push(indent + text);
+              });
+              lines.push("");
+            });
+            lines.push("");
+          });
+          var txt = lines.join("\n").replace(/\n{3,}/g, "\n\n").trim() + "\n";
+          var blob = new Blob([txt], { type: "text/plain" });
+          var a = document.createElement("a");
+          a.href = URL.createObjectURL(blob);
+          a.download = "decks.txt";
+          a.click();
+          URL.revokeObjectURL(a.href);
+        }
+
+        function item_list_build(items, deckId, cardIndex) {
+          // __item_list_build
+          const list = el_create("div", "card-text-list");
           items.forEach((item, itemIndex) => {
             const entry = document.createElement("div");
             entry.className = "card-text-item";
@@ -498,7 +884,7 @@
             entry.dataset.itemIndex = String(itemIndex);
             const textSpan = document.createElement("span");
             textSpan.className = "card-text-item-text";
-            const savedText = getEditedText(deckId, cardIndex, itemIndex);
+            const savedText = item_text_get(deckId, cardIndex, itemIndex);
             textSpan.textContent = savedText != null ? savedText : (item.text != null ? item.text : item.html != null ? item.html : "");
             entry.appendChild(textSpan);
             list.appendChild(entry);
@@ -506,34 +892,34 @@
           return list;
         }
 
-        function buildCardLayer(layerConfig, cardData, deckId, cardIndex) {
-          // __ux_card_layer_build
-          const layer = createEl("div", "card-layer");
+        function card_layer_build(layerConfig, cardData, deckId, cardIndex) {
+          // __card_layer_build
+          const layer = el_create("div", "card-layer");
           layer.dataset.color = layerConfig.color;
           layer.setAttribute("style", layerConfig.style);
 
-          const tab = createEl("div", `tab card-${layerConfig.color}-tab tab-label card-tab-editable`);
+          const tab = el_create("div", `tab card-${layerConfig.color}-tab tab-label`);
           tab.dataset.deckId = deckId;
           tab.dataset.cardIndex = String(cardIndex);
-          const titleContent = getDisplayTitle(deckId, cardIndex);
-          const tabContent = shortenForTab(titleContent) || titleContent || "";
+          const titleContent = title_display_get(deckId, cardIndex);
+          const tabContent = tab_label_shorten(titleContent) || titleContent || "";
           tab.textContent = tabContent;
 
-          const card = createEl("div", `card card-${layerConfig.color}-primary`);
+          const card = el_create("div", `card card-${layerConfig.color}-primary`);
           if (titleContent) card.dataset.cardTitle = titleContent;
-          const lines = createEl("div", "card-lines");
+          const lines = el_create("div", "card-lines");
           lines.setAttribute("aria-hidden", "true");
-          buildLines(lines);
+          card_line_build(lines);
 
-          const text = createEl("div", "card-text");
-          const title = createEl("div", "card-text-title card-title-editable", titleContent);
+          const text = el_create("div", "card-text");
+          const title = el_create("div", "card-text-title card-title-editable", titleContent);
           title.dataset.deckId = deckId;
           title.dataset.cardIndex = String(cardIndex);
-          const list = buildTextList(cardData.items || [], deckId, cardIndex);
+          const list = item_list_build(cardData.items || [], deckId, cardIndex);
 
           text.appendChild(title);
           if (cardData.image) {
-            const img = createEl("img", "card-text-image");
+            const img = el_create("img", "card-text-image");
             img.src = cardData.image;
             img.alt = cardData.imageAlt || "";
             if (cardData.imageClass) {
@@ -555,8 +941,8 @@
           return layer;
         }
 
-        function openImageLightbox(src, alt) {
-          // __ux_lightbox_open
+        function lightbox_open(src, alt) {
+          // __lightbox_open
           if (!imageLightbox || !imageLightboxImg) return;
           imageLightboxImg.src = src;
           imageLightboxImg.alt = alt || "";
@@ -565,8 +951,8 @@
           localStorage.setItem(IMAGE_LIGHTBOX_KEY, JSON.stringify({ open: true, src, alt: alt || "" }));
         }
 
-        function closeImageLightbox() {
-          // __ux_lightbox_close
+        function lightbox_close() {
+          // __lightbox_close
           if (!imageLightbox || !imageLightboxImg) return;
           imageLightbox.classList.remove("open");
           imageLightbox.setAttribute("aria-hidden", "true");
@@ -575,9 +961,9 @@
           localStorage.setItem(IMAGE_LIGHTBOX_KEY, JSON.stringify({ open: false }));
         }
 
-        function buildDeck(deckData, index) {
+        function deck_build(deckData, index) {
           // __deck_build
-          const deck = createEl("div", "deck");
+          const deck = el_create("div", "deck");
           if (deckData.isActive) {
             deck.classList.add("is-active");
           }
@@ -585,15 +971,15 @@
           deck.dataset.title = deckData.title || deckData.miniTitle || String(index + 1);
 
           const titleText = `${index + 1})${deckData.miniTitle ? " " + deckData.miniTitle : ""}`;
-          const title = createEl("div", "deck-title", titleText);
+          const title = el_create("div", "deck-title", titleText);
           title.setAttribute("aria-hidden", "true");
 
-          const viewport = createEl("div", "deck-viewport");
-          const scaleWrap = createEl("div", "deck-scale");
-          const stackWrap = createEl("div", "deck-stack-wrap");
-          const section = createEl("section", "card-scene");
+          const viewport = el_create("div", "deck-viewport");
+          const scaleWrap = el_create("div", "deck-scale");
+          const stackWrap = el_create("div", "deck-stack-wrap");
+          const section = el_create("section", "card-scene");
           section.setAttribute("aria-label", `${deckData.title} deck`);
-          const stack = createEl("div", "card-stack");
+          const stack = el_create("div", "card-stack");
           /* Cards live only in the overlay; stack kept empty for viewport dimensions */
 
           section.appendChild(stack);
@@ -605,16 +991,19 @@
           return deck;
         }
 
-        function getActiveDeck() {
+        // __deck_active_get
+        function deck_active_get() {
           return decks.find((deck) => deck.classList.contains("is-active")) || decks[0];
         }
 
-        function getDeckTitleText(deck) {
+        // __deck_title_text_get
+        function deck_title_text_get(deck) {
           const el = deck && deck.querySelector(".deck-title");
           return el ? el.textContent : (deck ? deck.dataset.title : "");
         }
 
-        function selectionKeyFor(deckName) {
+        // __deck_selection_key_get
+        function deck_selection_key_get(deckName) {
           return `${SELECT_KEY}-${deckName}`;
         }
 
@@ -628,7 +1017,8 @@
         const stackTopsByPosition = ["0px", "-8px", "-24px"];
         const tabOffsetY = -53;
 
-        function buildLayerMap(deck) {
+        // __deck_layer_map_build
+        function deck_layer_map_build(deck) {
           const layerMap = {};
           const overlay = document.getElementById("cardRectOverlay");
           if (!overlay) return layerMap;
@@ -643,14 +1033,15 @@
           return layerMap;
         }
 
-        function applyLayer(layer, slot) {
+        // __card_layer_apply
+        function card_layer_apply(layer, slot) {
           if (!layer) return;
           layer.style.setProperty("--card-top", slot.cardTop);
           layer.style.setProperty("--layer-z", slot.layerZ);
           /* Do not set --card-left here: leftmost (yellow) must always stay at 0px */
         }
 
-        function updateTabOffsets(layerMap, deck) {
+        function deck_tab_offset_update(layerMap, deck) {
           // __deck_tab_offset_update
           /* Card layers live in overlay; use design width 1200 (CARD_RECT_WIDTH) */
           const cardWidth = 1200;
@@ -671,22 +1062,23 @@
           });
         }
 
-        function updateAllTabOffsets() {
+        // __deck_tab_offset_update_all
+        function deck_tab_offset_update_all() {
           decks.forEach((deck) => {
-            updateTabOffsets(buildLayerMap(deck), deck);
+            deck_tab_offset_update(deck_layer_map_build(deck), deck);
           });
         }
 
-        function setOrder(order, deck) {
+        function deck_order_set(order, deck) {
           // __deck_order_set
-          const layerMap = buildLayerMap(deck);
+          const layerMap = deck_layer_map_build(deck);
           const layerZByPosition = [90, 70, 50];
           order.forEach((color, pos) => {
             const layer = layerMap[color];
             if (!layer) return;
             const cardTop = stackTopsByPosition[pos] || slots.front.cardTop;
             const slot = { cardTop: cardTop, layerZ: layerZByPosition[pos] };
-            applyLayer(layer, slot);
+            card_layer_apply(layer, slot);
           });
           Object.values(layerMap).forEach((layer) => layer.classList.remove("is-front"));
           if (layerMap[order[0]]) {
@@ -701,7 +1093,7 @@
             const minTop = Math.min(...tops);
             cardStack.style.setProperty("--stack-top-offset", `${-minTop}px`);
           }
-          updateTabOffsets(layerMap, deck);
+          deck_tab_offset_update(layerMap, deck);
         }
 
         const toRoman = (n) => {
@@ -717,7 +1109,8 @@
           return s;
         };
 
-        function applyLineNumbersInRoot(root) {
+        // __card_outline_apply
+        function card_outline_apply(root) {
           const maxLines = 12;
           if (!root) return;
           root.querySelectorAll(".card-text-list").forEach((list) => {
@@ -725,58 +1118,39 @@
             const cardTitle = (card && (card.dataset.cardTitle || card.querySelector(".card-text-title")?.textContent || "") || "").trim().toLowerCase();
             const isBasicInfo = cardTitle === "basic information" || (cardTitle && cardTitle.startsWith("basic info"));
 
-            const sectionItems = Array.from(list.querySelectorAll(".card-text-item.section"));
-            if (!isBasicInfo) {
-              sectionItems.forEach((section) => {
-                const prev = section.previousElementSibling;
-                if (!prev || !prev.classList.contains("line-break")) {
-                  const breakItem = document.createElement("div");
-                  breakItem.className = "card-text-item line-break";
-                  list.insertBefore(breakItem, section);
-                }
-              });
-            }
-
-            if (!isBasicInfo) {
-              list.querySelectorAll(".card-text-item.level-2").forEach((item) => {
-                const next = item.nextElementSibling;
-                if (next && next.classList.contains("level-2")) {
-                  const blank = document.createElement("div");
-                  blank.className = "card-text-item line-break";
-                  item.parentNode.insertBefore(blank, next);
-                }
-              });
-            }
+            /* Remove any existing line-break elements */
+            list.querySelectorAll(".card-text-item.line-break").forEach((lb) => lb.remove());
 
             const items = Array.from(list.querySelectorAll(".card-text-item"));
-            /* Alpha-outline numbering: top level uppercase A/B/C, second level lowercase a/b/c, third level Roman i/ii/iii */
-            const alphaOutlineCards = ["basic information", "basic info", "basic info.", "main characters", "setting & story", "herodotus"];
-            const useAlphaOutline = alphaOutlineCards.includes(cardTitle) || (cardTitle && cardTitle.startsWith("basic info"));
+            /* Outline markers: L1 A) B) C), L2 1) 2) 3), L3 a) b) c), L4 1) 2) 3) */
             let topNum = 0;
             let level2Num = 0;
             let level3Num = 0;
+            let level4Num = 0;
             items.forEach((item) => {
               item.querySelectorAll(".alpha-marker").forEach((node) => node.remove());
               item.querySelectorAll(".bullet-marker").forEach((node) => node.remove());
               if (!item.classList.contains("line-break")) {
                 let label;
-                if (item.classList.contains("level-3")) {
+                if (item.classList.contains("level-4")) {
+                  level4Num += 1;
+                  label = level4Num + ")";
+                } else if (item.classList.contains("level-3")) {
                   level3Num += 1;
-                  label = toRoman(level3Num) + ")";
+                  level4Num = 0;
+                  label = String.fromCharCode(96 + level3Num) + ")";
                 } else if (item.classList.contains("level-2")) {
                   level2Num += 1;
                   level3Num = 0;
-                  label = useAlphaOutline
-                    ? String.fromCharCode(96 + level2Num) + ")"
-                    : String.fromCharCode(64 + level2Num) + ")";
+                  level4Num = 0;
+                  label = level2Num + ")";
                 } else {
                   /* Top level: section headers or items with no level class */
                   topNum += 1;
                   level2Num = 0;
                   level3Num = 0;
-                  label = useAlphaOutline
-                    ? String.fromCharCode(64 + topNum) + ")"
-                    : `${topNum})`;
+                  level4Num = 0;
+                  label = String.fromCharCode(64 + topNum) + ")";
                 }
                 const bullet = document.createElement("span");
                 bullet.className = "bullet-marker";
@@ -821,14 +1195,35 @@
           });
         }
 
-        function applyLineNumbers() {
+        // __card_outline_apply_all
+        function card_outline_apply_all() {
           document.querySelectorAll(".deck").forEach((deck) => {
-            applyLineNumbersInRoot(deck);
+            card_outline_apply(deck);
           });
         }
 
-        function setupCardTextEditing() {
-          // __ux_edit_item_setup
+        function item_edit_setup() {
+          // __item_edit_setup
+          /* dblclick on item (e.g. bullet A)/B) area) when text span is empty/collapsed */
+          document.querySelectorAll(".card-text-item:not(.line-break)").forEach((item) => {
+            if (item._itemDblBound) return;
+            item._itemDblBound = true;
+            item.addEventListener("mousedown", (e) => {
+              if (document.body.classList.contains("project-view")) return;
+              if (e.target.closest(".card-text-item-text")) return;
+              var textSpan = item.querySelector(".card-text-item-text");
+              if (!textSpan) return;
+              var deckId = item.dataset.deckId;
+              var cardIndex = parseInt(item.dataset.cardIndex, 10);
+              var itemIndex = parseInt(item.dataset.itemIndex, 10);
+              e.stopPropagation();
+              e.preventDefault();
+              textSpan.contentEditable = "true";
+              item.classList.add("is-editing");
+              textSpan.focus();
+              edit_state_save({ type: "item", deckId: deckId, cardIndex: cardIndex, selectionStart: 0, selectionEnd: 0, itemIndex: itemIndex });
+            });
+          });
           document.querySelectorAll(".card-text-item:not(.line-break) .card-text-item-text").forEach((textSpan) => {
             if (textSpan._editBound) return;
             textSpan._editBound = true;
@@ -837,32 +1232,22 @@
             const cardIndex = parseInt(item.dataset.cardIndex, 10);
             const itemIndex = parseInt(item.dataset.itemIndex, 10);
 
-            textSpan.addEventListener("dblclick", (e) => {
+            textSpan.addEventListener("mousedown", (e) => {
               if (document.body.classList.contains("project-view")) return;
               e.stopPropagation();
-              e.preventDefault();
               textSpan.contentEditable = "true";
               if (item) item.classList.add("is-editing");
-              textSpan.focus();
-              const x = e.clientX;
-              const y = e.clientY;
-              if (document.caretRangeFromPoint) {
-                const range = document.caretRangeFromPoint(x, y);
-                if (range) {
-                  const sel = window.getSelection();
-                  sel.removeAllRanges();
-                  sel.addRange(range);
-                }
-              }
-              saveActiveEditState({ type: "item", deckId, cardIndex, selectionStart: textSpan.textContent.length, selectionEnd: textSpan.textContent.length, itemIndex });
+              /* Let the browser handle caret placement and
+                 drag-to-select natively — no preventDefault,
+                 no manual caretRangeFromPoint needed. */
             });
 
-            function commitToDeckAndStorage(deckId, cardIndex, itemIndex, text) {
+            function item_edit_commit(deckId, cardIndex, itemIndex, text) {
               const deckData = decksData.find((d) => d.id === deckId);
               if (deckData && deckData.cards && deckData.cards[cardIndex] && deckData.cards[cardIndex].items && deckData.cards[cardIndex].items[itemIndex]) {
                 deckData.cards[cardIndex].items[itemIndex].text = text;
               }
-              saveEditedText(deckId, cardIndex, itemIndex, text);
+              item_text_save(deckId, cardIndex, itemIndex, text);
             }
 
             textSpan.addEventListener("blur", () => {
@@ -879,18 +1264,18 @@
                   const end = range.endContainer === textSpan || range.endContainer.parentNode === textSpan
                     ? range.endOffset
                     : len;
-                  saveActiveEditState({ type: "item", deckId, cardIndex, selectionStart: Math.min(start, len), selectionEnd: Math.min(end, len), itemIndex });
+                  edit_state_save({ type: "item", deckId, cardIndex, selectionStart: Math.min(start, len), selectionEnd: Math.min(end, len), itemIndex });
                 } catch (_) {}
               } else {
                 /* No selection in this span; save cursor at end so we can still restore this line */
                 const len = textSpan.textContent.length;
-                saveActiveEditState({ type: "item", deckId, cardIndex, selectionStart: len, selectionEnd: len, itemIndex });
+                edit_state_save({ type: "item", deckId, cardIndex, selectionStart: len, selectionEnd: len, itemIndex });
               }
               textSpan.contentEditable = "false";
               if (item) item.classList.remove("is-editing");
               const newText = textSpan.textContent.replace(/\s+$/g, "").replace(/^\s+/, "");
               textSpan.textContent = newText;
-              commitToDeckAndStorage(deckId, cardIndex, itemIndex, newText);
+              item_edit_commit(deckId, cardIndex, itemIndex, newText);
             });
 
             textSpan.addEventListener("keydown", (e) => {
@@ -899,12 +1284,231 @@
                 e.preventDefault();
                 textSpan.blur();
               }
+              if (e.key === "Enter" && !e.shiftKey) {
+                e.preventDefault();
+                var curText = textSpan.textContent;
+                item_edit_commit(deckId, cardIndex, itemIndex, curText);
+                var deckData = decksData.find(function (d) { return d.id === deckId; });
+                var curLevel = 0;
+                if (deckData && deckData.cards && deckData.cards[cardIndex] && deckData.cards[cardIndex].items) {
+                  curLevel = item_level_get(deckData.cards[cardIndex].items[itemIndex]);
+                }
+                var newIdx = item_insert(deckId, cardIndex, itemIndex + 1);
+                if (newIdx != null && deckData && deckData.cards[cardIndex] && deckData.cards[cardIndex].items[newIdx]) {
+                  item_level_set(deckData.cards[cardIndex].items[newIdx], curLevel);
+                  item_store_save(deckId, cardIndex, deckData.cards[cardIndex].items);
+                  item_text_rebuild(deckId, cardIndex);
+                }
+                var newItem = document.querySelector(
+                  '.card-text-item[data-deck-id="' + deckId + '"][data-card-index="' + cardIndex + '"][data-item-index="' + newIdx + '"]'
+                );
+                if (newItem) {
+                  var newSpan = newItem.querySelector(".card-text-item-text");
+                  if (newSpan) {
+                    newSpan.contentEditable = "true";
+                    newItem.classList.add("is-editing");
+                    newSpan.focus();
+                    edit_state_save({ type: "item", deckId: deckId, cardIndex: cardIndex, selectionStart: 0, selectionEnd: 0, itemIndex: newIdx });
+                  }
+                }
+                return;
+              }
+              if ((e.key === "Backspace" || e.key === "Delete") && !textSpan.textContent.trim()) {
+                e.preventDefault();
+                var focusIdx = item_delete(deckId, cardIndex, itemIndex);
+                if (focusIdx != null) {
+                  var newItem = document.querySelector(
+                    '.card-text-item[data-deck-id="' + deckId + '"][data-card-index="' + cardIndex + '"][data-item-index="' + focusIdx + '"]'
+                  );
+                  if (newItem) {
+                    var newSpan = newItem.querySelector(".card-text-item-text");
+                    if (newSpan) {
+                      newSpan.contentEditable = "true";
+                      newItem.classList.add("is-editing");
+                      newSpan.focus();
+                      edit_state_save({ type: "item", deckId: deckId, cardIndex: cardIndex, selectionStart: 0, selectionEnd: 0, itemIndex: focusIdx });
+                    }
+                  }
+                }
+                return;
+              }
+              if (e.shiftKey && e.ctrlKey && (e.key === "ArrowLeft" || e.key === "ArrowRight")) {
+                e.preventDefault();
+                var curText = textSpan.textContent;
+                item_edit_commit(deckId, cardIndex, itemIndex, curText);
+                var sel = window.getSelection();
+                var cursorPos = curText.length;
+                if (sel.rangeCount && textSpan.contains(sel.anchorNode)) {
+                  try { cursorPos = sel.getRangeAt(0).startOffset; } catch (_) {}
+                }
+                var dir = e.key === "ArrowLeft" ? -1 : 1;
+                if (!item_indent(deckId, cardIndex, itemIndex, dir)) return;
+                var newItem = document.querySelector(
+                  '.card-text-item[data-deck-id="' + deckId + '"][data-card-index="' + cardIndex + '"][data-item-index="' + itemIndex + '"]'
+                );
+                if (newItem) {
+                  var newSpan = newItem.querySelector(".card-text-item-text");
+                  if (newSpan) {
+                    newSpan.contentEditable = "true";
+                    newItem.classList.add("is-editing");
+                    newSpan.focus();
+                    var len = newSpan.textContent.length;
+                    var pos = Math.min(cursorPos, len);
+                    if (newSpan.firstChild) {
+                      try {
+                        var range = document.createRange();
+                        range.setStart(newSpan.firstChild, pos);
+                        range.setEnd(newSpan.firstChild, pos);
+                        sel.removeAllRanges();
+                        sel.addRange(range);
+                      } catch (_) {}
+                    }
+                    edit_state_save({ type: "item", deckId: deckId, cardIndex: cardIndex, selectionStart: pos, selectionEnd: pos, itemIndex: itemIndex });
+                  }
+                }
+                return;
+              }
+              if (e.shiftKey && e.ctrlKey && (e.key === "ArrowUp" || e.key === "ArrowDown")) {
+                e.preventDefault();
+                var curText = textSpan.textContent;
+                var selOffsets = edit_selection_get(textSpan);
+                item_edit_commit(deckId, cardIndex, itemIndex, curText);
+                /* Disarm blur handler before rebuild so it cannot
+                   write the old text to the wrong (post-swap) index */
+                textSpan.contentEditable = "false";
+                var newIdx = e.key === "ArrowUp"
+                  ? item_move_left(deckId, cardIndex, itemIndex)
+                  : item_move_right(deckId, cardIndex, itemIndex);
+                if (newIdx == null) return;
+                var _dk = deckId, _ci = cardIndex, _ni = newIdx, _so = selOffsets;
+                requestAnimationFrame(function () {
+                  var newItem = document.querySelector(
+                    '.card-text-item[data-deck-id="' + _dk + '"][data-card-index="' + _ci + '"][data-item-index="' + _ni + '"]'
+                  );
+                  if (!newItem) return;
+                  var newSpan = newItem.querySelector(".card-text-item-text");
+                  if (!newSpan) return;
+                  newSpan.contentEditable = "true";
+                  newItem.classList.add("is-editing");
+                  newSpan.focus();
+                  var textNode = newSpan.firstChild;
+                  if (textNode && textNode.nodeType === 3) {
+                    var tLen = textNode.textContent.length;
+                    var s = Math.min(_so.start, tLen);
+                    var eOff = Math.min(_so.end, tLen);
+                    var sel = window.getSelection();
+                    var range = document.createRange();
+                    range.setStart(textNode, s);
+                    range.setEnd(textNode, eOff);
+                    sel.removeAllRanges();
+                    sel.addRange(range);
+                  }
+                  edit_state_save({ type: "item", deckId: _dk, cardIndex: _ci, selectionStart: _so.start, selectionEnd: _so.end, itemIndex: _ni });
+                });
+                return;
+              }
+              if (e.key === "Tab") {
+                e.preventDefault();
+                /* Save text before rebuild destroys the span */
+                var curText = textSpan.textContent;
+                item_edit_commit(deckId, cardIndex, itemIndex, curText);
+                var sel = window.getSelection();
+                var cursorPos = curText.length;
+                if (sel.rangeCount && textSpan.contains(sel.anchorNode)) {
+                  try { cursorPos = sel.getRangeAt(0).startOffset; } catch (_) {}
+                }
+                var dir = e.shiftKey ? -1 : 1;
+                if (!item_indent(deckId, cardIndex, itemIndex, dir)) return;
+                /* Re-focus the rebuilt item */
+                var newItem = document.querySelector(
+                  '.card-text-item[data-deck-id="' + deckId + '"][data-card-index="' + cardIndex + '"][data-item-index="' + itemIndex + '"]'
+                );
+                if (newItem) {
+                  var newSpan = newItem.querySelector(".card-text-item-text");
+                  if (newSpan) {
+                    newSpan.contentEditable = "true";
+                    newItem.classList.add("is-editing");
+                    newSpan.focus();
+                    /* Restore cursor position */
+                    var len = newSpan.textContent.length;
+                    var pos = Math.min(cursorPos, len);
+                    if (newSpan.firstChild) {
+                      try {
+                        var range = document.createRange();
+                        range.setStart(newSpan.firstChild, pos);
+                        range.setEnd(newSpan.firstChild, pos);
+                        sel.removeAllRanges();
+                        sel.addRange(range);
+                      } catch (_) {}
+                    }
+                    edit_state_save({ type: "item", deckId: deckId, cardIndex: cardIndex, selectionStart: pos, selectionEnd: pos, itemIndex: itemIndex });
+                  }
+                }
+              }
+            });
+
+            // __item_paste_split
+            textSpan.addEventListener("paste", (e) => {
+              if (textSpan.contentEditable !== "true") return;
+              var clip = (e.clipboardData || window.clipboardData);
+              if (!clip) return;
+              var raw = clip.getData("text/plain") || "";
+              if (!raw) return;
+              /* Split into sentences: split on . ! ? followed by space or end,
+                 keeping the punctuation with the sentence. */
+              var sentences = raw.match(/[^.!?]*[.!?]+(?:\s+|$)|[^.!?]+$/g);
+              if (!sentences) sentences = [raw];
+              sentences = sentences.map(function (s) { return s.trim(); }).filter(Boolean);
+              /* Single sentence: let default paste handle it */
+              if (sentences.length <= 1) return;
+              e.preventDefault();
+              /* Commit any existing text in the current item */
+              var existingText = textSpan.textContent.trim();
+              /* Get current indent level */
+              var deckData = decksData.find(function (d) { return d.id === deckId; });
+              var curLevel = 0;
+              if (deckData && deckData.cards && deckData.cards[cardIndex] && deckData.cards[cardIndex].items && deckData.cards[cardIndex].items[itemIndex]) {
+                curLevel = item_level_get(deckData.cards[cardIndex].items[itemIndex]);
+              }
+              /* Place first sentence into current item (appended to existing text) */
+              var firstText = existingText ? existingText + " " + sentences[0] : sentences[0];
+              textSpan.textContent = firstText;
+              item_edit_commit(deckId, cardIndex, itemIndex, firstText);
+              /* Insert remaining sentences as new items */
+              var lastIdx = itemIndex;
+              for (var si = 1; si < sentences.length; si++) {
+                var newIdx = item_insert(deckId, cardIndex, lastIdx + 1);
+                if (newIdx == null) break;
+                if (deckData && deckData.cards[cardIndex] && deckData.cards[cardIndex].items[newIdx]) {
+                  deckData.cards[cardIndex].items[newIdx].text = sentences[si];
+                  item_level_set(deckData.cards[cardIndex].items[newIdx], curLevel);
+                }
+                item_text_save(deckId, cardIndex, newIdx, sentences[si]);
+                lastIdx = newIdx;
+              }
+              /* Save and rebuild */
+              item_store_save(deckId, cardIndex, deckData.cards[cardIndex].items);
+              item_text_rebuild(deckId, cardIndex);
+              /* Focus the last inserted item */
+              var focusItem = document.querySelector(
+                '.card-text-item[data-deck-id="' + deckId + '"][data-card-index="' + cardIndex + '"][data-item-index="' + lastIdx + '"]'
+              );
+              if (focusItem) {
+                var focusSpan = focusItem.querySelector(".card-text-item-text");
+                if (focusSpan) {
+                  focusSpan.contentEditable = "true";
+                  focusItem.classList.add("is-editing");
+                  focusSpan.focus();
+                  var len = focusSpan.textContent.length;
+                  edit_state_save({ type: "item", deckId: deckId, cardIndex: cardIndex, selectionStart: len, selectionEnd: len, itemIndex: lastIdx });
+                }
+              }
             });
 
             textSpan.addEventListener("input", () => {
               if (textSpan.contentEditable !== "true") return;
               const currentText = textSpan.textContent;
-              commitToDeckAndStorage(deckId, cardIndex, itemIndex, currentText);
+              item_edit_commit(deckId, cardIndex, itemIndex, currentText);
               const sel = window.getSelection();
               if (sel.rangeCount && textSpan.contains(sel.anchorNode)) {
                 try {
@@ -916,7 +1520,7 @@
                   const end = range.endContainer === textSpan || range.endContainer.parentNode === textSpan
                     ? range.endOffset
                     : len;
-                  saveActiveEditState({ type: "item", deckId, cardIndex, selectionStart: Math.min(start, len), selectionEnd: Math.min(end, len), itemIndex });
+                  edit_state_save({ type: "item", deckId, cardIndex, selectionStart: Math.min(start, len), selectionEnd: Math.min(end, len), itemIndex });
                 } catch (_) {}
               }
             });
@@ -931,7 +1535,7 @@
               const selectionStart = parsed.selectionStart;
               const selectionEnd = parsed.selectionEnd;
 
-              function restoreSelection(el, s, e) {
+              function edit_selection_restore(el, s, e) {
                 if (typeof s !== "number" || typeof e !== "number" || !el) return;
                 if (!el.firstChild) el.appendChild(document.createTextNode(el.textContent || ""));
                 try {
@@ -947,6 +1551,7 @@
                 } catch (_) {}
               }
 
+              var restored = false;
               if (type === "item") {
                 const itemIndex = parsed.itemIndex;
                 const cardIndex = parsed.cardIndex;
@@ -960,19 +1565,9 @@
                     textSpan.contentEditable = "true";
                     item.classList.add("is-editing");
                     textSpan.focus();
-                    restoreSelection(textSpan, selectionStart, selectionEnd);
+                    edit_selection_restore(textSpan, selectionStart, selectionEnd);
+                    restored = true;
                   }
-                }
-              } else if (type === "tab") {
-                const cardIndex = parsed.cardIndex;
-                const tab = document.querySelector(
-                  `.tab-label.card-tab-editable[data-deck-id="${deckId}"][data-card-index="${cardIndex}"]`
-                );
-                if (tab) {
-                  if (!tab.firstChild) tab.appendChild(document.createTextNode(tab.textContent || ""));
-                  tab.contentEditable = "true";
-                  tab.focus();
-                  restoreSelection(tab, selectionStart, selectionEnd);
                 }
               } else if (type === "cardTitle") {
                 const cardIndex = parsed.cardIndex;
@@ -983,15 +1578,84 @@
                   if (!title.firstChild) title.appendChild(document.createTextNode(title.textContent || ""));
                   title.contentEditable = "true";
                   title.focus();
-                  restoreSelection(title, selectionStart, selectionEnd);
+                  edit_selection_restore(title, selectionStart, selectionEnd);
+                  restored = true;
                 }
               }
-              clearActiveEditState();
+              /* Do not clear — beforeunload/pagehide will
+                 overwrite with fresh state on next reload.
+                 Clearing here races with async selectionchange
+                 and loses state on rapid back-to-back reloads. */
             }
           } catch (_) {}
         }
 
-        function getSelectionOffsets(el) {
+        // __item_insert_setup
+        function item_insert_setup() {
+          document.querySelectorAll(".card-text-row").forEach(function (row) {
+            if (row._insertBound) return;
+            var cell = row.querySelector(".card-text-cell");
+            if (!cell) return;
+            /* Only bind on empty cells or cells that contain only a line-break */
+            var child = cell.firstElementChild;
+            var isEmpty = !child || (child.classList.contains("line-break") && !child.nextElementSibling);
+            if (!isEmpty) return;
+            row._insertBound = true;
+            row.addEventListener("dblclick", function (e) {
+              if (document.body.classList.contains("project-view")) return;
+              e.stopPropagation();
+              e.preventDefault();
+              /* Find deckId and cardIndex from sibling items or card title */
+              var rowsWrap = row.closest(".card-text-rows-wrap");
+              if (!rowsWrap) return;
+              var deckId, cardIndex;
+              /* Try sibling rows first */
+              var siblingItem = rowsWrap.querySelector(".card-text-item[data-deck-id]");
+              if (siblingItem) {
+                deckId = siblingItem.dataset.deckId;
+                cardIndex = parseInt(siblingItem.dataset.cardIndex, 10);
+              } else {
+                /* Fall back to card title */
+                var cardText = rowsWrap.closest(".card-text");
+                var titleEl = cardText && cardText.querySelector(".card-text-title[data-deck-id]");
+                if (!titleEl) return;
+                deckId = titleEl.dataset.deckId;
+                cardIndex = parseInt(titleEl.dataset.cardIndex, 10);
+              }
+              /* Determine insert index by scanning backward through rows */
+              var rows = Array.from(rowsWrap.querySelectorAll(".card-text-row"));
+              var rowIdx = rows.indexOf(row);
+              var insertIdx = 0;
+              for (var r = rowIdx - 1; r >= 0; r--) {
+                var rCell = rows[r].querySelector(".card-text-cell");
+                var rItem = rCell && rCell.querySelector(".card-text-item[data-item-index]");
+                if (rItem) {
+                  insertIdx = parseInt(rItem.dataset.itemIndex, 10) + 1;
+                  break;
+                }
+              }
+              /* Insert the new item */
+              var finalIdx = item_insert(deckId, cardIndex, insertIdx);
+              if (finalIdx == null) return;
+              /* Find and activate the new item for editing */
+              var newItem = document.querySelector(
+                '.card-text-item[data-deck-id="' + deckId + '"][data-card-index="' + cardIndex + '"][data-item-index="' + finalIdx + '"]'
+              );
+              if (newItem) {
+                var textSpan = newItem.querySelector(".card-text-item-text");
+                if (textSpan) {
+                  textSpan.contentEditable = "true";
+                  newItem.classList.add("is-editing");
+                  textSpan.focus();
+                  edit_state_save({ type: "item", deckId: deckId, cardIndex: cardIndex, selectionStart: 0, selectionEnd: 0, itemIndex: finalIdx });
+                }
+              }
+            });
+          });
+        }
+
+        // __edit_selection_get
+        function edit_selection_get(el) {
           const len = el.textContent.length;
           let start = len, end = len;
           const sel = window.getSelection();
@@ -1007,77 +1671,8 @@
           return { start, end };
         }
 
-        function setupCardTabAndTitleEditing() {
-          document.querySelectorAll(".tab-label.card-tab-editable").forEach((tab) => {
-            if (tab._editBound) return;
-            tab._editBound = true;
-            const deckId = tab.dataset.deckId;
-            const cardIndex = parseInt(tab.dataset.cardIndex, 10);
-
-            tab.addEventListener("dblclick", (e) => {
-              if (document.body.classList.contains("project-view")) return;
-              e.stopPropagation();
-              e.preventDefault();
-              tab.textContent = tab.textContent || "";
-              if (!tab.firstChild) tab.appendChild(document.createTextNode(""));
-              tab.contentEditable = "true";
-              tab.focus();
-              const { start, end } = getSelectionOffsets(tab);
-              saveActiveEditState({ type: "tab", deckId, cardIndex, selectionStart: start, selectionEnd: end });
-            });
-
-            tab.addEventListener("blur", () => {
-              if (tab.contentEditable !== "true") return;
-              const { start, end } = getSelectionOffsets(tab);
-              saveActiveEditState({ type: "tab", deckId, cardIndex, selectionStart: start, selectionEnd: end });
-              tab.contentEditable = "false";
-              const text = tab.textContent.replace(/\s+$/g, "").replace(/^\s+/, "");
-              saveEditedCardTitle(deckId, cardIndex, text);
-              const deckData = decksData.find((d) => d.id === deckId);
-              if (deckData && deckData.cards && deckData.cards[cardIndex]) {
-                deckData.cards[cardIndex].title = text;
-              }
-              tab.textContent = shortenForTab(text) || text;
-              const deck = tab.closest(".deck");
-              const titleEl = deck && deck.querySelector(`.card-text-title.card-title-editable[data-deck-id="${deckId}"][data-card-index="${cardIndex}"]`);
-              if (titleEl) titleEl.textContent = text;
-            });
-
-            tab.addEventListener("input", () => {
-              if (tab.contentEditable !== "true") return;
-              const { start, end } = getSelectionOffsets(tab);
-              saveActiveEditState({ type: "tab", deckId, cardIndex, selectionStart: start, selectionEnd: end });
-              const text = tab.textContent.replace(/\s+$/g, "").replace(/^\s+/, "");
-              saveEditedCardTitle(deckId, cardIndex, text);
-              const deckData = decksData.find((d) => d.id === deckId);
-              if (deckData && deckData.cards && deckData.cards[cardIndex]) {
-                deckData.cards[cardIndex].title = text;
-              }
-            });
-
-            tab.addEventListener("keydown", (e) => {
-              if (tab.contentEditable !== "true") return;
-              if (e.key === "Escape") { e.preventDefault(); tab.blur(); return; }
-              if (e.key === "Enter") { e.preventDefault(); tab.blur(); }
-            });
-
-            tab.addEventListener("mouseup", () => {
-              if (tab.contentEditable !== "true") return;
-              requestAnimationFrame(() => {
-                const { start, end } = getSelectionOffsets(tab);
-                saveActiveEditState({ type: "tab", deckId, cardIndex, selectionStart: start, selectionEnd: end });
-              });
-            });
-
-            tab.addEventListener("click", () => {
-              if (tab.contentEditable !== "true") return;
-              requestAnimationFrame(() => {
-                const { start, end } = getSelectionOffsets(tab);
-                saveActiveEditState({ type: "tab", deckId, cardIndex, selectionStart: start, selectionEnd: end });
-              });
-            });
-          });
-
+        // __tab_title_edit_setup
+        function tab_title_edit_setup() {
           document.querySelectorAll(".card-text-title.card-title-editable").forEach((title) => {
             if (title._editBound) return;
             title._editBound = true;
@@ -1091,40 +1686,36 @@
               if (!title.firstChild) title.appendChild(document.createTextNode(title.textContent || ""));
               title.contentEditable = "true";
               title.focus();
-              const { start, end } = getSelectionOffsets(title);
-              saveActiveEditState({ type: "cardTitle", deckId, cardIndex, selectionStart: start, selectionEnd: end });
+              const { start, end } = edit_selection_get(title);
+              edit_state_save({ type: "cardTitle", deckId, cardIndex, selectionStart: start, selectionEnd: end });
             });
 
             title.addEventListener("blur", () => {
               if (title.contentEditable !== "true") return;
-              const { start, end } = getSelectionOffsets(title);
-              saveActiveEditState({ type: "cardTitle", deckId, cardIndex, selectionStart: start, selectionEnd: end });
+              const { start, end } = edit_selection_get(title);
+              edit_state_save({ type: "cardTitle", deckId, cardIndex, selectionStart: start, selectionEnd: end });
               title.contentEditable = "false";
               const text = title.textContent.replace(/\s+$/g, "").replace(/^\s+/, "");
               title.textContent = text;
-              saveEditedCardTitle(deckId, cardIndex, text);
+              card_title_save(deckId, cardIndex, text);
               const deckData = decksData.find((d) => d.id === deckId);
               if (deckData && deckData.cards && deckData.cards[cardIndex]) {
                 deckData.cards[cardIndex].title = text;
               }
-              const deck = title.closest(".deck");
-              const tabEl = deck && deck.querySelector(`.tab-label.card-tab-editable[data-deck-id="${deckId}"][data-card-index="${cardIndex}"]`);
-              if (tabEl) tabEl.textContent = shortenForTab(text) || text;
+              tab_sync(deckId, cardIndex, text);
             });
 
             title.addEventListener("input", () => {
               if (title.contentEditable !== "true") return;
-              const { start, end } = getSelectionOffsets(title);
-              saveActiveEditState({ type: "cardTitle", deckId, cardIndex, selectionStart: start, selectionEnd: end });
+              const { start, end } = edit_selection_get(title);
+              edit_state_save({ type: "cardTitle", deckId, cardIndex, selectionStart: start, selectionEnd: end });
               const text = title.textContent.replace(/\s+$/g, "").replace(/^\s+/, "");
-              saveEditedCardTitle(deckId, cardIndex, text);
+              card_title_save(deckId, cardIndex, text);
               const deckData = decksData.find((d) => d.id === deckId);
               if (deckData && deckData.cards && deckData.cards[cardIndex]) {
                 deckData.cards[cardIndex].title = text;
               }
-              const deck = title.closest(".deck");
-              const tabEl = deck && deck.querySelector(`.tab-label.card-tab-editable[data-deck-id="${deckId}"][data-card-index="${cardIndex}"]`);
-              if (tabEl) tabEl.textContent = shortenForTab(title.textContent) || title.textContent;
+              tab_sync(deckId, cardIndex, title.textContent);
             });
 
             title.addEventListener("keydown", (e) => {
@@ -1136,37 +1727,38 @@
             title.addEventListener("mouseup", () => {
               if (title.contentEditable !== "true") return;
               requestAnimationFrame(() => {
-                const { start, end } = getSelectionOffsets(title);
-                saveActiveEditState({ type: "cardTitle", deckId, cardIndex, selectionStart: start, selectionEnd: end });
+                const { start, end } = edit_selection_get(title);
+                edit_state_save({ type: "cardTitle", deckId, cardIndex, selectionStart: start, selectionEnd: end });
               });
             });
 
             title.addEventListener("click", () => {
               if (title.contentEditable !== "true") return;
               requestAnimationFrame(() => {
-                const { start, end } = getSelectionOffsets(title);
-                saveActiveEditState({ type: "cardTitle", deckId, cardIndex, selectionStart: start, selectionEnd: end });
+                const { start, end } = edit_selection_get(title);
+                edit_state_save({ type: "cardTitle", deckId, cardIndex, selectionStart: start, selectionEnd: end });
               });
             });
           });
         }
 
 
-        function readCssNumber(varName) {
+        // __css_number_get
+        function css_number_get(varName) {
           const raw = getComputedStyle(document.documentElement).getPropertyValue(varName);
           const value = Number.parseFloat(raw);
           return Number.isFinite(value) ? value : 0;
         }
 
-        function updateDeckScales() {
+        function deck_scale_update() {
           // __deck_scale_update
-          const baseWidth = readCssNumber("--card-base-width") || 1200;
-          const baseHeight = (readCssNumber("--stack-base-height") || 755) + readCssNumber("--tab-height");
-          const gap = readCssNumber("--expanded-gap") || 0;
-          const expandedLift = readCssNumber("--expanded-lift") || 0;
-          const topRowLift = readCssNumber("--expanded-top-row-lift") || 0;
-          const bottomRowLift = readCssNumber("--expanded-bottom-row-lift") || 0;
-          const buffer = readCssNumber("--expanded-buffer") || 0;
+          const baseWidth = css_number_get("--card-base-width") || 1200;
+          const baseHeight = (css_number_get("--stack-base-height") || 755) + css_number_get("--tab-height");
+          const gap = css_number_get("--expanded-gap") || 0;
+          const expandedLift = css_number_get("--expanded-lift") || 0;
+          const topRowLift = css_number_get("--expanded-top-row-lift") || 0;
+          const bottomRowLift = css_number_get("--expanded-bottom-row-lift") || 0;
+          const buffer = css_number_get("--expanded-buffer") || 0;
           document.documentElement.style.setProperty("--deck-content-width", `${baseWidth}px`);
           document.documentElement.style.setProperty("--deck-content-height", `${baseHeight}px`);
 
@@ -1212,153 +1804,161 @@
           green: ["green", "yellow", "red"],
         };
 
-        function promote(color, deckOverride) {
-          // __ux_card_promote
-          const deck = deckOverride || getActiveDeck();
+        function card_promote(color, deckOverride) {
+          // __card_promote
+          const deck = deckOverride || deck_active_get();
           const order = orderMap[color];
           if (order) {
-            setOrder(order, deck);
-            localStorage.setItem(selectionKeyFor(deck.dataset.deck), color);
+            deck_order_set(order, deck);
+            localStorage.setItem(deck_selection_key_get(deck.dataset.deck), color);
           }
         }
 
-        function setActiveDeck(id) {
+        function deck_active_set(id) {
           // __deck_active_set
           decks.forEach((deck) => {
             deck.classList.toggle("is-active", deck.dataset.deck === id);
           });
           localStorage.setItem(ACTIVE_KEY, id);
-          updateDeckScales();
+          deck_scale_update();
         }
 
-        function runProjectDeckTransition(toView) {
-          // __ux_transition_project_deck_run
-          const active = getActiveDeck();
+        // __transition_complete_run __chat_140 __spatial_title_animate __chat_145 __title_settle_jump_fix
+        function transition_complete_run(toView, onDone) {
+          card_rect_overlay_build();
+          requestAnimationFrame(function () {
+            var states = view_state_list_get(toView);
+            view_framework_show(states);
+            if (toView === "project") {
+              view_project_stack_set();
+              title_rect_cache_build();
+            }
+            if (onDone) onDone();
+          });
+        }
+
+        function transition_project_deck_run(toView) {
+          // __transition_project_deck_run __chat_140 __spatial_title_animate __chat_145 __title_settle_jump_fix __chat_148 __transition_flash_fix
+          const active = deck_active_get();
           if (!active) {
-            applyView(toView);
+            view_apply(toView);
             return;
           }
           const activeIndex = decks.indexOf(active);
-          syncTitleOverlayContent();
-          const titleFromStates = toView === "project" ? getTitleFromStatesForDeckToProject(activeIndex) : getTitleStatesFromDOM();
+          const titleFromView = toView === "project" ? "deck" : "project";
+          const titleFrom = title_state_list_get(titleFromView);
+          title_rect_overlay_show(titleFrom);
+          const fromStates = toView === "project" ? view_state_current_get() : view_state_list_get("project");
+          view_apply(toView, { skipCardRectUpdate: true, skipTitleUpdate: true });
           if (toView === "project") {
-            const els = getTitleElements();
-            if (els[0]) els[0].textContent = "Project";
+            view_project_stack_set(activeIndex);
+            title_rect_cache_build();
+            view_framework_show(fromStates);
           }
-          showTitleOverlay(titleFromStates);
-          const fromStates = toView === "project" ? getStatesForAllDecksCurrentInDeckView() : getStatesForAllDecks("project");
-          applyView(toView, toView === "project"
-            ? { activeDeckIndexForLayer: activeIndex, skipTitleOverlayUpdate: true }
-            : { skipCardRectUpdate: true, skipTitleOverlayUpdate: true });
-          if (toView === "project") showCardRectFramework(fromStates);
           requestAnimationFrame(function () {
             if (toView === "deck") {
-              updateDeckScales();
-              const saved = active ? localStorage.getItem(selectionKeyFor(active.dataset.deck)) : null;
+              deck_scale_update();
+              const saved = active ? localStorage.getItem(deck_selection_key_get(active.dataset.deck)) : null;
               const order = orderMap[saved] || orderMap.yellow;
-              if (active) setOrder(order, active);
+              if (active) deck_order_set(order, active);
             }
             requestAnimationFrame(function () {
-              const toStates = toView === "project" ? getStatesForAllDecks("project") : getStatesForAllDecksProjectToDeck();
-              if (toView === "deck") setCardRectActiveDeckIndex(activeIndex);
-              const titleEls = getTitleElements();
-              if (toView === "deck" && titleEls[activeIndex + 1]) titleEls[activeIndex + 1].textContent = getDeckTitleText(getActiveDeck());
-              const titleToStates = toView === "project" ? getTitleStatesFromDOM() : getTitleToStatesForProjectToDeck(activeIndex);
-              animateTitleOverlay(titleFromStates, titleToStates, 520);
-              showCardRectFramework(fromStates);
-              animateCardRects(fromStates, toStates, 520, toView === "deck" ? function () {
-                buildCardRectOverlay();
-                requestAnimationFrame(function () {
-                  const states = getStatesForAllDecks("deck");
-                  showCardRectFramework(states);
-                });
-              } : undefined);
+              const toStates = toView === "project" ? view_state_list_get("project") : view_transition_project_deck_get();
+              if (toView === "deck") deck_active_index_set(activeIndex);
+              spatial_contract_validate(fromStates, toStates, "project_deck");
+              view_framework_show(fromStates);
+              var titleTo = title_state_list_get(toView);
+              title_rect_animate(titleFrom, titleTo, 520);
+              view_rect_animate(fromStates, toStates, 520, function () {
+                transition_complete_run(toView);
+              });
             });
           });
         }
 
-                function runDeckExpandedTransition(toView) {
-          // __ux_transition_deck_expanded_run
-          const active = getActiveDeck();
+                function transition_deck_expanded_run(toView) {
+          // __transition_deck_expanded_run __chat_140 __spatial_title_animate
+          const active = deck_active_get();
           if (!active) return;
           const finish = () => document.body.classList.remove("expand-animating", "expand-collapsing");
-          syncTitleOverlayContent();
-          const titleFromStates = getTitleStatesFromDOM();
-          showTitleOverlay(titleFromStates);
 
           if (toView === "expanded") {
-            const fromStates = getStatesForAllDecks("deck");
+            const titleFrom = title_state_list_get("deck");
+            title_rect_overlay_show(titleFrom);
+            const fromStates = view_state_list_get("deck");
             lastDeckViewStates = fromStates;
-            setCardRectActiveDeckIndex(decks.indexOf(active));
+            deck_active_index_set(decks.indexOf(active));
             decks.forEach((deck) => deck.classList.remove("is-expanded"));
-            showCardRectFramework(fromStates);
+            view_framework_show(fromStates);
             document.body.classList.add("expand-animating");
             document.body.classList.remove("deck-view");
             document.body.classList.add("expanded-view");
             active.classList.add("is-expanded");
             requestAnimationFrame(function () {
-              const titleToStates = getTitleStatesFromDOM();
-              animateTitleOverlay(titleFromStates, titleToStates, 520);
-              const toStates = getStatesForAllDecks("expanded");
-              animateCardRects(fromStates, toStates, 520, finish);
+              const toStates = view_state_list_get("expanded");
+              spatial_contract_validate(fromStates, toStates, "deck_expanded(expand)");
+              var titleTo = title_state_list_get("expanded");
+              title_rect_animate(titleFrom, titleTo, 520);
+              view_rect_animate(fromStates, toStates, 520, function () {
+                transition_complete_run(toView, finish);
+              });
             });
           } else if (toView === "deck") {
-            const fromStates = getStatesForAllDecks("expanded");
-            showCardRectFramework(fromStates);
+            const titleFrom = title_state_list_get("expanded");
+            title_rect_overlay_show(titleFrom);
+            const fromStates = view_state_list_get("expanded");
+            view_framework_show(fromStates);
             document.body.classList.add("expand-collapsing");
             decks.forEach((deck) => deck.classList.remove("is-expanded"));
             document.body.classList.remove("expanded-view");
             document.body.classList.add("deck-view");
             requestAnimationFrame(function () {
-              updateDeckScales();
-              const saved = active ? localStorage.getItem(selectionKeyFor(active.dataset.deck)) : null;
+              deck_scale_update();
+              const saved = active ? localStorage.getItem(deck_selection_key_get(active.dataset.deck)) : null;
               const order = orderMap[saved] || orderMap.yellow;
-              if (active) setOrder(order, active);
+              if (active) deck_order_set(order, active);
               requestAnimationFrame(function () {
-                setCardRectActiveDeckIndex(decks.indexOf(active));
-                const titleToStates = getTitleStatesFromDOM();
-                animateTitleOverlay(titleFromStates, titleToStates, 520);
-                const toStates = getStatesForAllDecksForCollapse();
-                animateCardRects(fromStates, toStates, 520, function () {
-                  buildCardRectOverlay();
-                  requestAnimationFrame(function () {
-                    const states = getStatesForAllDecks("deck");
-                    showCardRectFramework(states);
-                    finish();
-                  });
+                deck_active_index_set(decks.indexOf(active));
+                const toStates = view_expanded_collapse_get();
+                spatial_contract_validate(fromStates, toStates, "deck_expanded(collapse)");
+                var titleTo = title_state_list_get("deck");
+                title_rect_animate(titleFrom, titleTo, 520);
+                view_rect_animate(fromStates, toStates, 520, function () {
+                  transition_complete_run(toView, finish);
                 });
               });
             });
           }
         }
 
-        function runProjectExpandedTransition(toView) {
-          const active = getActiveDeck();
+        // __transition_project_expanded_run __chat_140 __spatial_title_animate __chat_145 __title_settle_jump_fix __chat_148 __transition_flash_fix
+        function transition_project_expanded_run(toView) {
+          const active = deck_active_get();
           if (!active) {
-            applyView(toView);
+            view_apply(toView);
             return;
           }
           const activeIndex = decks.indexOf(active);
-          syncTitleOverlayContent();
-          const titleFromStates = toView === "project" ? getTitleFromStatesForDeckToProject(activeIndex) : getTitleStatesFromDOM();
+          const titleFromView = toView === "project" ? "expanded" : "project";
+          const titleFrom = title_state_list_get(titleFromView);
+          title_rect_overlay_show(titleFrom);
+          const fromStates = toView === "project" ? view_state_list_get("expanded") : view_state_list_get("project");
+          view_apply(toView, { skipCardRectUpdate: true, skipTitleUpdate: true });
           if (toView === "project") {
-            const els = getTitleElements();
-            if (els[0]) els[0].textContent = "Project";
+            view_project_stack_set(activeIndex);
+            title_rect_cache_build();
+            view_framework_show(fromStates);
           }
-          showTitleOverlay(titleFromStates);
-          const fromStates = toView === "project" ? getStatesForAllDecks("expanded") : getStatesForAllDecks("project");
-          applyView(toView, toView === "project"
-            ? { activeDeckIndexForLayer: activeIndex, skipTitleOverlayUpdate: true }
-            : { skipCardRectUpdate: true, skipTitleOverlayUpdate: true });
           requestAnimationFrame(function () {
-            const toStates = toView === "project" ? getStatesForAllDecks("project") : getStatesForAllDecks("expanded");
-            if (toView === "expanded") setCardRectActiveDeckIndex(activeIndex);
-            const titleElsExp = getTitleElements();
-            if (toView === "expanded" && titleElsExp[activeIndex + 1]) titleElsExp[activeIndex + 1].textContent = getDeckTitleText(getActiveDeck());
-            const titleToStates = toView === "project" ? getTitleStatesFromDOM() : getTitleToStatesForProjectToDeck(activeIndex);
-            animateTitleOverlay(titleFromStates, titleToStates, 520);
-            showCardRectFramework(fromStates);
-            animateCardRects(fromStates, toStates, 520);
+            const toStates = toView === "project" ? view_state_list_get("project") : view_state_list_get("expanded");
+            if (toView === "expanded") deck_active_index_set(activeIndex);
+            spatial_contract_validate(fromStates, toStates, "project_expanded");
+            view_framework_show(fromStates);
+            var titleTo = title_state_list_get(toView);
+            title_rect_animate(titleFrom, titleTo, 520);
+            view_rect_animate(fromStates, toStates, 520, function () {
+              transition_complete_run(toView);
+            });
           });
         }
 
@@ -1366,12 +1966,14 @@
         const PROXY_CONTENT_WIDTH = 1200;
         const PROXY_CONTENT_HEIGHT = 728;
 
-        function getDeckProxy() {
+        // __deck_proxy_get
+        function deck_proxy_get() {
           return document.getElementById("deckProxy");
         }
 
-        function buildDeckProxy(deck) {
-          const proxy = getDeckProxy();
+        // __deck_proxy_build
+        function deck_proxy_build(deck) {
+          const proxy = deck_proxy_get();
           if (!proxy) return;
           const viewport = deck.querySelector(".deck-viewport");
           if (!viewport) return;
@@ -1379,16 +1981,18 @@
           proxy.appendChild(viewport.cloneNode(true));
         }
 
-        function clearDeckProxy() {
-          const proxy = getDeckProxy();
+        // __deck_proxy_clear
+        function deck_proxy_clear() {
+          const proxy = deck_proxy_get();
           if (!proxy) return;
           proxy.classList.remove("is-active");
           proxy.innerHTML = "";
           proxy.style.transform = "";
         }
 
-        function runProxyTransition(fromRect, toRect, durationMs, onDone) {
-          const proxy = getDeckProxy();
+        // __deck_proxy_transition_run
+        function deck_proxy_transition_run(fromRect, toRect, durationMs, onDone) {
+          const proxy = deck_proxy_get();
           if (!proxy) {
             if (onDone) onDone();
             return;
@@ -1430,17 +2034,19 @@
         const CARD_RECT_HEIGHT = 728; /* wire frame = tab + .card (53+675), matches old card bottom edge */
         const CARD_RECT_INDICES = [0, 1, 2];
 
-        function cardRectState(x, y, scaleX, scaleY, opacity) {
+        // __card_rect_state
+        function card_rect_state(x, y, scaleX, scaleY, opacity) {
           return { x: x, y: y, scaleX: scaleX, scaleY: scaleY, opacity: opacity != null ? opacity : 1 };
         }
 
-        function getCardRectOverlay() {
+        // __card_rect_overlay_get
+        function card_rect_overlay_get() {
           return document.getElementById("cardRectOverlay");
         }
 
-        function buildCardRectOverlay() {
-          // __deck_rect_build
-          const overlay = getCardRectOverlay();
+        function card_rect_overlay_build() {
+          // __card_rect_overlay_build
+          const overlay = card_rect_overlay_get();
           if (!overlay) return;
           overlay.innerHTML = "";
           const deckList = Array.from(document.querySelectorAll(".deck"));
@@ -1456,51 +2062,27 @@
                 const cardData = deckData && deckData.cards && deckData.cards[cardIndex];
                 if (cardData) {
                   const color = ["yellow", "red", "green"][cardIndex];
-                  const host = buildCardLayer(layerLayouts[cardIndex], cardData, deckData.id, cardIndex);
+                  const host = card_layer_build(layerLayouts[cardIndex], cardData, deckData.id, cardIndex);
                   host.classList.add("card-layer--overlay");
+                  var bodyHit = document.createElement("div");
+                  bodyHit.className = "card-body-hit";
+                  host.insertBefore(bodyHit, host.firstChild);
                   rect.appendChild(host);
-                  applyLineNumbersInRoot(host);
-                  setupCardTextEditing();
-                  setupCardTabAndTitleEditing();
-                  host.querySelectorAll(".tab").forEach((tab) => {
-                    tab.addEventListener("click", (e) => {
-                      // __deck_tab_promote
-                      if (!document.body.classList.contains("deck-view") && !document.body.classList.contains("expanded-view")) return;
-                      const active = getActiveDeck();
-                      if (!active || deck !== active) return;
-                      /* Don't stopPropagation: allow overlay handler to run so tab click promotes */
-                      promote(color, deck);
-                      setCardRectActiveDeckIndex(deckIndex);
-                      if (document.body.classList.contains("expanded-view")) {
-                        const expandedStates = getStatesForAllDecks("expanded");
-                        showCardRectFramework(expandedStates);
-                        requestAnimationFrame(function () {
-                          requestAnimationFrame(function () { setView("deck"); });
-                        });
-                      } else {
-                        const states = getStatesForAllDecks("deck");
-                        showCardRectFramework(states);
-                      }
-                    });
-                  });
-                  host.querySelectorAll(".card-text-image").forEach((img) => {
-                    img.addEventListener("click", (e) => {
-                      // __ux_lightbox_image_click
-                      if (document.body.classList.contains("project-view")) return;
-                      e.stopPropagation();
-                      openImageLightbox(img.src, img.alt);
-                    });
-                  });
+                  card_outline_apply(host);
+                  item_edit_setup();
+                  item_insert_setup();
+                  tab_title_edit_setup();
                 }
               }
               overlay.appendChild(rect);
             });
           });
-          requestAnimationFrame(updateAllTabOffsets);
+          requestAnimationFrame(deck_tab_offset_update_all);
         }
 
-        function getCardRects() {
-          const overlay = getCardRectOverlay();
+        // __card_rect_list_get
+        function card_rect_list_get() {
+          const overlay = card_rect_overlay_get();
           if (!overlay) return [];
           return Array.from(overlay.querySelectorAll(".card-rect"));
         }
@@ -1511,28 +2093,31 @@
          * Positions are assigned by stack order: front=lowest (0,0), middle, back=highest.
          * order = [front, middle, back]; each color gets STACK_OFFSETS[order.indexOf(color)].
          */
-        function getStackedStatesFromViewport(deck) {
+        function deck_stack_layout_get(deck) {
           // __deck_stack_layout_get
           const vp = deck && deck.querySelector(".deck-viewport");
-          if (!vp) return CARD_RECT_INDICES.map(() => cardRectState(0, 0, 0, 0, 0));
-          const saved = deck ? localStorage.getItem(selectionKeyFor(deck.dataset.deck)) : null;
+          if (!vp) return CARD_RECT_INDICES.map(() => card_rect_state(0, 0, 0, 0, 0));
+          const saved = deck ? localStorage.getItem(deck_selection_key_get(deck.dataset.deck)) : null;
           const order = orderMap[saved] || orderMap.yellow;
           const r = vp.getBoundingClientRect();
-          let scale = Math.min(r.width / DECK_CONTENT_WIDTH, r.height / DECK_CONTENT_HEIGHT);
-          scale *= DECK_VIEW_SCALE;
+          const baseScale = Math.min(r.width / DECK_CONTENT_WIDTH, r.height / DECK_CONTENT_HEIGHT);
+          let scale = baseScale * DECK_VIEW_SCALE;
           const contentW = DECK_CONTENT_WIDTH * scale;
           const contentH = DECK_CONTENT_HEIGHT * scale;
           const card0X = r.left + (r.width - contentW) / 2;
-          const card0Y = r.top + (r.height - contentH) / 2 + DECK_TAB_OFFSET * scale;
+          /* Pin top to where 0.9 scale centered; card grows down + sideways only */
+          const refContentH = DECK_CONTENT_HEIGHT * baseScale * 0.9;
+          const card0Y = r.top + (r.height - refContentH) / 2 + DECK_TAB_OFFSET * scale;
           const colors = ["yellow", "red", "green"];
           return colors.map(function (color) {
             const posInOrder = order.indexOf(color);
             const o = STACK_OFFSETS[posInOrder >= 0 ? posInOrder : 0];
-            return cardRectState(card0X + o.x * scale, card0Y + o.y * scale, scale, scale, 1);
+            return card_rect_state(card0X + o.x * scale, card0Y + o.y * scale, scale, scale, 1);
           });
         }
 
-        function getStackedLayoutStates() {
+        // __deck_stack_state_get
+        function deck_stack_state_get() {
           const w = window.innerWidth;
           const h = window.innerHeight;
           const centerX = w / 2;
@@ -1541,11 +2126,11 @@
           const scale = Math.min((w - 2 * margin) / CARD_RECT_WIDTH, (h - 2 * margin) / CARD_RECT_HEIGHT);
           const x = centerX - (CARD_RECT_WIDTH * scale) / 2;
           const y = centerY - (CARD_RECT_HEIGHT * scale) / 2;
-          const s = cardRectState(x, y, scale, scale, 1);
+          const s = card_rect_state(x, y, scale, scale, 1);
           return [s, s, s];
         }
 
-        function getExpandedLayoutStates(deck) {
+        function view_expanded_layout_get(deck) {
           // __view_expanded_layout_get
           const w = window.innerWidth;
           const h = window.innerHeight;
@@ -1574,17 +2159,11 @@
           const card2X = card1X + cardW + gap;
           const cardsBottomY = horizonY + marginAboveHorizon;
           const card1Y = cardsBottomY + (bottomAvailableH - cardH) / 2;
-          const topState = cardRectState(card0X, card0Y, scale, scale, 1);
-          const bottomLeftState = cardRectState(card1X, card1Y, scale, scale, 1);
-          const bottomRightState = cardRectState(card2X, card1Y, scale, scale, 1);
-          const saved = deck ? localStorage.getItem(selectionKeyFor(deck.dataset.deck)) : null;
-          const order = orderMap[saved] || orderMap.yellow;
-          const positions = [topState, bottomLeftState, bottomRightState];
-          const colors = ["yellow", "red", "green"];
-          return colors.map(function (color) {
-            const posInOrder = order.indexOf(color);
-            return positions[posInOrder >= 0 ? posInOrder : 0];
-          });
+          const topState = card_rect_state(card0X, card0Y, scale, scale, 1);
+          const bottomLeftState = card_rect_state(card1X, card1Y, scale, scale, 1);
+          const bottomRightState = card_rect_state(card2X, card1Y, scale, scale, 1);
+          /* Expanded layout: yellow always top, red bottom-left, green bottom-right */
+          return [topState, bottomLeftState, bottomRightState];
         }
 
         /* Stack offsets: vertical only (down). Front=0; middle=-17; back=-34. No horizontal slide. */
@@ -1601,14 +2180,14 @@
         const DECK_CONTENT_HEIGHT = 808;
         const DECK_TAB_OFFSET = 53;
         /** Scale down cards in deck view so the deck title above them stays visible (all deck views). */
-        const DECK_VIEW_SCALE = 0.9;
+        const DECK_VIEW_SCALE = 0.98;
 
-        function getStatesForDeck(deck, view) {
+        function view_state_deck_get(deck, view) {
           // __view_state_deck_get
           if (view === "project") {
             const vp = deck && deck.querySelector(".deck-viewport");
-            if (!vp) return CARD_RECT_INDICES.map(() => cardRectState(0, 0, 0, 0, 0));
-            const saved = deck ? localStorage.getItem(selectionKeyFor(deck.dataset.deck)) : null;
+            if (!vp) return CARD_RECT_INDICES.map(() => card_rect_state(0, 0, 0, 0, 0));
+            const saved = deck ? localStorage.getItem(deck_selection_key_get(deck.dataset.deck)) : null;
             const order = orderMap[saved] || orderMap.yellow;
             const r = vp.getBoundingClientRect();
             const scale = Math.min(r.width / STACK_BOUNDS_WIDTH, r.height / STACK_BOUNDS_HEIGHT);
@@ -1620,12 +2199,12 @@
             return colors.map(function (color) {
               const posInOrder = order.indexOf(color);
               const o = STACK_OFFSETS[posInOrder >= 0 ? posInOrder : 0];
-              return cardRectState(card0X + o.x * scale, card0Y + o.y * scale, scale, scale, 1);
+              return card_rect_state(card0X + o.x * scale, card0Y + o.y * scale, scale, scale, 1);
             });
           }
-          if (view === "deck") return getStackedStatesFromViewport(deck);
-          if (view === "expanded") return getExpandedLayoutStates(deck);
-          return CARD_RECT_INDICES.map(() => cardRectState(0, 0, 0, 0, 0));
+          if (view === "deck") return deck_stack_layout_get(deck);
+          if (view === "expanded") return view_expanded_layout_get(deck);
+          return CARD_RECT_INDICES.map(() => card_rect_state(0, 0, 0, 0, 0));
         }
 
         let lastStackedStates = null;
@@ -1635,75 +2214,131 @@
         // that exact physical configuration (positions/scale/opacity).
         let lastDeckViewStates = null;
 
-        function getStatesForAllDecks(view) {
+        /* -- State registry: rendered position cache -- */
+        // __state_registry __chat_139 __state_persistence_abc __chat_157 __merge_spatial_state
+        var state_registry = {};
+
+        // __state_registry_update __chat_139 __state_persistence_abc __chat_157 __merge_spatial_state
+        function state_registry_update(states) {
+          if (!states) return;
+          var rects = card_rect_list_get();
+          states.forEach(function (s, i) {
+            if (!rects[i]) return;
+            var key = rects[i].getAttribute("data-deck-index") + "-" + rects[i].getAttribute("data-index");
+            state_registry[key] = {
+              x: s.x, y: s.y,
+              scaleX: s.scaleX, scaleY: s.scaleY,
+              opacity: s.opacity != null ? s.opacity : 1
+            };
+          });
+        }
+
+        // __state_registry_get __chat_139 __state_persistence_abc __chat_157 __merge_spatial_state
+        function state_registry_get() {
+          var rects = card_rect_list_get();
+          var states = [];
+          rects.forEach(function (rect) {
+            var key = rect.getAttribute("data-deck-index") + "-" + rect.getAttribute("data-index");
+            var s = state_registry[key];
+            if (s) states.push(card_rect_state(s.x, s.y, s.scaleX, s.scaleY, s.opacity));
+            else states.push(card_rect_state(0, 0, 0, 0, 0));
+          });
+          return states;
+        }
+
+        // __state_contract_validate __chat_139 __state_persistence_abc __chat_157 __merge_spatial_state
+        function state_contract_validate(fromStates, toStates, label) {
+          var rects = card_rect_list_get();
+          if (!fromStates || !toStates) {
+            console.warn("[state] " + (label || "transition") + ": missing from or to states");
+            return false;
+          }
+          if (fromStates.length !== rects.length) {
+            console.warn("[state] " + (label || "transition") + ": fromStates length " + fromStates.length + " != rects " + rects.length);
+            return false;
+          }
+          if (toStates.length !== rects.length) {
+            console.warn("[state] " + (label || "transition") + ": toStates length " + toStates.length + " != rects " + rects.length);
+            return false;
+          }
+          if (fromStates.length !== toStates.length) {
+            console.warn("[state] " + (label || "transition") + ": from/to length mismatch " + fromStates.length + " vs " + toStates.length);
+            return false;
+          }
+          return true;
+        }
+
+        function view_state_list_get(view) {
           // __view_state_list_get
-          const active = getActiveDeck();
+          const active = deck_active_get();
           const flat = [];
           decks.forEach(function (deck, deckIndex) {
             const isActive = deck === active;
             if (view === "project") {
-              const projectStates = getStatesForDeck(deck, "project");
+              const projectStates = view_state_deck_get(deck, "project");
               lastProjectStatesByDeckIndex[deckIndex] = projectStates;
               flat.push.apply(flat, projectStates);
             } else if (view === "deck") {
               if (isActive) {
-                const stacked = getStatesForDeck(deck, "deck");
+                const stacked = view_state_deck_get(deck, "deck");
                 lastStackedStates = stacked;
                 flat.push.apply(flat, stacked);
               } else {
-                const center = getViewportCenter();
-                flat.push.apply(flat, getRecedeStatesForDeck(center));
+                const center = viewport_center_get();
+                flat.push.apply(flat, deck_recede_state_get(center));
               }
             } else if (view === "expanded") {
-              if (isActive) flat.push.apply(flat, getStatesForDeck(deck, "expanded"));
+              if (isActive) flat.push.apply(flat, view_state_deck_get(deck, "expanded"));
               else {
-                const center = getViewportCenter();
-                flat.push.apply(flat, getRecedeStatesForDeck(center));
+                const center = viewport_center_get();
+                flat.push.apply(flat, deck_recede_state_get(center));
               }
             } else {
-              flat.push.apply(flat, lastProjectStatesByDeckIndex[deckIndex] || getStatesForDeck(deck, "project"));
+              flat.push.apply(flat, lastProjectStatesByDeckIndex[deckIndex] || view_state_deck_get(deck, "project"));
             }
           });
           return flat;
         }
 
         /** Deck-view states for collapse: use viewport-based stacked positions so we don't read layer rects mid-transition. */
-        function getStatesForAllDecksForCollapse() {
+        function view_expanded_collapse_get() {
           // __view_expanded_collapse_get
-          const active = getActiveDeck();
-          const center = getViewportCenter();
+          const active = deck_active_get();
+          const center = viewport_center_get();
           const flat = [];
           decks.forEach(function (deck) {
             if (deck === active) {
-              flat.push.apply(flat, getStackedStatesFromViewport(deck));
+              flat.push.apply(flat, deck_stack_layout_get(deck));
             } else {
-              flat.push.apply(flat, getRecedeStatesForDeck(center));
+              flat.push.apply(flat, deck_recede_state_get(center));
             }
           });
           return flat;
         }
 
-        function getViewportCenter() {
+        // __viewport_center_get
+        function viewport_center_get() {
           return { x: window.innerWidth / 2, y: window.innerHeight / 2 };
         }
 
-        function getRecedeStatesForDeck(center) {
-          const recedeState = cardRectState(center.x, center.y, 0, 0, 0);
+        // __deck_recede_state_get
+        function deck_recede_state_get(center) {
+          const recedeState = card_rect_state(center.x, center.y, 0, 0, 0);
           return [recedeState, recedeState, recedeState];
         }
 
-        function getStatesForAllDecksProjectToDeck() {
+        function view_transition_project_deck_get() {
           // __view_transition_project_deck_get
-          const active = getActiveDeck();
-          const center = getViewportCenter();
+          const active = deck_active_get();
+          const center = viewport_center_get();
           const flat = [];
           decks.forEach(function (deck) {
             if (deck === active) {
-              const stacked = getStatesForDeck(deck, "deck");
+              const stacked = view_state_deck_get(deck, "deck");
               lastStackedStates = stacked;
               flat.push.apply(flat, stacked);
             } else {
-              flat.push.apply(flat, getRecedeStatesForDeck(center));
+              flat.push.apply(flat, deck_recede_state_get(center));
             }
           });
           return flat;
@@ -1712,40 +2347,41 @@
         // Current visual states while in deck view (stacked or expanded):
         // - Active deck: real deck or expanded layout
         // - Other decks: receded to center (shrunken)
-        function getStatesForAllDecksCurrentInDeckView() {
+        function view_state_current_get() {
           // __view_state_current_get
-          const active = getActiveDeck();
-          const center = getViewportCenter();
+          const active = deck_active_get();
+          const center = viewport_center_get();
           const flat = [];
           const isExpanded = document.body.classList.contains("expanded-view");
           decks.forEach(function (deck) {
             if (deck === active) {
               const view = isExpanded ? "expanded" : "deck";
-              flat.push.apply(flat, getStatesForDeck(deck, view));
+              flat.push.apply(flat, view_state_deck_get(deck, view));
             } else {
-              flat.push.apply(flat, getRecedeStatesForDeck(center));
+              flat.push.apply(flat, deck_recede_state_get(center));
             }
           });
           return flat;
         }
 
-        function getFrontCardIndexForDeck(deck) {
+        // __deck_front_card_get
+        function deck_front_card_get(deck) {
           if (!deck) return 0;
-          const saved = localStorage.getItem(selectionKeyFor(deck.dataset.deck));
+          const saved = localStorage.getItem(deck_selection_key_get(deck.dataset.deck));
           const order = orderMap[saved] || orderMap.yellow;
           const colorToIndex = { yellow: 0, red: 1, green: 2 };
           return colorToIndex[order[0]] || 0;
         }
 
-        function setCardRectActiveDeckIndex(activeDeckIndex, frontCardIndex) {
+        function deck_active_index_set(activeDeckIndex, frontCardIndex) {
           // __deck_active_index_set
-          const overlay = getCardRectOverlay();
+          const overlay = card_rect_overlay_get();
           if (!overlay) return;
           overlay.dataset.activeDeckIndex = String(activeDeckIndex);
-          const rects = getCardRects();
+          const rects = card_rect_list_get();
           const deck = decks[activeDeckIndex];
           const colorToIndex = { yellow: 0, red: 1, green: 2 };
-          const saved = deck ? localStorage.getItem(selectionKeyFor(deck.dataset.deck)) : null;
+          const saved = deck ? localStorage.getItem(deck_selection_key_get(deck.dataset.deck)) : null;
           const order = orderMap[saved] || orderMap.yellow;
           const frontIndex = colorToIndex[order[0]];
           const secondIndex = colorToIndex[order[1]];
@@ -1753,24 +2389,31 @@
           rects.forEach(function (rect) {
             const di = rect.getAttribute("data-deck-index");
             const cardIndex = parseInt(rect.getAttribute("data-index"), 10);
+            var layer = rect.querySelector(".card-layer--overlay");
             if (di !== String(activeDeckIndex)) {
               rect.style.zIndex = 1;
+              if (layer) layer.classList.remove("is-front");
             } else {
-              if (cardIndex === frontIndex) rect.style.zIndex = 3;
-              else if (cardIndex === secondIndex) rect.style.zIndex = 2;
-              else rect.style.zIndex = 1;
+              if (cardIndex === frontIndex) {
+                rect.style.zIndex = 3;
+                if (layer) layer.classList.add("is-front");
+              } else {
+                if (cardIndex === secondIndex) rect.style.zIndex = 2;
+                else rect.style.zIndex = 1;
+                if (layer) layer.classList.remove("is-front");
+              }
             }
           });
         }
 
-        function setProjectStackOrder(activeDeckIndexForLayer) {
+        function view_project_stack_set(activeDeckIndexForLayer) {
           // __view_project_stack_set
-          const rects = getCardRects();
+          const rects = card_rect_list_get();
           const colorToIndex = { yellow: 0, red: 1, green: 2 };
           const n = decks.length;
           const activeBase = (activeDeckIndexForLayer != null) ? n * 3 + 1 : -1;
           decks.forEach(function (deck, deckIndex) {
-            const saved = localStorage.getItem(selectionKeyFor(deck.dataset.deck));
+            const saved = localStorage.getItem(deck_selection_key_get(deck.dataset.deck));
             const order = orderMap[saved] || orderMap.yellow;
             const frontIndex = colorToIndex[order[0]];
             const secondIndex = colorToIndex[order[1]];
@@ -1778,26 +2421,34 @@
             const base = deckIndex * 3;
             const isActiveDeck = (deckIndex === activeDeckIndexForLayer);
             const deckZBase = isActiveDeck ? activeBase : (n - 1 - deckIndex) * 3 + 1;
-            if (rects[base + backIndex]) rects[base + backIndex].style.zIndex = deckZBase + 1;
-            if (rects[base + secondIndex]) rects[base + secondIndex].style.zIndex = deckZBase + 2;
-            if (rects[base + frontIndex]) rects[base + frontIndex].style.zIndex = deckZBase + 3;
+            [backIndex, secondIndex, frontIndex].forEach(function (ci, pos) {
+              var rect = rects[base + ci];
+              if (!rect) return;
+              rect.style.zIndex = deckZBase + pos + 1;
+              var layer = rect.querySelector(".card-layer--overlay");
+              if (layer) {
+                if (ci === frontIndex) layer.classList.add("is-front");
+                else layer.classList.remove("is-front");
+              }
+            });
           });
         }
 
-        function getStatesForView(view) {
-          const active = getActiveDeck();
+        // __view_state_get
+        function view_state_get(view) {
+          const active = deck_active_get();
           if (view === "deck" && document.body.classList.contains("expanded-view")) {
-            return lastStackedStates || getStatesForDeck(active, "deck");
+            return lastStackedStates || view_state_deck_get(active, "deck");
           }
           if (view === "deck") {
-            const states = getStatesForDeck(active, "deck");
+            const states = view_state_deck_get(active, "deck");
             lastStackedStates = states;
             return states;
           }
-          return getStatesForDeck(active, view);
+          return view_state_deck_get(active, view);
         }
 
-        function applyCardRectState(el, state) {
+        function card_rect_state_apply(el, state) {
           if (!el || !state) return;
           el.style.transform = "translate(" + state.x + "px," + state.y + "px) scale(" + state.scaleX + "," + state.scaleY + ")";
           const opacity = state.opacity != null ? state.opacity : 1;
@@ -1807,17 +2458,43 @@
           el.style.pointerEvents = isReceded ? "none" : "";
         }
 
-        function applyCardRectStates(states) {
-          const rects = getCardRects();
+        function card_rect_state_apply_all(states) {
+          const rects = card_rect_list_get();
           states.forEach(function (s, i) {
-            if (rects[i]) applyCardRectState(rects[i], s);
+            if (rects[i]) card_rect_state_apply(rects[i], s);
           });
         }
 
-        function animateCardRects(fromStates, toStates, durationMs, onDone) {
+        // __spatial_registry_update
+        function spatial_registry_update(states) {
+          var rects = card_rect_list_get();
+          states.forEach(function (s, i) {
+            var id = rects[i] ? rects[i].dataset.cardId || ("card-" + i) : ("card-" + i);
+            spatial_registry[id] = {
+              x: s.x, y: s.y,
+              scaleX: s.scaleX != null ? s.scaleX : (s.scale != null ? s.scale : 1),
+              scaleY: s.scaleY != null ? s.scaleY : (s.scale != null ? s.scale : 1),
+              opacity: s.opacity != null ? s.opacity : 1
+            };
+          });
+        }
+
+        // __spatial_contract_validate
+        function spatial_contract_validate(fromStates, toStates, label) {
+          if (!fromStates || !toStates) {
+            console.warn("[spatial_contract] " + label + ": missing from or to states");
+            return;
+          }
+          if (fromStates.length !== toStates.length) {
+            console.warn("[spatial_contract] " + label + ": length mismatch from=" + fromStates.length + " to=" + toStates.length);
+          }
+        }
+
+        function view_rect_animate(fromStates, toStates, durationMs, onDone) {
           // __view_rect_animate
-          const overlay = getCardRectOverlay();
-          const rects = getCardRects();
+          const overlay = card_rect_overlay_get();
+          const rects = card_rect_list_get();
+          spatial_contract_validate(fromStates, toStates, "view_rect_animate");
           if (!overlay || rects.length === 0 || fromStates.length !== rects.length || toStates.length !== rects.length) {
             if (onDone) onDone();
             return;
@@ -1844,292 +2521,496 @@
           });
           Promise.all(anims.map(function (a) { return new Promise(function (res) { a.onfinish = res; }); })).then(function () {
             /* Re-apply final states so pointer-events are correct for receded rects */
-            applyCardRectStates(toStates);
+            card_rect_state_apply_all(toStates);
+            spatial_registry_update(toStates);
             if (onDone) onDone();
           });
         }
 
-        function showCardRectFramework(states) {
+        function view_framework_show(states) {
           // __view_framework_show
-          const rects = getCardRects();
+          const rects = card_rect_list_get();
           if (!states || states.length !== rects.length) return;
-          const overlay = getCardRectOverlay();
+          const overlay = card_rect_overlay_get();
           if (!overlay) return;
-          applyCardRectStates(states);
+          card_rect_state_apply_all(states);
+          spatial_registry_update(states);
           overlay.classList.add("is-active");
           document.body.classList.add("card-rect-framework");
           if (document.body.classList.contains("deck-view") || document.body.classList.contains("expanded-view")) {
-            const active = getActiveDeck();
-            if (active) setCardRectActiveDeckIndex(decks.indexOf(active));
+            const active = deck_active_get();
+            if (active) deck_active_index_set(decks.indexOf(active));
           }
         }
 
-        function hideCardRectFramework() {
-          const overlay = getCardRectOverlay();
+        function view_framework_hide() {
+          const overlay = card_rect_overlay_get();
           if (overlay) overlay.classList.remove("is-active");
           document.body.classList.remove("card-rect-framework");
         }
 
-        /* ---------- Title overlay: persistent title objects (view + deck titles) ---------- */
-        const TITLE_INDICES = { VIEW: 0, DECK_0: 1, DECK_1: 2, DECK_2: 3 };
+        /* ---------- Title rect overlay: spatially persistent title objects ---------- */
 
-        function titleRectState(x, y, scaleX, scaleY, opacity, fontSize) {
-          const s = { x: x, y: y, scaleX: scaleX, scaleY: scaleY, opacity: opacity != null ? opacity : 1 };
-          if (fontSize != null) s.fontSize = fontSize;
-          return s;
+        // __title_rect_state __chat_140 __spatial_title_animate
+        function title_rect_state(x, y, scale, opacity) {
+          return { x: x, y: y, scale: scale, opacity: opacity != null ? opacity : 1 };
         }
 
-        function getTitleOverlay() {
-          return document.getElementById("titleOverlay");
+        // __title_rect_overlay_get __chat_140 __spatial_title_animate
+        function title_rect_overlay_get() {
+          return document.getElementById("titleRectOverlay");
         }
 
-        function getRecedeStateForTitle(center) {
-          return titleRectState(center.x, center.y, 0, 0, 0, "0px");
+        // __title_rect_list_get __chat_140 __spatial_title_animate
+        function title_rect_list_get() {
+          var overlay = title_rect_overlay_get();
+          return overlay ? Array.from(overlay.querySelectorAll(".title-rect")) : [];
         }
 
-        function getComputedFontSize(el) {
-          return el ? window.getComputedStyle(el).fontSize : "0px";
-        }
-
-        /** Read current DOM layout and return 4 title states (view + 3 deck titles).
-         * In deck/expanded view, deck titles are hidden; return receded state. */
-        function getTitleStatesFromDOM() {
-          const center = getViewportCenter();
-          const isDeckOrExpanded = document.body.classList.contains("deck-view") || document.body.classList.contains("expanded-view");
-          const viewTitleState = pageTitle
-            ? (function () {
-                const r = pageTitle.getBoundingClientRect();
-                const fs = getComputedFontSize(pageTitle);
-                return titleRectState(r.left, r.top, r.width / (r.width || 1), r.height / (r.height || 1), 1, fs);
-              })()
-            : getRecedeStateForTitle(center);
-          const deckStates = decks.map(function (deck) {
-            if (isDeckOrExpanded) return getRecedeStateForTitle(center);
-            const el = deck && deck.querySelector(".deck-title");
-            if (!el) return getRecedeStateForTitle(center);
-            const r = el.getBoundingClientRect();
-            const fs = getComputedFontSize(el);
-            return titleRectState(r.left, r.top, r.width / (r.width || 1), r.height / (r.height || 1), 1, fs);
-          });
-          while (deckStates.length < 3) deckStates.push(getRecedeStateForTitle(center));
-          return [viewTitleState].concat(deckStates.slice(0, 3));
-        }
-
-        function getTitleElements() {
-          const overlay = getTitleOverlay();
-          if (!overlay) return [];
-          return Array.from(overlay.querySelectorAll(".title-element"));
-        }
-
-        function applyTitleState(el, state) {
-          if (!el || !state) return;
-          el.style.transform = "translate(" + state.x + "px," + state.y + "px) scale(" + state.scaleX + "," + state.scaleY + ")";
-          el.style.opacity = String(state.opacity != null ? state.opacity : 1);
-          if (state.fontSize != null) el.style.fontSize = state.fontSize;
-          el.style.pointerEvents = (state.opacity != null && state.opacity > 0) ? "auto" : "none";
-        }
-
-        function syncTitleOverlayContent() {
-          const elements = getTitleElements();
-          if (elements.length < 4) return;
-          elements[0].textContent = pageTitle ? pageTitle.textContent : "Project";
-          decks.forEach(function (deck, i) {
-            const el = deck && deck.querySelector(".deck-title");
-            if (elements[i + 1]) elements[i + 1].textContent = el ? el.textContent : "";
-          });
-        }
-
-        /** For deck→project: Project returns from horizon; active deck title
-         * animates from center to above its deck; other deck titles from receded. */
-        function getTitleFromStatesForDeckToProject(activeDeckIndex) {
-          const center = getViewportCenter();
-          const receded = getRecedeStateForTitle(center);
-          const fromStates = [receded, receded, receded, receded];
-          if (pageTitle && activeDeckIndex >= 0 && activeDeckIndex < 3) {
-            const r = pageTitle.getBoundingClientRect();
-            const fs = getComputedFontSize(pageTitle);
-            fromStates[activeDeckIndex + 1] = titleRectState(r.left, r.top, r.width / (r.width || 1), r.height / (r.height || 1), 1, fs);
-          }
-          return fromStates;
-        }
-
-        /** For project→deck: view title recedes, clicked deck title moves to center. */
-        function getTitleToStatesForProjectToDeck(activeDeckIndex) {
-          const center = getViewportCenter();
-          const receded = getRecedeStateForTitle(center);
-          const r = pageTitle.getBoundingClientRect();
-          const fs = getComputedFontSize(pageTitle);
-          const atCenter = titleRectState(r.left, r.top, r.width / (r.width || 1), r.height / (r.height || 1), 1, fs);
-          const toStates = [receded, receded, receded, receded];
-          toStates[activeDeckIndex + 1] = atCenter;
-          return toStates;
-        }
-
-        function buildTitleOverlay() {
-          const overlay = getTitleOverlay();
+        // __title_rect_overlay_build __chat_140 __spatial_title_animate __chat_147 __title_natural_width_fix
+        function title_rect_overlay_build() {
+          var overlay = title_rect_overlay_get();
           if (!overlay) return;
           overlay.innerHTML = "";
-          const labels = ["Project", "", "", ""];
-          for (let i = 0; i < 4; i++) {
-            const el = document.createElement("span");
-            el.className = "title-element";
-            el.setAttribute("data-index", String(i));
-            el.textContent = labels[i];
-            el.setAttribute("aria-hidden", "true");
+          /* page title ("Projects") */
+          var page = document.createElement("div");
+          page.className = "title-rect";
+          page.setAttribute("data-title-type", "page");
+          page.setAttribute("data-title-index", "page");
+          page.textContent = "Projects";
+          overlay.appendChild(page);
+          /* deck titles */
+          decksData.forEach(function (d, i) {
+            var el = document.createElement("div");
+            el.className = "title-rect";
+            el.setAttribute("data-title-type", "deck");
+            el.setAttribute("data-title-index", String(i));
+            el.textContent = (i + 1) + ")" + (d.miniTitle ? " " + d.miniTitle : "");
             overlay.appendChild(el);
+          });
+          /* Cache natural widths before any transforms applied */
+          title_rect_natural = {};
+          var builtEls = overlay.querySelectorAll(".title-rect");
+          builtEls.forEach(function (el) {
+            var idx = el.getAttribute("data-title-index");
+            var key = el.getAttribute("data-title-type") === "page" ? "page" : "deck-" + idx;
+            var r = el.getBoundingClientRect();
+            title_rect_natural[key] = { width: r.width, height: r.height };
+          });
+        }
+
+        var title_rect_cache = {};
+        var title_rect_natural = {};
+
+        // __title_rect_cache_build __chat_140 __spatial_title_animate __chat_147 __title_natural_width_fix
+        function title_rect_cache_build() {
+          title_rect_cache = {};
+          /* Measure real page-title position */
+          var pt = document.querySelector(".page-title");
+          if (pt) {
+            var r = pt.getBoundingClientRect();
+            title_rect_cache.page = { x: r.left, y: r.top, width: r.width, height: r.height };
           }
-          overlay.querySelector(".title-element[data-index='0']").addEventListener("click", function () {
-            if (document.body.classList.contains("deck-view") || document.body.classList.contains("expanded-view")) {
-              setView("project");
+          /* Measure real deck-title positions */
+          var deckTitles = document.querySelectorAll(".deck-title");
+          deckTitles.forEach(function (dt, i) {
+            var r = dt.getBoundingClientRect();
+            title_rect_cache["deck-" + i] = { x: r.left, y: r.top, width: r.width, height: r.height };
+          });
+        }
+
+        // __title_state_list_get __chat_140 __spatial_title_animate __chat_147 __title_natural_width_fix
+        function title_state_list_get(view) {
+          var center = viewport_center_get();
+          var horizon = title_rect_state(center.x, center.y, 0, 0);
+          var active = deck_active_get();
+          var activeIndex = active ? decks.indexOf(active) : 0;
+          var states = [];
+
+          if (view === "project") {
+            /* Page title: at cached position, scale 1 */
+            var pc = title_rect_cache.page;
+            var pn = title_rect_natural.page;
+            if (pc && pn) {
+              /* Center overlay element on the real page-title center */
+              var ox = pc.x + pc.width / 2 - pn.width / 2;
+              var oy = pc.y + pc.height / 2 - pn.height / 2;
+              states.push(title_rect_state(ox, oy, 1, 1));
+            } else {
+              states.push(title_rect_state(center.x, 10, 1, 1));
             }
-          });
-          [1, 2, 3].forEach(function (i) {
-            const el = overlay.querySelector(".title-element[data-index='" + i + "']");
-            if (!el) return;
-            el.addEventListener("click", function () {
-              if (!document.body.classList.contains("project-view")) return;
-              const deck = decks[i - 1];
-              if (deck) {
-                setActiveDeck(deck.dataset.deck);
-                setView("deck");
-              }
-            });
-          });
-        }
-
-        function showTitleOverlay(states) {
-          const overlay = getTitleOverlay();
-          const elements = getTitleElements();
-          if (!overlay || !states || states.length !== elements.length) return;
-          states.forEach(function (s, i) {
-            if (elements[i]) applyTitleState(elements[i], s);
-          });
-          overlay.classList.add("is-active");
-          document.body.classList.add("title-overlay-active");
-        }
-
-        function animateTitleOverlay(fromStates, toStates, durationMs, onDone) {
-          const overlay = getTitleOverlay();
-          const elements = getTitleElements();
-          if (!overlay || elements.length === 0 || fromStates.length !== elements.length || toStates.length !== elements.length) {
-            if (onDone) onDone();
-            return;
-          }
-          const duration = durationMs || 520;
-          const easing = "cubic-bezier(0.215, 0.61, 0.355, 1)";
-          const anims = elements.map(function (el, i) {
-            const from = fromStates[i];
-            const to = toStates[i];
-            const fromFs = from.fontSize != null ? from.fontSize : getComputedFontSize(el);
-            const toFs = to.fontSize != null ? to.fontSize : getComputedFontSize(el);
-            const keyframes = [
-              {
-                transform: "translate(" + from.x + "px," + from.y + "px) scale(" + from.scaleX + "," + from.scaleY + ")",
-                opacity: from.opacity != null ? from.opacity : 1,
-                fontSize: fromFs,
-              },
-              {
-                transform: "translate(" + to.x + "px," + to.y + "px) scale(" + to.scaleX + "," + to.scaleY + ")",
-                opacity: to.opacity != null ? to.opacity : 1,
-                fontSize: toFs,
-              },
-            ];
-            return el.animate(keyframes, { duration: duration, easing: easing, fill: "both" });
-          });
-          Promise.all(anims.map(function (a) { return new Promise(function (res) { a.onfinish = res; }); })).then(function () {
-            toStates.forEach(function (s, i) {
-              if (elements[i]) applyTitleState(elements[i], s);
-            });
-            if (onDone) onDone();
-          });
-        }
-
-        (function setupCardRectClicks() {
-          // __ux_card_rect_click
-          const overlay = getCardRectOverlay();
-          if (!overlay) return;
-          overlay.addEventListener("click", function (e) {
-            const rect = e.target.closest(".card-rect[data-deck-index]");
-            if (!rect) return;
-
-            /* Project view: clicking any card rect opens that deck in deck view */
-            if (document.body.classList.contains("project-view")) {
-              e.preventDefault();
-              e.stopPropagation();
-              const deckIndex = parseInt(rect.getAttribute("data-deck-index"), 10);
-              const deck = decks[deckIndex];
-              if (deck) {
-                setActiveDeck(deck.dataset.deck);
-                setView("deck");
-              }
-              return;
-            }
-
-            if (!document.body.classList.contains("deck-view") && !document.body.classList.contains("expanded-view")) return;
-            const active = getActiveDeck();
-            if (!active || rect.getAttribute("data-deck-index") !== String(decks.indexOf(active))) return;
-            e.preventDefault();
-            e.stopPropagation();
-            const idx = parseInt(rect.getAttribute("data-index"), 10);
-            const color = ["yellow", "red", "green"][idx];
-            if (color) {
-              promote(color, active);
-              const activeIndex = decks.indexOf(active);
-              if (activeIndex >= 0) setCardRectActiveDeckIndex(activeIndex);
-              if (document.body.classList.contains("expanded-view")) {
-                const expandedStates = getStatesForAllDecks("expanded");
-                showCardRectFramework(expandedStates);
-                requestAnimationFrame(function () {
-                  requestAnimationFrame(function () { setView("deck"); });
-                });
+            /* Deck titles: at cached positions, scaled to match 1rem/42px */
+            var deckScale = 32 / 42;
+            for (var i = 0; i < decksData.length; i++) {
+              var dc = title_rect_cache["deck-" + i];
+              var dn = title_rect_natural["deck-" + i];
+              if (dc && dn) {
+                var dox = dc.x + dc.width / 2 - (dn.width * deckScale) / 2;
+                var doy = dc.y + dc.height / 2 - (dn.height * deckScale) / 2;
+                states.push(title_rect_state(dox, doy, deckScale, 1));
               } else {
-                const states = getStatesForAllDecks("deck");
-                showCardRectFramework(states);
+                states.push(horizon);
               }
             }
+          } else {
+            /* Deck or expanded view */
+            /* Page title: beyond horizon */
+            states.push(horizon);
+            /* Active deck title: centered at page-title position, full scale */
+            var pc2 = title_rect_cache.page;
+            var pn2 = title_rect_natural.page;
+            for (var j = 0; j < decksData.length; j++) {
+              if (j === activeIndex) {
+                /* Active deck goes to top center (page-title position) */
+                var an = title_rect_natural["deck-" + j];
+                var aw = an ? an.width : 200;
+                if (pc2 && pn2) {
+                  var ax = pc2.x + pc2.width / 2 - aw / 2;
+                  var ay = pc2.y + pc2.height / 2 - pn2.height / 2;
+                  states.push(title_rect_state(ax, ay, 1, 1));
+                } else {
+                  states.push(title_rect_state(center.x - aw / 2, 10, 1, 1));
+                }
+              } else {
+                states.push(horizon);
+              }
+            }
+          }
+          return states;
+        }
+
+        // __title_rect_state_apply __chat_140 __spatial_title_animate
+        function title_rect_state_apply(el, state) {
+          el.style.transform = "translate(" + state.x + "px," + state.y + "px) scale(" + state.scale + ")";
+          el.style.opacity = state.opacity != null ? state.opacity : 1;
+          el.style.pointerEvents = state.opacity > 0 && state.scale > 0 ? "auto" : "none";
+        }
+
+        // __title_rect_state_apply_all __chat_140 __spatial_title_animate
+        function title_rect_state_apply_all(states) {
+          var els = title_rect_list_get();
+          states.forEach(function (s, i) {
+            if (els[i]) title_rect_state_apply(els[i], s);
+          });
+        }
+
+        // __title_registry_update __chat_140 __spatial_title_animate
+        function title_registry_update(states) {
+          var keys = ["title-page"];
+          for (var i = 0; i < decksData.length; i++) keys.push("title-deck-" + i);
+          states.forEach(function (s, i) {
+            if (keys[i]) {
+              spatial_registry[keys[i]] = {
+                x: s.x, y: s.y,
+                scaleX: s.scale, scaleY: s.scale,
+                opacity: s.opacity != null ? s.opacity : 1
+              };
+            }
+          });
+        }
+
+        // __title_rect_overlay_show __chat_140 __spatial_title_animate
+        function title_rect_overlay_show(states) {
+          title_rect_state_apply_all(states);
+          title_registry_update(states);
+          var overlay = title_rect_overlay_get();
+          if (overlay) overlay.classList.add("is-active");
+          document.body.classList.add("title-rect-active");
+        }
+
+        // __deck_title_edit_setup __chat_150 __deck_title_edit
+        (function () {
+          var overlay = title_rect_overlay_get();
+          if (!overlay) return;
+          overlay.addEventListener("dblclick", function (e) {
+            var el = e.target.closest(".title-rect[data-title-type='deck']");
+            if (!el) return;
+            var idx = parseInt(el.getAttribute("data-title-index"), 10);
+            var deckData = decksData[idx];
+            if (!deckData) return;
+            el.textContent = deckData.miniTitle || "";
+            el.contentEditable = "true";
+            el.style.pointerEvents = "auto";
+            el.style.cursor = "text";
+            el.style.whiteSpace = "pre-wrap";
+            el.focus();
+            var range = document.createRange();
+            range.selectNodeContents(el);
+            var sel = window.getSelection();
+            sel.removeAllRanges();
+            sel.addRange(range);
+            function onBlur() {
+              el.removeEventListener("blur", onBlur);
+              el.contentEditable = "false";
+              el.style.cursor = "";
+              el.style.whiteSpace = "nowrap";
+              var text = el.textContent.replace(/\s+$/g, "").replace(/^\s+/, "");
+              deckData.miniTitle = text;
+              deckData.title = text;
+              deck_title_edit_save(deckData.id, text);
+              el.textContent = (idx + 1) + ")" + (text ? " " + text : "");
+              var deck = decks[idx];
+              if (deck) {
+                var realTitle = deck.querySelector(".deck-title");
+                if (realTitle) realTitle.textContent = el.textContent;
+                deck.dataset.title = text;
+              }
+              var view = click_view_get();
+              if (view === "deck" || view === "expanded") {
+                pageTitle.textContent = deck_title_text_get(deck_active_get()) || "Projects";
+                document.title = pageTitle.textContent;
+              }
+              var r = el.getBoundingClientRect();
+              title_rect_natural["deck-" + idx] = { width: r.width, height: r.height };
+            }
+            el.addEventListener("blur", onBlur);
+            el.addEventListener("keydown", function (e) {
+              if (e.key === "Escape" || e.key === "Enter") { e.preventDefault(); el.blur(); }
+            });
           });
         })();
 
-        function applyView(view, options) {
-          // __ux_view_apply
+        // __title_rect_animate __chat_140 __spatial_title_animate
+        function title_rect_animate(fromStates, toStates, durationMs, onDone) {
+          var els = title_rect_list_get();
+          if (els.length === 0 || fromStates.length !== els.length || toStates.length !== els.length) {
+            if (onDone) onDone();
+            return;
+          }
+          var duration = durationMs || 520;
+          var easing = "cubic-bezier(0.215, 0.61, 0.355, 1)";
+          var anims = els.map(function (el, i) {
+            var from = fromStates[i];
+            var to = toStates[i];
+            return el.animate(
+              [
+                {
+                  transform: "translate(" + from.x + "px," + from.y + "px) scale(" + from.scale + ")",
+                  opacity: from.opacity != null ? from.opacity : 1,
+                },
+                {
+                  transform: "translate(" + to.x + "px," + to.y + "px) scale(" + to.scale + ")",
+                  opacity: to.opacity != null ? to.opacity : 1,
+                },
+              ],
+              { duration: duration, easing: easing, fill: "both" }
+            );
+          });
+          Promise.all(anims.map(function (a) { return new Promise(function (res) { a.onfinish = res; }); })).then(function () {
+            title_rect_state_apply_all(toStates);
+            title_registry_update(toStates);
+            if (onDone) onDone();
+          });
+        }
+
+        // __click_view_get
+        function click_view_get() {
+          if (document.body.classList.contains("project-view")) return "project";
+          if (document.body.classList.contains("deck-view")) return "deck";
+          if (document.body.classList.contains("expanded-view")) return "expanded";
+          return "project";
+        }
+
+        // __click_target_resolve
+        function click_target_resolve(hits, view) {
+          for (var i = 0; i < hits.length; i++) {
+            var el = hits[i];
+            /* Tab inside card-rect overlay */
+            var tab = el.closest ? el.closest(".card-rect .card-layer--overlay .tab") : null;
+            if (tab) {
+              var rect = tab.closest(".card-rect[data-deck-index]");
+              if (rect) {
+                return {
+                  type: "tab",
+                  deckIndex: parseInt(rect.getAttribute("data-deck-index"), 10),
+                  cardIndex: parseInt(rect.getAttribute("data-index"), 10),
+                  element: tab
+                };
+              }
+            }
+            /* Card image for lightbox */
+            if (el.classList && el.classList.contains("card-text-image")) {
+              var imgRect = el.closest ? el.closest(".card-rect[data-deck-index]") : null;
+              if (imgRect) {
+                return { type: "card-image", element: el };
+              }
+            }
+            /* Card content (text items, rows, title) — for editing */
+            var content = el.closest ? el.closest(".card-text-item, .card-text-row, .card-text-title") : null;
+            if (content) {
+              var contentRect = content.closest(".card-rect[data-deck-index]");
+              if (contentRect) {
+                return {
+                  type: "card-content",
+                  deckIndex: parseInt(contentRect.getAttribute("data-deck-index"), 10),
+                  cardIndex: parseInt(contentRect.getAttribute("data-index"), 10),
+                  element: content
+                };
+              }
+            }
+            /* Card body (::after area, card element, or card-rect itself) */
+            var bodyRect = el.closest ? el.closest(".card-rect[data-deck-index]") : null;
+            if (bodyRect) {
+              return {
+                type: "card-body",
+                deckIndex: parseInt(bodyRect.getAttribute("data-deck-index"), 10),
+                cardIndex: parseInt(bodyRect.getAttribute("data-index"), 10),
+                element: bodyRect
+              };
+            }
+          }
+          return null;
+        }
+
+        // __click_route
+        function click_route(hit, view, e) {
+          if (!hit) return;
+          if (hit.type === "tab") {
+            if (view === "project") {
+              var deck = decks[hit.deckIndex];
+              if (deck) {
+                deck_active_set(deck.dataset.deck);
+                view_set("deck");
+              }
+              return;
+            }
+            if (view === "deck" || view === "expanded") {
+              var active = deck_active_get();
+              if (!active || hit.deckIndex !== decks.indexOf(active)) return;
+              var color = ["yellow", "red", "green"][hit.cardIndex];
+              if (!color) return;
+              if (view === "expanded") {
+                card_promote(color, active);
+                deck_active_index_set(hit.deckIndex);
+                var expandedStates = view_state_list_get("expanded");
+                view_framework_show(expandedStates);
+                requestAnimationFrame(function () {
+                  requestAnimationFrame(function () { view_set("deck"); });
+                });
+              } else {
+                var fromStates = view_state_list_get("deck");
+                card_promote(color, active);
+                deck_active_index_set(hit.deckIndex);
+                var toStates = view_state_list_get("deck");
+                view_framework_show(fromStates);
+                view_rect_animate(fromStates, toStates, 300);
+              }
+            }
+            return;
+          }
+          if (hit.type === "card-image") {
+            if (view !== "project") {
+              e.stopPropagation();
+              lightbox_open(hit.element.src, hit.element.alt);
+            }
+            return;
+          }
+          if (hit.type === "card-content") {
+            if (view === "project") {
+              var deck = decks[hit.deckIndex];
+              if (deck) {
+                deck_active_set(deck.dataset.deck);
+                view_set("deck");
+              }
+            } else if (view === "expanded") {
+              var active = deck_active_get();
+              if (!active || hit.deckIndex !== decks.indexOf(active)) return;
+              var color = ["yellow", "red", "green"][hit.cardIndex];
+              if (color) {
+                card_promote(color, active);
+                deck_active_index_set(hit.deckIndex);
+              }
+              view_set("deck");
+            }
+            /* deck: do nothing — allow native editing */
+            return;
+          }
+          if (hit.type === "card-body") {
+            if (view === "project") {
+              var deck = decks[hit.deckIndex];
+              if (deck) {
+                deck_active_set(deck.dataset.deck);
+                view_set("deck");
+              }
+            } else if (view === "deck" || view === "expanded") {
+              var active = deck_active_get();
+              if (!active || hit.deckIndex !== decks.indexOf(active)) return;
+              var color = ["yellow", "red", "green"][hit.cardIndex];
+              if (!color) return;
+              if (view === "expanded") {
+                card_promote(color, active);
+                deck_active_index_set(hit.deckIndex);
+                var expandedStates = view_state_list_get("expanded");
+                view_framework_show(expandedStates);
+                requestAnimationFrame(function () {
+                  requestAnimationFrame(function () { view_set("deck"); });
+                });
+              } else {
+                var fromStates = view_state_list_get("deck");
+                card_promote(color, active);
+                deck_active_index_set(hit.deckIndex);
+                var toStates = view_state_list_get("deck");
+                view_framework_show(fromStates);
+                view_rect_animate(fromStates, toStates, 300);
+              }
+            }
+            return;
+          }
+        }
+
+        // __click_dispatch
+        function click_dispatch(e) {
+          /* Skip if click is inside a contenteditable area */
+          if (e.target.closest && e.target.closest("[contenteditable='true']")) return;
+          /* Skip lightbox clicks */
+          if (e.target.closest && e.target.closest(".image-lightbox")) return;
+          /* Skip UI controls */
+          if (e.target.closest && e.target.closest("#reloadRow, #titleRow")) return;
+          var view = click_view_get();
+          var hits = document.elementsFromPoint(e.clientX, e.clientY);
+          var hit = click_target_resolve(hits, view);
+          if (hit) click_route(hit, view, e);
+        }
+        document.addEventListener("click", click_dispatch);
+
+        function view_apply(view, options) {
+          // __view_apply __chat_140 __spatial_title_animate __chat_145 __title_settle_jump_fix
           options = options || {};
           document.body.classList.toggle("project-view", view === "project");
           document.body.classList.toggle("deck-view", view === "deck");
           document.body.classList.toggle("expanded-view", view === "expanded");
-          pageTitle.textContent = view === "project" ? "Project" : getDeckTitleText(getActiveDeck()) || "Project";
+          pageTitle.textContent = view === "project" ? "Projects" : deck_title_text_get(deck_active_get()) || "Projects";
           document.title = pageTitle.textContent;
-          updateDeckScales();
-          requestAnimationFrame(updateAllTabOffsets);
+          deck_scale_update();
+          requestAnimationFrame(deck_tab_offset_update_all);
           decks.forEach((deck) => deck.classList.remove("is-expanded"));
           if (view === "deck" || view === "expanded") {
-            clearDeckProxy();
+            deck_proxy_clear();
             window.scrollTo(0, 0);
-            const active = getActiveDeck();
+            const active = deck_active_get();
             if (active && view === "expanded") active.classList.add("is-expanded");
           }
           if (!options.skipCardRectUpdate) {
             requestAnimationFrame(function () {
               const viewState = view === "project" ? "project" : (view === "expanded" ? "expanded" : "deck");
-              const states = getStatesForAllDecks(viewState);
-              showCardRectFramework(states);
+              const states = view_state_list_get(viewState);
+              view_framework_show(states);
               if (view === "project") {
-                setProjectStackOrder(options.activeDeckIndexForLayer);
+                view_project_stack_set(options.activeDeckIndexForLayer);
+                title_rect_cache_build();
               } else {
-                const active = getActiveDeck();
-                if (active) setCardRectActiveDeckIndex(decks.indexOf(active));
+                const active = deck_active_get();
+                if (active) deck_active_index_set(decks.indexOf(active));
               }
-            });
-          }
-          if (!options.skipTitleOverlayUpdate && getTitleOverlay() && getTitleElements().length >= 4) {
-            requestAnimationFrame(function () {
-              syncTitleOverlayContent();
-              showTitleOverlay(getTitleStatesFromDOM());
+              if (!options.skipTitleUpdate) {
+                title_rect_overlay_show(title_state_list_get(viewState));
+              }
             });
           }
         }
 
-        function setView(view) {
-          // __ux_view_set
+        function view_set(view) {
+          // __view_set
           if (view === "deck" || view === "expanded") lastProjectScroll = window.scrollY;
           localStorage.setItem(VIEW_KEY, view);
           const fromProject = document.body.classList.contains("project-view");
@@ -2137,19 +3018,19 @@
           const fromExpanded = document.body.classList.contains("expanded-view");
 
           if (fromProject && view === "deck") {
-            runProjectDeckTransition("deck");
+            transition_project_deck_run("deck");
           } else if (fromProject && view === "expanded") {
-            runProjectExpandedTransition("expanded");
+            transition_project_expanded_run("expanded");
           } else if (fromDeck && view === "project") {
-            runProjectDeckTransition("project");
+            transition_project_deck_run("project");
           } else if (fromDeck && view === "expanded") {
-            runDeckExpandedTransition("expanded");
+            transition_deck_expanded_run("expanded");
           } else if (fromExpanded && view === "project") {
-            runProjectExpandedTransition("project");
+            transition_project_expanded_run("project");
           } else if (fromExpanded && view === "deck") {
-            runDeckExpandedTransition("deck");
+            transition_deck_expanded_run("deck");
           } else {
-            applyView(view);
+            view_apply(view);
           }
 
           if (view === "deck" || view === "expanded") window.scrollTo(0, 0);
@@ -2158,20 +3039,20 @@
 
         const colorToIndex = { yellow: YELLOW_CARD_INDEX, red: RED_CARD_INDEX, green: GREEN_CARD_INDEX };
 
-        function getFrontCardData() {
-          const active = getActiveDeck();
+        function card_front_data_get() {
+          const active = deck_active_get();
           if (!active) return null;
           const deckId = active.dataset.deck;
           const deckData = decksData.find((d) => d.id === deckId);
           if (!deckData || !deckData.cards) return null;
-          const saved = localStorage.getItem(selectionKeyFor(deckId));
+          const saved = localStorage.getItem(deck_selection_key_get(deckId));
           const order = orderMap[saved] || orderMap.yellow;
           const frontIndex = colorToIndex[order[0]];
           if (frontIndex === undefined) return null;
           return deckData.cards[frontIndex] || null;
         }
 
-        function runFlipAnimation(active, startRect, endRect) {
+        function card_flip_animate(active, startRect, endRect) {
           const dx = startRect.left - endRect.left;
           const dy = startRect.top - endRect.top;
           const scaleX = startRect.width / endRect.width;
@@ -2201,7 +3082,7 @@
           };
         }
 
-        function runTitleFlip(startRect, endRect) {
+        function title_flip_animate(startRect, endRect) {
           if (!pageTitle || !startRect || !endRect) return;
           const dx = startRect.left - endRect.left;
           const dy = startRect.top - endRect.top;
@@ -2222,7 +3103,7 @@
           };
         }
 
-        function runDeckInit() {
+        function deck_init_run() {
           decks.forEach((deck) => {
             const deckTitle = deck.querySelector(".deck-title");
           if (deckTitle) {
@@ -2230,12 +3111,12 @@
             deckTitle.addEventListener("click", (event) => {
               if (document.body.classList.contains("deck-view") || document.body.classList.contains("expanded-view")) {
                 event.stopPropagation();
-                setView("project");
+                view_set("project");
                 return;
               }
               event.stopPropagation();
-              setActiveDeck(deck.dataset.deck);
-              setView("deck");
+              deck_active_set(deck.dataset.deck);
+              view_set("deck");
             });
           }
           /* Card interactivity lives in the overlay; viewport/deck clicks open deck in project view */
@@ -2244,51 +3125,47 @@
             viewport.addEventListener("click", (event) => {
               if (!document.body.classList.contains("project-view")) return;
               event.stopPropagation();
-              setActiveDeck(deck.dataset.deck);
-              setView("deck");
+              deck_active_set(deck.dataset.deck);
+              view_set("deck");
             });
           }
 
           deck.addEventListener("click", () => {
-            setActiveDeck(deck.dataset.deck);
-            setView("deck");
+            if (!document.body.classList.contains("project-view")) return;
+            deck_active_set(deck.dataset.deck);
+            view_set("deck");
           });
         });
 
         pageTitle.addEventListener("click", () => {
           if (document.body.classList.contains("deck-view") || document.body.classList.contains("expanded-view")) {
-            setView("project");
+            view_set("project");
           }
         });
 
         const exportDeckDataBtn = document.getElementById("exportDeckDataBtn");
         if (exportDeckDataBtn) {
-          exportDeckDataBtn.addEventListener("click", exportDeckDataToFile);
-        }
-        const reloadDeckDataBtn = document.getElementById("reloadDeckDataBtn");
-        if (reloadDeckDataBtn) {
-          // __reload_data_click
-          reloadDeckDataBtn.addEventListener("click", reloadDeckDataFromFile);
+          exportDeckDataBtn.addEventListener("click", export_file_save);
         }
         const titleRowBackBtn = document.getElementById("titleRowBackBtn");
         if (titleRowBackBtn) {
           // __ux_title_back
-          titleRowBackBtn.addEventListener("click", () => setView("project"));
+          titleRowBackBtn.addEventListener("click", () => view_set("project"));
         }
         const titleRowExpandBtn = document.getElementById("titleRowExpandBtn");
         if (titleRowExpandBtn) {
           // __ux_title_expand
           titleRowExpandBtn.addEventListener("click", () => {
             const isExpanded = document.body.classList.contains("expanded-view");
-            setView(isExpanded ? "deck" : "expanded");
+            view_set(isExpanded ? "deck" : "expanded");
           });
         }
         const reload_key = "index-card3-auto-reload";
         const reload_switch = document.getElementById("reload_switch");
         const reload_switch_status = document.getElementById("reload_switch_status");
         function update_reload_ui() {
-          // __reload_ui_update
-          const on = localStorage.getItem(reload_key) !== "0";
+          // __update_reload_ui
+          const on = localStorage.getItem(reload_key) === "1";
           if (reload_switch) {
             reload_switch.setAttribute("aria-checked", on ? "true" : "false");
             reload_switch.setAttribute("aria-label", "Auto-reload " + (on ? "on" : "off"));
@@ -2299,24 +3176,28 @@
           update_reload_ui();
           reload_switch.addEventListener("click", () => {
             // __reload_toggle_click
-            const on = localStorage.getItem(reload_key) !== "0";
+            const on = localStorage.getItem(reload_key) === "1";
             localStorage.setItem(reload_key, on ? "0" : "1");
             update_reload_ui();
           });
         }
-        const loadDeckDataFileBtn = document.getElementById("loadDeckDataFileBtn");
-        const loadDeckDataFileInput = document.getElementById("loadDeckDataFileInput");
-        if (loadDeckDataFileBtn && loadDeckDataFileInput) {
-          loadDeckDataFileBtn.addEventListener("click", () => loadDeckDataFileInput.click());
-          loadDeckDataFileInput.addEventListener("change", () => {
-            const file = loadDeckDataFileInput.files && loadDeckDataFileInput.files[0];
-            loadDeckDataFromFileInput(file);
-            loadDeckDataFileInput.value = "";
+        const deck_data_loadFileBtn = document.getElementById("deck_data_loadFileBtn");
+        const deck_data_loadFileInput = document.getElementById("deck_data_loadFileInput");
+        if (deck_data_loadFileBtn && deck_data_loadFileInput) {
+          deck_data_loadFileBtn.addEventListener("click", () => deck_data_loadFileInput.click());
+          deck_data_loadFileInput.addEventListener("change", () => {
+            const file = deck_data_loadFileInput.files && deck_data_loadFileInput.files[0];
+            deck_data_file_load(file);
+            deck_data_loadFileInput.value = "";
           });
         }
 
         document.addEventListener("click", (event) => {
           if (event.target.closest(".title-row-back") || event.target.closest(".title-row-expand")) {
+            return;
+          }
+          /* Skip navigation if click hit a deck title overlay (dblclick edits it) */
+          if (event.target.closest(".title-rect[data-title-type='deck']")) {
             return;
           }
           const rect = pageTitle.getBoundingClientRect();
@@ -2330,7 +3211,7 @@
             y <= rect.bottom + pad;
           if (inside) {
             if (document.body.classList.contains("deck-view") || document.body.classList.contains("expanded-view")) {
-              setView("project");
+              view_set("project");
             }
           }
         });
@@ -2339,25 +3220,25 @@
         if (viewBackdrop) {
           viewBackdrop.addEventListener("click", () => {
             if (document.body.classList.contains("deck-view") || document.body.classList.contains("expanded-view")) {
-              setView("project");
+              view_set("project");
             }
           });
           viewBackdrop.addEventListener("touchend", () => {
             if (document.body.classList.contains("deck-view") || document.body.classList.contains("expanded-view")) {
-              setView("project");
+              view_set("project");
             }
           });
         }
 
         if (imageLightbox) {
           imageLightbox.addEventListener("click", () => {
-            closeImageLightbox();
+            lightbox_close();
           });
         }
 
         const savedActive = localStorage.getItem(ACTIVE_KEY);
         if (savedActive) {
-          setActiveDeck(savedActive);
+          deck_active_set(savedActive);
         }
 
         let savedView = localStorage.getItem(VIEW_KEY) || localStorage.getItem(LEGACY_MODE_KEY) || "project";
@@ -2365,10 +3246,10 @@
         if (savedView === "deck" && localStorage.getItem(EXPANDED_KEY) === "1") savedView = "expanded";
         if (savedView) localStorage.setItem(VIEW_KEY, savedView);
         if (savedView === "project") {
-          const active = getActiveDeck();
-          applyView(savedView, active != null ? { activeDeckIndexForLayer: decks.indexOf(active) } : {});
+          const active = deck_active_get();
+          view_apply(savedView, active != null ? { activeDeckIndexForLayer: decks.indexOf(active) } : {});
         } else {
-          applyView(savedView);
+          view_apply(savedView);
         }
         if (savedView === "project") {
           requestAnimationFrame(() => {
@@ -2381,32 +3262,33 @@
         try {
           const lightboxState = JSON.parse(localStorage.getItem(IMAGE_LIGHTBOX_KEY));
           if (lightboxState && lightboxState.open && lightboxState.src) {
-            openImageLightbox(lightboxState.src, lightboxState.alt || "");
+            lightbox_open(lightboxState.src, lightboxState.alt || "");
           }
         } catch {
           // ignore invalid state
         }
 
-        applyLineNumbers();
-        setupCardTextEditing();
-        setupCardTabAndTitleEditing();
+        card_outline_apply_all();
+        item_edit_setup();
+        item_insert_setup();
+        tab_title_edit_setup();
         /* Save selection when still editing so reload can restore it (no blur) */
-        window.addEventListener("pagehide", saveCurrentEditStateIfActive);
-        window.addEventListener("beforeunload", saveCurrentEditStateIfActive);
-        document.addEventListener("selectionchange", saveCurrentEditStateIfActive);
-        updateAllTabOffsets();
-        updateDeckScales();
+        window.addEventListener("pagehide", edit_state_save_current);
+        window.addEventListener("beforeunload", edit_state_save_current);
+        document.addEventListener("selectionchange", edit_state_save_current);
+        deck_tab_offset_update_all();
+        deck_scale_update();
         requestAnimationFrame(() => {
-          updateDeckScales();
-          updateAllTabOffsets();
+          deck_scale_update();
+          deck_tab_offset_update_all();
         });
 
         decks.forEach((deck) => {
-          const saved = localStorage.getItem(selectionKeyFor(deck.dataset.deck));
+          const saved = localStorage.getItem(deck_selection_key_get(deck.dataset.deck));
           if (saved && orderMap[saved]) {
-            setOrder(orderMap[saved], deck);
+            deck_order_set(orderMap[saved], deck);
           } else {
-            setOrder(orderMap.yellow, deck);
+            deck_order_set(orderMap.yellow, deck);
           }
         });
 
@@ -2415,8 +3297,14 @@
           if (resizeFrame) return;
           resizeFrame = requestAnimationFrame(() => {
             resizeFrame = null;
-            updateDeckScales();
-            updateAllTabOffsets();
+            deck_scale_update();
+            deck_tab_offset_update_all();
+            if (document.body.classList.contains("project-view")) {
+              title_rect_cache_build();
+            }
+            var currentView = document.body.classList.contains("project-view") ? "project"
+              : document.body.classList.contains("expanded-view") ? "expanded" : "deck";
+            title_rect_overlay_show(title_state_list_get(currentView));
           });
         });
         }
@@ -2424,13 +3312,13 @@
         if (window.__SAVED_STATE__) {
           const state = window.__SAVED_STATE__;
           window.__SAVED_STATE__ = null;
-          if (state.decks && state.decks.length > 0 && normalizeToDecksData({ decks: state.decks }) != null) {
-            loadDecksFromData({ decks: state.decks }, false);
+          if (state.decks && state.decks.length > 0 && deck_data_normalize({ decks: state.decks }) != null) {
+            deck_data_render({ decks: state.decks }, false);
           } else {
-            loadDeckData();
+            deck_data_load();
           }
         } else {
-          loadDeckData();
+          deck_data_load();
         }
       })();
     </script>

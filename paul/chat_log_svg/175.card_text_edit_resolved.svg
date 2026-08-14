@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 200">
+  <rect width="600" height="200" rx="12" fill="#2a2a2a"/>
+  <text x="300" y="28" text-anchor="middle" font-family="monospace" font-size="13" fill="#e0e0e0" font-weight="700">chat_175: card_text_edit_resolved</text>
+
+  <rect x="30" y="50" width="540" height="50" rx="6" fill="#3d2020" stroke="#c96b6b" stroke-width="1"/>
+  <text x="300" y="72" text-anchor="middle" font-family="monospace" font-size="9" fill="#c96b6b">Report: 3rd card text not editable (select but no edit)</text>
+  <text x="300" y="88" text-anchor="middle" font-family="monospace" font-size="8" fill="#888">Hit targets too small at old 0.9 scale</text>
+
+  <line x1="300" y1="103" x2="300" y2="118" stroke="#888" stroke-width="2" marker-end="url(#arr)"/>
+  <defs><marker id="arr" markerWidth="6" markerHeight="4" refX="5" refY="2" orient="auto"><path d="M0,0 L6,2 L0,4" fill="#888"/></marker></defs>
+
+  <rect x="30" y="120" width="540" height="50" rx="6" fill="#1e332e" stroke="#6bc96b" stroke-width="1"/>
+  <text x="300" y="142" text-anchor="middle" font-family="monospace" font-size="9" fill="#6bc96b">Resolved: deck size increase (0.98 scale) fixed hit targets</text>
+  <text x="300" y="158" text-anchor="middle" font-family="monospace" font-size="8" fill="#888">User confirmed "its ok now"</text>
+</svg>

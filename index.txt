@@ -226,28 +226,16 @@
           "title": "Herodotus",
           "items": [
             {
-              "text": "The Greek historian Herodotus believed that we are what we do, not what we say.",
-              "classes": [
-                "level-2"
-              ]
+              "text": "The Greek historian Herodotus believed that we are what we do, not what we say."
             },
             {
-              "text": "According to him, our worth does not rely upon our appearance or the wardrobe we carry.",
-              "classes": [
-                "level-2"
-              ]
+              "text": "According to him, our worth does not rely upon our appearance or the wardrobe we carry."
             },
             {
-              "text": "Furthermore, our evaluation of moral behavior sometimes lies outside the scope of due diligence.",
-              "classes": [
-                "level-2"
-              ]
+              "text": "Furthermore, our evaluation of moral behavior sometimes lies outside the scope of due diligence."
             },
             {
-              "text": "The inevitability of conflict was evident from the start.",
-              "classes": [
-                "level-2"
-              ]
+              "text": "The inevitability of conflict was evident from the start."
             }
           ]
         },
@@ -256,34 +244,19 @@
           "title": "Example",
           "items": [
             {
-              "text": "A story comes to mind from my operations days at AT&T in which I ran into a clash of cultures that caused confusion daily.",
-              "classes": [
-                "level-2"
-              ]
+              "text": "A story comes to mind from my operations days at AT&T in which I ran into a clash of cultures that caused confusion daily."
             },
             {
-              "text": "For example, a driver was sent to our location in West Virginia in a super-long limousine, inappropriate in scruffy West Virginia.",
-              "classes": [
-                "level-2"
-              ]
+              "text": "For example, a driver was sent to our location in West Virginia in a super-long limousine, inappropriate in scruffy West Virginia."
             },
             {
-              "text": "I could not convince the driver that money was not the sole criteria for evaluation.",
-              "classes": [
-                "level-2"
-              ]
+              "text": "I could not convince the driver that money was not the sole criteria for evaluation."
             },
             {
-              "text": "\"It's free. They give you the limo for free!\"",
-              "classes": [
-                "level-2"
-              ]
+              "text": "\"It's free. They give you the limo for free!\""
             },
             {
-              "text": "Again and again, she demonstrated that money was the only criteria she considered.",
-              "classes": [
-                "level-2"
-              ]
+              "text": "Again and again, she demonstrated that money was the only criteria she considered."
             }
           ]
         },
@@ -292,22 +265,13 @@
           "title": "Conflicts",
           "items": [
             {
-              "text": "Conflicts are inevitable; we all have to navigate backgrounds and situations in the early part of our career.",
-              "classes": [
-                "level-2"
-              ]
+              "text": "Conflicts are inevitable; we all have to navigate backgrounds and situations in the early part of our career."
             },
             {
-              "text": "There are differences in the meaning of words, phrases, and gestures.",
-              "classes": [
-                "level-2"
-              ]
+              "text": "There are differences in the meaning of words, phrases, and gestures."
             },
             {
-              "text": "It takes repetition to wipe out the past.",
-              "classes": [
-                "level-2"
-              ]
+              "text": "It takes repetition to wipe out the past."
             },
             {
               "classes": [
@@ -315,10 +279,7 @@
               ]
             },
             {
-              "text": "He had a way that permitted, etc.",
-              "classes": [
-                "level-2"
-              ]
+              "text": "He had a way that permitted, etc."
             }
           ]
         },

@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 440 180">
+  <style>
+    text { font-family: monospace; font-size: 11px; }
+    .del { fill: #c44; }
+    .add { fill: #28a745; }
+  </style>
+
+  <text x="220" y="20" text-anchor="middle" font-size="13" font-weight="bold">135. SVG Link Update</text>
+
+  <!-- BEFORE -->
+  <text x="110" y="50" text-anchor="middle" font-size="11" font-weight="bold">BEFORE</text>
+  <rect x="20" y="60" width="180" height="50" rx="4" fill="#fdd" stroke="#c44"/>
+  <text x="30" y="78" font-size="9" class="del">B.b link:</text>
+  <text x="30" y="92" font-size="9" class="del">file:///.../index.html</text>
+  <text x="30" y="104" font-size="8" class="del">(points to app, not diagram)</text>
+
+  <!-- Arrow -->
+  <text x="215" y="90" font-size="20">→</text>
+
+  <!-- AFTER -->
+  <text x="330" y="50" text-anchor="middle" font-size="11" font-weight="bold">AFTER</text>
+  <rect x="240" y="60" width="180" height="50" rx="4" fill="#d4edda" stroke="#28a745"/>
+  <text x="250" y="78" font-size="9" class="add">B.b link:</text>
+  <text x="250" y="92" font-size="9" class="add">file:///.../chat_log_svg/</text>
+  <text x="250" y="104" font-size="9" class="add">N.short_label.svg</text>
+
+  <!-- Rule update -->
+  <rect x="60" y="130" width="320" height="36" rx="4" fill="#fff3cd" stroke="#ffc107"/>
+  <text x="70" y="148" font-size="9">prompt.mdc C.5.b.2 + MEMORY.md updated</text>
+  <text x="70" y="160" font-size="9">Each entry links to its own SVG diagram</text>
+</svg>

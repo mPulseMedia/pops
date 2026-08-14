@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 460 220" style="background: white;">
+  <style>
+    text { font-family: monospace; font-size: 10px; }
+    .heading { font-size: 13px; font-weight: bold; }
+    .add { fill: #28a745; }
+    .rule { fill: #0366d6; }
+  </style>
+  <text x="230" y="20" text-anchor="middle" class="heading">143. Chat Entry Codename Rule</text>
+  <rect x="20" y="40" width="420" height="60" rx="6" fill="#e8f4fd" stroke="#0366d6" stroke-width="1.5"/>
+  <text x="230" y="58" text-anchor="middle" font-size="11" font-weight="bold" class="rule">prompt.mdc H. Chat Entry Codenames</text>
+  <text x="30" y="76" font-size="9">Two separate codenames per entry:</text>
+  <text x="30" y="88" font-size="9" class="add">chat_NNN (e.g. chat_140)  +  short_label (e.g. spatial_title_animate)</text>
+
+  <rect x="20" y="115" width="200" height="90" rx="6" fill="#d4edda" stroke="#28a745" stroke-width="1.5"/>
+  <text x="120" y="135" text-anchor="middle" font-size="10" font-weight="bold" class="add">In code:</text>
+  <text x="30" y="152" font-size="8">// __chat_140 __spatial_title_animate</text>
+  <text x="30" y="166" font-size="8">function title_rect_animate(...)</text>
+  <text x="30" y="180" font-size="8">Two codenames on one line:</text>
+  <text x="30" y="194" font-size="8">entry number + descriptive label</text>
+
+  <rect x="240" y="115" width="200" height="90" rx="6" fill="#fff3cd" stroke="#ffc107" stroke-width="1.5"/>
+  <text x="340" y="135" text-anchor="middle" font-size="10" font-weight="bold" fill="#856404">In chat log:</text>
+  <text x="250" y="152" font-size="8">C.  Codenames</text>
+  <text x="250" y="166" font-size="8">    a. chat_140</text>
+  <text x="250" y="180" font-size="8">    b. spatial_title_animate</text>
+  <text x="250" y="194" font-size="8">Both listed separately</text>
+</svg>

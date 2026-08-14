@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 280" style="background: white;">
+  <style>
+    text { font-family: monospace; font-size: 10px; }
+    .heading { font-size: 13px; font-weight: bold; }
+    .sub { font-size: 11px; font-weight: bold; }
+    .add { fill: #28a745; }
+    .rule { fill: #0366d6; }
+  </style>
+  <text x="250" y="20" text-anchor="middle" class="heading">144. SVG Context Rule + Two Codenames</text>
+
+  <!-- SVG context rule -->
+  <rect x="15" y="40" width="225" height="100" rx="6" fill="#e8f4fd" stroke="#0366d6" stroke-width="1.5"/>
+  <text x="127" y="58" text-anchor="middle" class="sub rule">prompt.mdc F.4 (new)</text>
+  <text x="25" y="76" font-size="9">Consider recent + related</text>
+  <text x="25" y="90" font-size="9">chat entries when composing</text>
+  <text x="25" y="104" font-size="9">SVG diagrams. Richer context</text>
+  <text x="25" y="118" font-size="9">= more useful diagrams.</text>
+
+  <!-- Two codenames -->
+  <rect x="255" y="40" width="230" height="100" rx="6" fill="#d4edda" stroke="#28a745" stroke-width="1.5"/>
+  <text x="370" y="58" text-anchor="middle" class="sub add">prompt.mdc H (updated)</text>
+  <text x="265" y="76" font-size="9">Two SEPARATE codenames:</text>
+  <text x="265" y="94" font-size="9" class="add">1. chat_140</text>
+  <text x="265" y="108" font-size="9" class="add">2. spatial_title_animate</text>
+  <text x="265" y="126" font-size="9">Not one combined name.</text>
+
+  <!-- Connection to recent entries -->
+  <text x="250" y="165" text-anchor="middle" class="sub">Context: entries 138-143</text>
+  <rect x="15" y="175" width="470" height="90" rx="6" fill="#f8f9fa" stroke="#dee2e6"/>
+  <text x="25" y="195" font-size="9">138. Continuity audit (identified 20+ spatial requests)</text>
+  <text x="25" y="209" font-size="9">139. Spatial persistence (spec + validation + registry)</text>
+  <text x="25" y="223" font-size="9" class="add">140. Spatial title animate (11 new functions)</text>
+  <text x="25" y="237" font-size="9">141. current.html viewer  142. chat_log_current</text>
+  <text x="25" y="251" font-size="9">143. Chat entry codenames  144. SVG context rule</text>
+</svg>

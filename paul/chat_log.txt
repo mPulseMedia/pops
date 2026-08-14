@@ -1039,22 +1039,2079 @@
     C.  Codenames
         a.  deck_tab_offset_update.
 
+63.  CURSOR RULES QUERY – 2026-02-14 12:00:00 PM
+    A.  Prompt
+        a.  "do you read the .cursor/rule files each
+            time you process a prompt?"
+    B.  Response
+        a.  No; Claude Code uses CLAUDE.md and
+            MEMORY.md, not .cursor/rules.
+    C.  Codenames
+        a.  None.
+
+64.  RULES TO MEMORY – 2026-02-14 12:01:00 PM
+    A.  Prompt
+        a.  "copy codename, outline and prompt where
+            you'll see them every prompt processing,
+            not just at the start of a conversation."
+    B.  Response
+        a.  Copied codename.mdc, outline.mdc,
+            prompt.mdc into MEMORY.md (96 lines,
+            within 200-line limit).
+    C.  Codenames
+        a.  None.
+
+65.  CHAT LOG CONFIRM – 2026-02-14 12:02:00 PM
+    A.  Prompt
+        a.  "ok, so now will my prompts to you show
+            up in chat log?"
+    B.  Response
+        a.  Yes; rules now in MEMORY.md. Added
+            entries 63-65 to chat_log.txt.
+    C.  Codenames
+        a.  None.
+
+66.  DECK TITLES CENTERED – 2026-02-14 12:03:00 PM
+    A.  Prompt
+        1.  "in project vew center deck titles over
+            decks."
+    B.  Response
+        1.  Changed .deck-title width from 33.333vw
+            to 100% in project view so title fills
+            the grid cell and centers over its deck.
+    C.  Codenames
+        1.  ux_title_overlay_setup,
+            ux_title_overlay_show.
+
+67.  TITLES STILL LEFT – 2026-02-14 12:04:00 PM
+    A.  Prompt
+        1.  "i still see title left aligned above
+            deck"
+    B.  Response
+        1.  Grid had justify-items: center which
+            shrink-wrapped deck to viewport width.
+            Changed to justify-items: stretch so
+            deck fills cell; title text-align:
+            center now centers over deck.
+    C.  Codenames
+        1.  ux_title_overlay_show.
+
+68.  TITLES STILL LEFT 2 – 2026-02-14 12:05:00 PM
+    A.  Prompt
+        1.  "no still"
+    B.  Response
+        1.  Real .deck-title was hidden; title overlay
+            elements were visible instead. Overlay
+            elements had no width constraint so
+            text-align: center had no effect.
+        2.  Added width to titleRectState; pass real
+            element r.width in getTitleStatesFromDOM;
+            applyTitleState sets el.style.width.
+        3.  Added white-space: normal on project-view
+            overlay deck titles.
+    C.  Codenames
+        1.  ux_title_overlay_setup,
+            ux_title_overlay_show (new).
+
+69.  TITLE TRANSITION JUMP – 2026-02-14 12:06:00 PM
+    A.  Prompt
+        1.  "when title transitions from deck view or
+            expand view to project view, the title
+            first goes to a left align, and then
+            jumps to the center align. it should just
+            transition to the center place"
+    B.  Response
+        1.  Width was not included in animation
+            keyframes; only set after animation via
+            applyTitleState. Added width to from/to
+            keyframes in animateTitleOverlay so width
+            transitions smoothly alongside position.
+    C.  Codenames
+        1.  ux_title_overlay_animate (new).
+
+70.  OUTLINE LEVEL CHANGE – 2026-02-14 12:07:00 PM
+    A.  Prompt
+        1.  "Id like the outline alphanumeric to use
+            A B C... on top level, 1 2 3, then a b c
+            then 1 2 3."
+    B.  Response
+        1.  Updated outline.mdc: L1 uppercase, L2
+            numeric, L3 lowercase, L4 numeric.
+        2.  Updated MEMORY.md with same change.
+    C.  Codenames
+        1.  None.
+
+71.  ENTRY 70 FORMAT FIX – 2026-02-14 12:08:00 PM
+    A.  Prompt
+        1.  "but in chat log 70 you didn't do it
+            right"
+    B.  Response
+        1.  Fixed entry 70: changed L2 markers from
+            lowercase (a. b.) to numeric (1. 2.)
+            per new outline rules.
+    C.  Codenames
+        1.  None.
+
+72.  CARD OUTLINE MARKERS – 2026-02-14 12:09:00 PM
+    A.  Prompt
+        1.  "apply this outline alphanum to the index
+            cards too"
+    B.  Response
+        1.  Updated applyLineNumbersInRoot: L1 A),
+            L2 1), L3 a), L4 1). Removed per-card
+            alpha toggle and toRoman usage.
+        2.  Added level-4 CSS (padding-left 160px).
+        3.  Removed card-specific padding overrides
+            for Basic Info, Main Characters,
+            Setting & Story.
+    C.  Codenames
+        1.  ux_card_outline_apply (new).
+
+73.  CODENAMES MISSING – 2026-02-14 12:10:00 PM
+    A.  Prompt
+        1.  "youre not referencing or adding any
+            codenames"
+    B.  Response
+        1.  Added codenames: ux_card_outline_apply,
+            ux_title_overlay_setup,
+            ux_title_overlay_show,
+            ux_title_overlay_animate.
+        2.  Updated codename_index.txt: ux_card 5,
+            ux_title 5, added reload_toggle.
+        3.  Fixed entries 66-69, 72 with proper
+            codename references. Fixed L2 markers
+            in entries 66-69.
+    C.  Codenames
+        1.  ux_card_outline_apply (new),
+            ux_title_overlay_setup (new),
+            ux_title_overlay_show (new),
+            ux_title_overlay_animate (new).
+
+74.  TITLES UP – 2026-02-14 12:11:00 PM
+    A.  Prompt
+        1.  "move the titles above the decks n
+            project view up a little"
+    B.  Response
+        1.  Added negative top margin (-12px) to
+            .deck-title in project view to shift
+            titles upward.
+    C.  Codenames
+        1.  ux_title_overlay_show.
+
+------------------
+
+75.  TITLES UP MORE – 2026-02-14 12:12:00 PM
+    A.  Prompt
+        1.  "up lots"
+    B.  Response
+        1.  Increased negative top margin from -12px
+            to -48px.
+    C.  Codenames
+        1.  ux_title_overlay_show.2
+
+76.  TITLES NOT MOVING – 2026-02-14 12:13:00 PM
+    A.  Prompt
+        1.  "not sure its moving up"
+    B.  Response
+        1.  Negative margin was collapsing within
+            the flex/grid layout. Switched to
+            position: relative; top: -48px with
+            negative bottom margin to compensate
+            for layout gap.
+    C.  Codenames
+        1.  ux_title_overlay_show.
+
+77.  UPDATE INDEX – 2026-02-15 12:00:00 AM
+    A.  Prompt
+        1.  "update codename_index"
+    B.  Response
+        1.  Added missing reload_setup (shared.js)
+            to both sections of codename_index.txt.
+            25 unique first+second terms total.
+    C.  Codenames
+        1.  reload_setup.
+
+78.  INDEX REBUILD – 2026-02-15 12:01:00 AM
+    A.  Prompt
+        1.  "update again. changed whats listed in
+            index"
+    B.  Response
+        1.  Detected codename.mdc changes: §0
+            removed, §3B1 now "list all codenames",
+            §3B2 count at 24 chars in.
+        2.  Rebuilt codename_index.txt: 45 full
+            codenames listed alphabetically, each
+            with count at column 24.
+        3.  Updated MEMORY.md to match new rules.
+    C.  Codenames
+        1.  All 45 codenames listed in index.
+
+79.  DECK TITLE UP – 2026-02-15 12:02:00 AM
+    A.  Prompt
+        1.  "in deck view, the titles are still too
+            close to the decks. move the titles UP!"
+    B.  Response
+        1.  Added margin-top: -16px to .title-row
+            in deck-view and expanded-view to shift
+            the title row upward.
+    C.  Codenames
+        1.  ux_title_overlay_show, ux_title_back,
+            ux_title_expand.
+
+80.  CARD OUTLINE FIX – 2026-02-15 12:03:00 AM
+    A.  Prompt
+        1.  "On all decks, the top level alphanumeric
+            should be A, B, C... Second level is
+            1 2 3. Third level is a b c, fourth is
+            1 2 3. I've asked for this before so not
+            sure why not happening. Do you need to
+            change some script as well as text"
+    B.  Response
+        1.  Script was correct (entry 72). Problem
+            was card data: Away We Go items all had
+            classes: ["level-2"], making them L2
+            (numeric) instead of L1 (uppercase).
+        2.  Removed level-2 class from Away We Go
+            cards (Herodotus, Example, Conflicts)
+            in both index.html defaults and
+            index.txt.
+        3.  Items now have no class = top level =
+            A) B) C) D).
+    C.  Codenames
+        1.  ux_card_outline_apply,
+            ux_card_items_build.
+
+81.  UNDO TITLE + RETRY – 2026-02-15 12:04:00 AM
+    A.  Prompt
+        1.  "thay last thing was good. but the prior
+            one to move the titles up and earlier
+            ones to move tites up. that was bad.
+            undo that. and try again a different way"
+    B.  Response
+        1.  Kept card data fix (level-2 removed from
+            Away We Go items).
+        2.  Reverted all title positioning changes:
+            deck-title back to position: static,
+            margin 0 0 8px, width 33.333vw;
+            justify-items back to center; removed
+            margin-top -16px from title-row; removed
+            width from titleRectState, applyTitleState,
+            animateTitleOverlay.
+        3.  New approach: in showTitleOverlay, for
+            project view, measure overlay element
+            offsetWidth and recompute x as center of
+            real deck-title rect minus half overlay
+            width. Overlay text now centers over deck.
+    C.  Codenames
+        1.  ux_title_overlay_show,
+            ux_title_overlay_setup.
+
+82.  PROMPT.MDC OUTLINE – 2026-02-15 12:05:00 AM
+    A.  Prompt
+        1.  "fix outline formatting of prompt.mdc"
+    B.  Response
+        1.  Rewrote prompt.mdc: L1 A-F (uppercase),
+            L2 1-11 (numeric), L3 a-e (lowercase),
+            L4 1-4 (numeric). Wrapped at ~60 chars.
+        2.  Updated MEMORY.md prompt rules section
+            to match new outline format.
+    C.  Codenames
+        1.  None.
+
+83.  EMPTY LINE INSERT – 2026-02-15 10:30:00 AM
+    A.  Prompt
+        1.  "make it so if I double-click on an empty
+            line of a card, it will create (or insert)
+            a text field and I can type into. It will
+            have an alphanumberc. if I type long, it
+            will wrap. If there was something below
+            it, that wil get renumbered and moved down
+            as needed."
+    B.  Response
+        1.  Added shiftStorageKeysAfterInsert,
+            insertNewCardItem, rebuildCardTextDOM
+            functions for inserting new items into
+            card data and refreshing the DOM.
+        2.  Added setupEmptyRowInsert: dblclick on
+            empty rows or line-break rows creates a
+            new editable text item at the correct
+            insert index.
+        3.  Added cursor:text CSS for empty cells
+            and line-break-only cells.
+    C.  Codenames
+        1.  ux_card_item_insert (new),
+            ux_card_item_build,
+            ux_card_outline_apply,
+            ux_card_item_edit_setup.
+
+84.  CODENAME PLURAL FIX – 2026-02-15 10:40:00 AM
+    A.  Prompt
+        1.  "no plural in codenames. fix 83 c 1
+            second name"
+    B.  Response
+        1.  Renamed ux_card_items_build to
+            ux_card_item_build in code, codename
+            index, and chat log.
+    C.  Codenames
+        1.  ux_card_item_build.
+
+85.  CODENAME RENAME – 2026-02-15 10:42:00 AM
+    A.  Prompt
+        1.  "seems liek ux_edit_item_setup should be
+            ux_card_item_edit_setup"
+    B.  Response
+        1.  Renamed ux_edit_item_setup to
+            ux_card_item_edit_setup in code and
+            codename index.
+    C.  Codenames
+        1.  ux_card_item_edit_setup.
+
+86.  EMPTY ROW CLICK FIX – 2026-02-15 10:44:00 AM
+    A.  Prompt
+        1.  "whenb I double-click nothing happens"
+    B.  Response
+        1.  Added pointer-events: auto to empty cells
+            and line-break-only cells so clicks pass
+            through the overlay's pointer-events: none
+            hierarchy.
+        2.  Added individual codenames to each new
+            function: ux_card_item_storage_shift,
+            ux_card_item_insert_setup,
+            ux_card_text_rebuild.
+    C.  Codenames
+        1.  ux_card_item_insert_setup (new),
+            ux_card_item_storage_shift (new),
+            ux_card_text_rebuild (new).
+
+87.  INSERT PERSIST FIX – 2026-02-15 10:46:00 AM
+    A.  Prompt
+        1.  "when I reload the page or it
+            automatically reloads, I loos my text.
+            Thjis was not the case with other text
+            already in there. use the smae mechanism
+            that was there, maybe improving it if
+            needed."
+    B.  Response
+        1.  Added CARD_ITEMS_KEY localStorage to
+            persist the full items array when
+            structural changes (inserts) happen.
+        2.  Added getStoredCardItems, saveCardItems,
+            applyStoredCardItems. On reload,
+            applyStoredCardItems restores inserted
+            items before DOM is built.
+    C.  Codenames
+        1.  ux_card_item_insert,
+            ux_card_item_persist (new).
+
+88.  METHOD RENAME – 2026-02-15 10:50:00 AM
+    A.  Prompt
+        1.  "rename methods (following codename rules)
+            used relating to storing and retrieving
+            card items"
+    B.  Response
+        1.  Renamed to snake_case, root first, action
+            last: getStoredCardItems →
+            card_item_store_get, saveCardItems →
+            card_item_store_save,
+            applyStoredCardItems →
+            card_item_store_apply,
+            shiftStorageKeysAfterInsert →
+            card_item_storage_shift.
+    C.  Codenames
+        1.  item_persist, item_storage_shift.
+
+89.  CODENAME ROOT RENAME – 2026-02-15 10:52:00 AM
+    A.  Prompt
+        1.  "make item be a root, so rename codenames
+            with ux_card_item... to item..."
+    B.  Response
+        1.  Renamed six codenames: ux_card_item_build
+            → item_build, ux_card_item_edit_setup →
+            item_edit_setup, ux_card_item_insert →
+            item_insert, ux_card_item_insert_setup →
+            item_insert_setup, ux_card_item_persist →
+            item_persist, ux_card_item_storage_shift
+            → item_storage_shift.
+    C.  Codenames
+        1.  item_build, item_edit_setup, item_insert,
+            item_insert_setup, item_persist,
+            item_storage_shift.
+
+90.  ITEM METHOD RENAME – 2026-02-15 10:55:00 AM
+    A.  Prompt
+        1.  "rename all methods related to saving and
+            retrieving items to comply with codename"
+    B.  Response
+        1.  Renamed nine functions to item_* root:
+            getEditedText → item_text_get,
+            saveEditedText → item_text_save,
+            card_item_store_get → item_store_get,
+            card_item_store_save → item_store_save,
+            card_item_store_apply → item_store_apply,
+            card_item_storage_shift →
+            item_storage_shift, insertNewCardItem →
+            item_insert, rebuildCardTextDOM →
+            item_text_rebuild, setupEmptyRowInsert →
+            item_insert_setup.
+        2.  Removed redundant item_text_save call in
+            item_insert.
+    C.  Codenames
+        1.  item_build, item_edit_setup, item_insert,
+            item_insert_setup, item_persist,
+            item_storage_shift.
+
+91.  BROAD METHOD RENAME – 2026-02-15 10:58:00 AM
+    A.  Prompt
+        1.  "broaden to move methods related, and can
+            be other than item_"
+    B.  Response
+        1.  Renamed 14 storage/retrieval functions:
+            getCardEdits            → edit_store_get,
+            getEditedTabLabel       → tab_text_get,
+            saveEditedTabLabel      → tab_text_save,
+            getEditedCardTitle → card_title_get,
+            saveEditedCardTitle → card_title_save,
+            getDisplayTitle → title_display_get,
+            shortenForTab → tab_label_shorten,
+            saveActiveEditState → edit_state_save,
+            clearActiveEditState → edit_state_clear,
+            saveCurrentEditStateIfActive →
+            edit_state_save_current,
+            getExportDeckData → export_data_get,
+            exportDeckDataToFile → export_file_save,
+            commitToDeckAndStorage →
+            item_edit_commit, getSelectionOffsets →
+            edit_selection_get.
+    C.  Codenames
+        1.  None.
+
+92.  TAB INDENT – 2026-02-15 11:00:00 AM
+    A.  Prompt
+        1.  "if I hit teb, wheneditig a item, indent
+            that item and anything already under it.
+            if I hit shift-tab, then outdent"
+    B.  Response
+        1.  Added item_level_get, item_level_set,
+            item_indent functions for changing item
+            outline depth (0-3) with child cascade.
+        2.  Added Tab/Shift+Tab keydown handler in
+            setupCardTextEditing: saves text, calls
+            item_indent, rebuilds card, re-focuses
+            with cursor position preserved.
+        3.  Persists via item_store_save; survives
+            reload.
+    C.  Codenames
+        1.  item_indent (new), item_level_get (new),
+            item_level_set (new).
+
+93.  SHIFT UP/DOWN MOVE ITEM – 2026-02-15
+
+    A.  Prompt
+        a.  "shift-up and -down move an item up and
+            down a line"
+    B.  Response
+        a.  Added item_move(deckId, cardIndex,
+            itemIndex, direction) to swap items and
+            edit keys.
+        b.  Shift+ArrowUp / Shift+ArrowDown in
+            item_edit_setup keydown handler.
+    C.  Codenames
+        a.  item_move (new). Role: update
+            paul/codename_index.txt when codenames
+            change.
+
+94.  ITEM_MOVE METHOD NAMES – 2026-02-15
+
+    A.  Prompt
+        a.  "set method names to be item_move..."
+    B.  Response
+        a.  Added item_move_up, item_move_down
+            calling item_move_swap.
+        b.  Keydown handler uses item_move_up /
+            item_move_down.
+    C.  Codenames
+        a.  item_move_up (new), item_move_down
+            (new).
+
+95.  OPTION UP/DOWN MOVE ITEM – 2026-02-15
+
+    A.  Prompt
+        a.  "oh, instead of shift-up/down, make it
+            option-up/down"
+    B.  Response
+        a.  Changed e.shiftKey to e.altKey for
+            ArrowUp/ArrowDown.
+    C.  Codenames
+        a.  None.
+
+96.  ITEM_MOVE_LEFT RIGHT NAMES – 2026-02-15
+
+    A.  Prompt
+        a.  "i meant item_move_right, item_move_left,
+            etc."
+    B.  Response
+        a.  Renamed item_move_up → item_move_left,
+            item_move_down → item_move_right.
+    C.  Codenames
+        a.  item_move_left, item_move_right.
+
+97.  FN + UP/DOWN MOVE ITEM – 2026-02-15
+
+    A.  Prompt
+        a.  "make the up and down happen with mac fn
+            key + up/down arrow"
+    B.  Response
+        a.  fn+Up/Down on Mac sends PageUp/PageDown;
+            handler now uses e.key === "PageUp" /
+            "PageDown".
+    C.  Codenames
+        a.  None.
+
+98.  SHIFT+CONTROL MOVE; TAB INDENT – 2026-02-15
+
+    A.  Prompt
+        a.  "make it shift+control instead of fn.
+            still support tab and shift-tab"
+    B.  Response
+        a.  Move item: Shift+Control+ArrowUp/Down.
+        b.  Tab / Shift+Tab unchanged (indent).
+    C.  Codenames
+        a.  None.
+
+99.  CODENAME INDEX UPDATE – 2026-02-15
+
+    A.  Prompt
+        a.  "update index codename"
+    B.  Response
+        a.  Rebuilt paul/codename_index.txt from all
+            // __ codenames in index.html and
+            shared.js; added item_move_left,
+            item_move_right, reload_setup.
+    C.  Codenames
+        a.  All listed in index.
+
+100.  MOVE ITEM WITH CHILDREN – 2026-02-15
+
+    A.  Prompt
+        a.  "when moving up or down, move the
+            children with it"
+    B.  Response
+        a.  item_move_swap now finds children (items
+            below at deeper indent) and swaps whole
+            block; rekeys edits for new indices.
+    C.  Codenames
+        a.  None.
+
+101.  BLANK AREA DBLCLICK JUMPS DECK – 2026-02-15
+
+    A.  Prompt
+        a.  "when i double-click a blank area in the
+            yellow card of deck 1 (Chair) it jumps to
+            card 2.. it shouldn't do this" / "happens
+            with single click sometimes" / "when I
+            single click an empty line but that has an
+            A or B ... the bug happens"
+    B.  Response
+        a.  card-layer--overlay and card had pointer-
+            events: none; added auto.
+        b.  Empty lines with A/B labels: added
+            pointer-events: auto for card-text-row,
+            card-text-cell, card-text-item.
+    C.  Codenames
+        a.  None.
+
+102.  BACKSPACE/DELETE EMPTY ITEM – 2026-02-15
+
+103.  A/B LINE CLICK JUMP FIX – 2026-02-11
+    A.  Prompt
+        1.  yeah still single-clicking a line that has not
+            text but has a A) ro B) ... will jump me to
+            between card 1 and 2 in deck 1
+    B.  Response
+        1.  Raised card-rect overlay z-index above title
+            overlay (5650) in project view so card clicks
+            hit cards, not deck titles.
+        2.  Added pointer-events: auto for card-text-list,
+            card-text-rows-wrap, bullet-marker.
+        3.  Added card::before full-coverage hit area to
+            catch gaps on empty A)/B) lines.
+    C.  Codenames
+        1.  ux_card_rect_click, view_project_stack_set,
+            view_state_deck_get.
+
+104.  A/B CLICK BUG STILL – 2026-02-11
+    A.  Prompt
+        1.  bug still moving me to other card
+    B.  Response
+        1.  Use elementsFromPoint for coordinate-based
+            hit-testing instead of e.target.closest.
+        2.  In deck/expanded view: skip promote when click
+            hits card-text-item or card-text-row.
+    C.  Codenames
+        1.  ux_card_rect_click.
+
+105.  DBLCLICK A/B LINE EDIT – 2026-02-11
+    A.  Prompt
+        1.  clicking on a line with no text but n
+            alphanumeric does not jump to a different
+            card, but also if I double-click, it does
+            not set the i-beam on that line and let me
+            start typing -- but it should
+    B.  Response
+        1.  Added dblclick on card-text-item for when
+            user double-clicks bullet (A)/B)) or empty
+            area; activates text span for editing.
+        2.  Added min-height: var(--line-gap) to
+            card-text-item-text so empty span stays
+            clickable and caret-visible.
+    C.  Codenames
+        1.  item_edit_setup.
+
+106.  BLUR REMOVES LINE BREAKS – 2026-02-11
+    A.  Prompt
+        1.  when i blur, it removes a line break
+            [return] from the text and puts multiple
+            lines on one line
+    B.  Response
+        1.  Set white-space: pre-wrap on card-text-item
+            -text so newlines in saved text display as
+            line breaks; data was already saved.
+    C.  Codenames
+        1.  item_edit_commit, item_text_save.
+
+    A.  Prompt
+        a.  "if item is empty (no text) and I click
+            back space then delete the item. move what
+            was below it up a line"
+    B.  Response
+        a.  item_delete, item_storage_shift_down.
+        b.  Backspace/Delete when empty: delete item,
+            focus item below (or above if last).
+    C.  Codenames
+        a.  item_delete (new), item_storage_shift_down
+            (new).
+
+107.  PROJECTS TITLE – 2026-02-16 12:00:00 PM
+    A.  Prompt
+        a.  "in project view, the 'Projects' title
+            should show. It should have moved to
+            beyond the horizon when in Deck view.
+            Ensure spacial and scalling continuity
+            with cards & title. follow all mdc rules"
+    B.  Response
+        a.  Changed view title from "Project" to
+            "Projects" in HTML, view_apply,
+            title_overlay_build, title_overlay_sync,
+            and both transition functions.
+    C.  Codenames
+        a.  title_overlay_build, title_overlay_sync,
+            view_apply.
+
+108.  DECK TITLE CENTERED – 2026-02-16 12:01:00 PM
+    A.  Prompt
+        a.  "from deck view, the deck title should
+            return to be CENTERED above the deck,
+            not left justified."
+    B.  Response
+        a.  Added title_state_center_adjust: computes
+            centered x for deck title overlay
+            elements using real .deck-title rect
+            center minus half overlay element width.
+        b.  title_overlay_animate now applies center
+            adjustment to toStates before keyframes
+            and on finish. Deck titles animate to
+            centered position above their deck.
+    C.  Codenames
+        a.  title_overlay_animate,
+            title_state_center_adjust (new).
+
+109.  ITEM MOVE KEEP CURSOR – 2026-02-16 12:02:00 PM
+    A.  Prompt
+        a.  "if I move a item, keep my insertion point
+            or selection the same wherever it moves
+            to"
+    B.  Response
+        a.  Capture selection offsets via
+            edit_selection_get before move. After
+            rebuild, restore cursor/selection at
+            same offsets in new text node.
+    C.  Codenames
+        a.  edit_selection_get, item_move_left,
+            item_move_right.
+
+110.  EMPTY TITLE DBLCLICK EDIT – 2026-02-16 12:03:00 PM
+    A.  Prompt
+        a.  "if I double click the card title
+            (sepearate from the tab), even if it's
+            empty, then let me edit the title"
+    B.  Response
+        a.  Added min-height: var(--line-gap) to
+            .card-text-title so empty titles have a
+            clickable area for double-click.
+        b.  Added caret-color and outline: none for
+            contenteditable state.
+        c.  Existing dblclick handler already creates
+            text node and enables editing; min-height
+            was the missing piece.
+    C.  Codenames
+        a.  card_title_save, edit_state_save.
+
+111.  TAB READ-ONLY – 2026-02-16 12:04:00 PM
+    A.  Prompt
+        a.  "make the tab non-editable, but show a
+            copy of the title (shorten if needed)"
+    B.  Response
+        a.  Removed card-tab-editable class from tab
+            creation. Removed all tab editing event
+            listeners (dblclick, blur, input, keydown,
+            mouseup, click). Removed tab edit-state
+            restore and tab branch from
+            edit_state_save_current.
+        b.  Tab still shows shortened title via
+            tab_label_shorten; updated by card title
+            blur and input handlers.
+        c.  Updated CSS: removed card-tab-editable
+            cursor rule; fixed tab selectors.
+    C.  Codenames
+        a.  tab_title_edit_setup, tab_label_shorten,
+            edit_state_save_current.
+
+112.  TAB SYNC ON TITLE EDIT – 2026-02-16 12:05:00 PM
+    A.  Prompt
+        a.  "when I chance title, update tab"
+    B.  Response
+        a.  Root cause: title.closest(".deck")
+            returned null because title lives in
+            card-rect overlay, not inside .deck.
+        b.  Added tab_sync(deckId, cardIndex, text):
+            queries all .tab-label elements by
+            data-deck-id and data-card-index globally,
+            sets textContent to shortened title.
+        c.  Title blur and input handlers now call
+            tab_sync instead of deck-scoped query.
+    C.  Codenames
+        a.  tab_sync (new), tab_label_shorten,
+            card_title_save.
+
+113.  RELOAD KEEPS CURSOR – 2026-02-16 12:06:00 PM
+    A.  Prompt
+        a.  "when the page automatically reloads, I
+            loose my i-beam insertion point or
+            selection from the item or title. I
+            should not"
+    B.  Response
+        a.  canReload now returns false when
+            activeElement has contentEditable true;
+            auto-reload skips while editing.
+        b.  edit_state_clear only called after
+            successful restore (element found and
+            focused). Previously cleared even when
+            element not found, so overlay build's
+            later item_edit_setup had nothing to
+            restore.
+    C.  Codenames
+        a.  reload_ui_setup, edit_state_save_current,
+            item_edit_setup.
+
+114.  DECK TITLE POSITION FIX – 2026-02-16 12:07:00 PM
+    A.  Prompt
+        a.  "when I animate returning from deck view
+            to project view, the titles are messed
+            up (left justified, not in right
+            position). fixed when I reload page.
+            fix this!"
+    B.  Response
+        a.  title_state_center_adjust was measuring
+            overlay element offsetWidth while element
+            was at receded state (fontSize 0, scale
+            0). Result: width 0, centering failed.
+        b.  Fix: temporarily set target fontSize and
+            scale(1) on overlay element, measure
+            offsetWidth, then restore. Centering now
+            uses accurate text width at destination
+            font size.
+    C.  Codenames
+        a.  title_state_center_adjust,
+            title_overlay_animate,
+            title_overlay_show.
+
+115.  TITLE CENTER REFACTOR – 2026-02-16 12:08:00 PM
+    A.  Prompt
+        a.  Refactor: compute centered x directly in
+            title_state_dom_get instead of patching it
+            in title_overlay_show and
+            title_state_center_adjust.
+    B.  Response
+        a.  title_state_dom_get now measures overlay
+            element text width at target font size
+            when in project view; computes centered x
+            as rect center minus half overlay width.
+        b.  Removed centering patch from
+            title_overlay_show. Removed
+            title_state_center_adjust function
+            entirely.
+        c.  title_overlay_animate uses raw toStates
+            (removed adjustedTo variable).
+    C.  Codenames
+        a.  title_overlay_animate, title_overlay_show,
+            title_state_dom_get.
+
+116.  DECK TITLE UP – 2026-02-16 12:09:00 PM
+    A.  Prompt
+        a.  "in project view, move the deck title up
+            so there's a small but larger gap between
+            top of cards (tab) and the title"
+    B.  Response
+        a.  Changed .deck-title margin from
+            0 0 8px 0 to -20px 0 16px 0. Shifts
+            title up 20px, bottom gap now 16px.
+    C.  Codenames
+        a.  ux_title_overlay_show.
+
+117.  REMOVE BLANK SPACES – 2026-02-16 12:10:00 PM
+    A.  Prompt
+        a.  "remove the blank spaces on teh cards"
+    B.  Response
+        a.  Removed line-break insertion logic that
+            added blank rows before sections and
+            between consecutive level-2 items.
+        b.  card_outline_apply now removes all
+            line-break elements from card lists.
+    C.  Codenames
+        a.  card_outline_apply.
+
+118.  FIX THREE BUGS – 2026-02-16 12:30:00 PM
+    A.  Prompt
+        a.  "analyze chat log and chat log prior for
+            returning bugs that should be handeled
+            in a better way" then "fix all"
+    B.  Response
+        a.  Bug 3: Single data source. Embedded JSON
+            in HTML via script tag; deck_data_embed_get
+            reads it. Fallback chain: fetch > embedded
+            > defaultDecksData.
+        b.  Bug 2: Shared transition completion.
+            Created transition_complete_run called by
+            all three transition functions. Rebuilds
+            overlay and refreshes framework on finish.
+        c.  Bug 1: Unified click dispatcher. Replaced
+            35+ pointer-events CSS rules with uniform
+            none. Added click_dispatch on document
+            using elementsFromPoint to route clicks
+            by type and view.
+    C.  Codenames
+        a.  deck_data_embed_get (new).
+        b.  transition_complete_run (new).
+        c.  click_dispatch (new).
+        d.  click_view_get (new).
+        e.  click_target_resolve (new).
+        f.  click_route (new).
+
+119.  EXPAND TAB CLICK FIX – 2026-02-17 12:00:00 AM
+    A.  Prompt
+        a.  "click not handeled when in expand view.
+            tabs do not respond to clicks"
+    B.  Response
+        a.  Added pointer-events: auto to
+            .card-rect-overlay.is-active so overlay
+            catches clicks instead of leaking to deck
+            handlers below.
+        b.  Fixed contentEditable guard: check click
+            target, not document.activeElement.
+        c.  Added project-view guard to catch-all
+            deck click handler.
+    C.  Codenames
+        a.  click_dispatch.
+
+120.  ARIA HIDDEN FIX – 2026-02-17 12:05:00 AM
+    A.  Prompt
+        a.  "in expand view: Blocked aria-hidden on
+            an element because its descendant
+            retained focus."
+    B.  Response
+        a.  Removed aria-hidden="true" from
+            #cardRectOverlay. Overlay now hosts
+            interactive contenteditable elements.
+    C.  Codenames
+        a.  None.
+
+121.  TAB CLICK FIX – 2026-02-17 12:10:00 AM
+    A.  Prompt
+        a.  "clicking on tab does nothing"
+    B.  Response
+        a.  elementsFromPoint skips pointer-events:
+            none elements. Restored auto on tabs and
+            ::after hit area so hit-test detects them.
+        b.  Added project-view tab click routing to
+            open deck.
+    C.  Codenames
+        a.  click_route.
+
+122.  CARD BODY CLICK FIX – 2026-02-17 12:15:00 AM
+    A.  Prompt
+        a.  "in expand view, clicking cards does
+            nothing. tab work"
+    B.  Response
+        a.  ::after pseudo-element invisible to
+            elementsFromPoint. Replaced with real
+            DOM element .card-body-hit inserted as
+            first child of card-layer--overlay.
+    C.  Codenames
+        a.  None.
+
+123.  EXPAND CARD RETURN – 2026-02-17 12:20:00 AM
+    A.  Prompt
+        a.  "in expanded view, clicking a card should
+            return me to deck view with that card
+            on top"
+    B.  Response
+        a.  In expanded view, card-content clicks now
+            promote that card and return to deck view.
+            Editing remains in deck view only.
+    C.  Codenames
+        a.  click_route.
+
+124.  EXPANDED LAYOUT FIXED – 2026-02-17 12:25:00 AM
+    A.  Prompt
+        a.  "in expanded view, the yellow first card
+            should always be shown on the top, and
+            card 2 on bottom left, and third on
+            bottom right"
+    B.  Response
+        a.  Removed orderMap lookup from
+            view_expanded_layout_get; positions now
+            fixed: yellow=top, red=bottom-left,
+            green=bottom-right.
+    C.  Codenames
+        a.  view_expanded_layout_get.
+
+125.  PROJECT KEEPS FRONT CARD – 2026-02-17 12:30:00 AM
+    A.  Prompt
+        a.  "When going from expanded or deck view to
+            projects view keep the current card that's
+            on top or foremost. I should say as shown
+            on top in the project view. Don't re-order
+            which card is foremost."
+    B.  Response
+        a.  transition_complete_run now calls
+            view_project_stack_set when toView is
+            project. After overlay rebuild, z-index
+            reflects saved card order so promoted card
+            stays on top in project view.
+    C.  Codenames
+        a.  transition_complete_run,
+            view_project_stack_set.
+
+126.  CODENAME INDEX UPDATE – 2026-02-17 12:35:00 AM
+    A.  Prompt
+        a.  "update codename_index"
+    B.  Response
+        a.  Rebuilt from all // __ markers in
+            index.html and shared.js. Removed 4
+            stale entries (item_move_down/left/right/
+            up). Added 2 missing (tab_sync,
+            title_state_dom_get). 105 total.
+    C.  Codenames
+        a.  All 105 listed in index.
+
+------------------
+
+127.  PROMOTE ANIMATE – 2026-02-17 12:40:00 AM
+    A.  Prompt
+        a.  "When in deck view, if I click a different
+            tab, immediately transition which card is
+            in the forefront, but animate the cards
+            position so that there is a smooth
+            transition regarding the card location,
+            though the cards movement to the forefront
+            is instant"
+    B.  Response
+        a.  Tab and card-body click in deck view now
+            capture fromStates before promote, then
+            promote (instant z-order), then animate
+            from old to new positions (300ms).
+    C.  Codenames
+        a.  click_route, view_rect_animate.
+
+128.  FRONT CARD BRIGHT COLOR – 2026-02-17 12:45:00 AM
+    A.  Prompt
+        a.  "the cards all have a brighter color and
+            a darker color and when I return from
+            expanded view to deck view, the darker
+            color is shown for the card in the
+            forefront. that card should be the
+            brighter color in deck view all the time.
+            same applies from project view to deck
+            view."
+    B.  Response
+        a.  deck_active_index_set now sets is-front
+            on overlay card-layer for the front card
+            and removes it from non-front cards.
+        b.  view_project_stack_set also sets is-front
+            on overlay layers per deck so front card
+            is bright in project view too.
+    C.  Codenames
+        a.  deck_active_index_set,
+            view_project_stack_set.
+
+129.  EXPANDED ALL BRIGHT – 2026-02-17 12:50:00 AM
+    A.  Prompt
+        a.  "In expanded view, show all three cards
+            with the brighter color"
+    B.  Response
+        a.  Added CSS override: body.expanded-view
+            .card-layer:not(.is-front) .card/.tab
+            filter: none. All cards bright in
+            expanded view.
+    C.  Codenames
+        a.  None.
+
+130.  ENTER INSERTS ITEM – 2026-02-17 12:55:00 AM
+    A.  Prompt
+        a.  "when entering text into an item, if I
+            hit return, then create an item below it
+            inserting if necessary that picks up the
+            next alphanumeric on that same level"
+    B.  Response
+        a.  Added Enter key handler in item_edit_setup
+            keydown: saves current text, calls
+            item_insert at itemIndex+1, sets new item
+            to same outline level, rebuilds DOM, and
+            focuses new item for editing.
+        b.  Shift+Enter still inserts a line break
+            (default contenteditable behavior).
+    C.  Codenames
+        a.  item_edit_setup, item_insert,
+            item_level_set.
+
+131.  CARD TITLE CENTERED – 2026-02-17 01:00:00 AM
+    A.  Prompt
+        a.  "doesn't seem like the title on the card
+            in deck view is centered. It should be
+            centered right left."
+    B.  Response
+        a.  card-text-title was inside card-text which
+            has unequal left/right offsets (32px/64px).
+            Title centered within that offset box, not
+            the full card. Changed left/right to
+            negative of parent offsets so title spans
+            full card width; text-align: center now
+            centers correctly.
+    C.  Codenames
+        a.  None.
+
+
+132.  TITLE SYSTEM REFACTOR – 2026-02-17 01:05:00 AM
+    A.  Prompt
+        a.  "When returning from deck view to project
+            view, the title in Project view is yet
+            again messed up. This is like the 20th
+            time in this code base that this problem
+            has represented itself. I would like you
+            to completely refactor how the title of
+            projects is handled if that means
+            refactoring how all of the titles to all
+            of the decks are handled then so be."
+    B.  Response
+        a.  Replaced entire title overlay system
+            (14 functions, ~180 lines,
+            getBoundingClientRect measurement) with
+            CSS opacity crossfade (2 functions,
+            ~20 lines). No measurement, no timing
+            sensitivity.
+        b.  Deleted #titleOverlay HTML, all overlay
+            CSS (~50 lines), title-element hit
+            detection from click dispatch.
+        c.  Simplified all 3 transition functions
+            and view_apply. Net ~250 lines deleted,
+            ~30 added.
+        d.  file:///Users/pauldsmith/Desktop/pops/paul/chat_log_svg/132.title_system_refactor.svg
+    C.  Codenames
+        a.  title_crossfade (new), deck_title_fade
+            (new). Removed: title_overlay_animate,
+            title_overlay_build, title_overlay_show,
+            title_state_dom_get.
+
+133.  TAB GAP FIX – 2026-02-17 01:10:00 AM
+    A.  Prompt
+        a.  "There's like a one pixel gap between the
+            bottom of the tabs and the top of the
+            cards on which the tabs rest can you
+            somehow close that one pixel occasional
+            gap"
+    B.  Response
+        a.  Changed .tab height from 53px to 54px.
+        b.  file:///Users/pauldsmith/Desktop/pops/paul/chat_log_svg/133.tab_gap_fix.svg
+    C.  Codenames
+        a.  None.
+
+134.  SVG DIAGRAM FOLDER – 2026-02-17 01:15:00 AM
+    A.  Prompt
+        a.  "Create a folder named chat_log_SVG and
+            in it put starting with 131 create a
+            file named 131.card_title_centered.svg
+            that depicts a diagram that explains
+            the response in the context of the
+            recent chat. and then update the MDC
+            file about prompt to say that each
+            prompt should generate a new SVG file
+            inside that folder with the
+            corresponding number of the chat. And
+            chat should also include in B.b. a
+            local link (based on this URL
+            file:///Users/pauldsmith/Desktop/pops/
+            index.html)"
+    B.  Response
+        a.  Created paul/chat_log_svg/ folder with
+            131.card_title_centered.svg (diagram
+            showing before/after centering fix).
+        b.  Updated prompt.mdc: C.5.d adds local
+            link in B response; new section G for
+            SVG diagram generation per prompt.
+        c.  Updated codename_index.txt: removed 4
+            deleted title overlay codenames, added
+            title_crossfade and deck_title_fade.
+            103 total.
+        d.  file:///Users/pauldsmith/Desktop/pops/paul/chat_log_svg/134.svg_diagram_folder.svg
+    C.  Codenames
+        a.  title_crossfade, deck_title_fade.
+
+135.  SVG LINK UPDATE – 2026-02-19 12:00:00 PM
+    A.  Prompt
+        a.  "Update the prompt.MDC to base the URL
+            in the link B.b. on ex:
+            file:///Users/pauldsmith/Desktop/pops/
+            paul/chat_log_svg/
+            133.tab_gap_fix.svg"
+    B.  Response
+        a.  Updated prompt.mdc C.5.b.2: link now
+            points to the SVG diagram file, not
+            index.html.
+        b.  Updated MEMORY.md to match.
+        c.  Retroactively fixed links in entries
+            132-134 to point to their SVG files.
+        d.  file:///Users/pauldsmith/Desktop/pops/paul/chat_log_svg/135.svg_link_update.svg
+    C.  Codenames
+        a.  None.
+
+136.  URL NO-WRAP RULE – 2026-02-19 12:01:00 PM
+    A.  Prompt
+        a.  "I can't click on the URL in the chat
+            log file because the line break messes
+            up the URL. Modify outline.mdc: if
+            it's a URL that would wrap, don't
+            break it; wrap after the URL."
+    B.  Response
+        a.  Added outline.mdc 6.C: never break a
+            URL across lines; keep full URL on
+            one line even if it exceeds ~60 chars.
+        b.  Updated MEMORY.md wrapping rule.
+        c.  Fixed all split URLs in chat log
+            entries 132-135 to single lines.
+        d.  file:///Users/pauldsmith/Desktop/pops/paul/chat_log_svg/136.url_no_wrap_rule.svg
+    C.  Codenames
+        a.  None.
+
+137.  SVG BACKGROUND COLOR – 2026-02-19 12:02:00 PM
+    A.  Prompt
+        a.  "Add to the prompt.MDC file that the
+            SVGs that it generates should have a
+            background color non-transparent"
+    B.  Response
+        a.  Added prompt.mdc F.5: use a
+            non-transparent background color on
+            the root SVG element.
+        b.  file:///Users/pauldsmith/Desktop/pops/paul/chat_log_svg/137.svg_background_color.svg
+    C.  Codenames
+        a.  None.
+
+138.  CONTINUITY AUDIT – 2026-02-19 12:03:00 PM
+    A.  Prompt
+        a.  "Review the chat log for my consistent
+            requests regarding the continuousness
+            of the position of the titles as well
+            as the cards. That the location should
+            not jump, should not move from position
+            A to immediately position B but should
+            transition between A and B. Identify
+            all those requests, consolidate and
+            organize them. Make a prompt for next
+            prompt to do three different versions
+            of what I'm asking for regarding
+            getting and organizing all of my
+            requests regarding the continuous
+            physical persistence of objects and
+            that the location and scale and z-layer
+            changes. Z-layer changes instantly, but
+            the position and scale do not -- they
+            transition."
+    B.  Response
+        a.  Identified 20+ entries across chat log
+            (#21-27, 30-33, 66-69, 74-76, 79, 81,
+            107-108, 114-115, 127, 132) requesting
+            spatial continuity for titles and cards.
+        b.  Core principle: z-layer instant,
+            position/scale/fontSize transition
+            smoothly, no jumps, objects persist
+            even "beyond the horizon."
+        c.  Updated NEXT PROMPT with three
+            approaches to codify these rules.
+        d.  file:///Users/pauldsmith/Desktop/pops/paul/chat_log_svg/138.continuity_audit.svg
+    C.  Codenames
+        a.  None.
+
+139.  SPATIAL PERSISTENCE ABC – 2026-02-19 12:04:00 PM
+    A.  Prompt
+        a.  "Do next prompt A, B, and C if they are
+            non-conflicting. Do all starting from A.
+            Don't do the ones that are conflicting,
+            only do the ones that are compatible and
+            still efficient." Executed next prompt.
+        b.  A. Spatial persistence spec: create
+            spec_06_spatial_persistence.txt
+            codifying position/scale/opacity/zIndex
+            rules per view, beyond-the-horizon
+            pattern, transition contract.
+        c.  B. Transition contract functions: create
+            spatial_contract_validate that asserts
+            from/to states exist and match before
+            any animation. Log warnings on mismatch.
+        d.  C. Unified object registry: create
+            spatial_registry tracking current state
+            of all persistent objects. Updated after
+            every animation and framework show.
+    B.  Response
+        a.  Created spec_06_spatial_persistence.txt
+            with sections A-I: overview, properties,
+            transition rules, beyond horizon,
+            persistent objects, per-view states,
+            transition contract, spatial registry,
+            history of principle.
+        b.  Added spatial_registry (object),
+            spatial_registry_update,
+            spatial_registry_get,
+            spatial_contract_validate to
+            index.html. Wired into
+            view_framework_show (updates registry),
+            view_rect_animate (validates + updates),
+            and all 3 transition functions
+            (validates before animate).
+        c.  Updated codename_index.txt: added 4 new
+            codenames (107 total).
+        d.  file:///Users/pauldsmith/Desktop/pops/paul/chat_log_svg/139.spatial_persistence_abc.svg
+    C.  Codenames
+        a.  spatial_registry (new),
+            spatial_registry_update (new),
+            spatial_registry_get (new),
+            spatial_contract_validate (new).
+
+140.  SPATIAL TITLE ANIMATE – 2026-02-19 12:10:00 PM
+    A.  Prompt
+        a.  "I want to use that spatial consistent,
+            persistent architecture -- the spatial
+            registry -- to make the deck titles move
+            from where they are when the deck is
+            clicked to the top center where we want
+            them in deck view. Likewise when we move
+            back from deck view to project view, the
+            title should move from top center down
+            to centered above the appropriate deck.
+            The other two titles should shrink and
+            disappear to the horizon. The project
+            title 'Projects' should move from top
+            center in project view to beyond the
+            horizon in the other two views."
+    B.  Response
+        a.  Replaced title_crossfade/deck_title_fade
+            (CSS opacity only) with full spatial
+            title rect overlay system. 4 overlay
+            elements ("Projects" + 3 deck titles)
+            animate position/scale/opacity via Web
+            Animations API alongside card animations.
+        b.  Positions cached at rest via
+            title_rect_cache_build (never during
+            transitions). Project view: page title
+            at cached .page-title rect, deck titles
+            at cached .deck-title rects scaled to
+            32/42. Deck/expanded view: active deck
+            title at page-title center, all others
+            at horizon (scale 0, opacity 0).
+        c.  Wired into all 3 transition functions,
+            transition_complete_run, view_apply, and
+            window resize handler. 11 new functions,
+            ~200 lines.
+        d.  file:///Users/pauldsmith/Desktop/pops/paul/chat_log_svg/140.spatial_title_animate.svg
+    C.  Codenames
+        a.  title_rect_state (new),
+            title_rect_overlay_build (new),
+            title_rect_overlay_get (new),
+            title_rect_overlay_show (new),
+            title_rect_list_get (new),
+            title_rect_animate (new),
+            title_rect_state_apply (new),
+            title_rect_state_apply_all (new),
+            title_rect_cache_build (new),
+            title_state_list_get (new),
+            title_registry_update (new).
+        b.  Removed: title_crossfade,
+            deck_title_fade.
+        c.  116 total codenames.
+
+141.  CURRENT HTML VIEWER – 2026-02-19 12:11:00 PM
+    A.  Prompt
+        a.  "Put a file in SVG folder called
+            current.html right next to current.svg.
+            It displays current.svg and auto-reloads
+            every four seconds with an on/off switch
+            like the reload switch on the card
+            interface."
+    B.  Response
+        a.  Created paul/chat_log_svg/current.html:
+            displays current.svg, auto-reloads every
+            4 seconds, toggle switch (on/off) styled
+            like the app's reload_switch.
+        b.  file:///Users/pauldsmith/Desktop/pops/paul/chat_log_svg/141.current_html_viewer.svg
+    C.  Codenames
+        a.  None.
+
+142.  CHAT LOG CURRENT – 2026-02-19 12:12:00 PM
+    A.  Prompt
+        a.  "Do the same thing with chat_log_current
+            -- only put a duplicate of the most
+            recently added chat log entry into it."
+    B.  Response
+        a.  Created paul/chat_log_current.txt with
+            duplicate of entry 142 (this entry).
+            Updated each prompt.
+        b.  file:///Users/pauldsmith/Desktop/pops/paul/chat_log_svg/142.chat_log_current.svg
+    C.  Codenames
+        a.  None.
+
+143.  CHAT ENTRY CODENAME RULE – 2026-02-19 12:13:00 PM
+    A.  Prompt
+        a.  "Add a rule to prompt.mdc: create a
+            codename for each chat entry like
+            chat_131 and a separate short label
+            codename. Use both to mark code
+            affected by that chat entry, linking
+            code to the chat log entry that
+            created/modified it."
+    B.  Response
+        a.  Added prompt.mdc H. Chat entry
+            codenames: two separate codenames per
+            entry -- chat_NNN (e.g. chat_140) and
+            a short label (e.g.
+            spatial_title_animate). Mark code with
+            // __chat_NNN __short_label.
+        b.  file:///Users/pauldsmith/Desktop/pops/paul/chat_log_svg/143.chat_entry_codename_rule.svg
+    C.  Codenames
+        a.  None.
+
+144.  SVG CONTEXT RULE – 2026-02-19 12:14:00 PM
+    A.  Prompt
+        a.  "In the prompt MDC file that instructs
+            what the SVG diagram should be, it
+            should take into account any recent and
+            related chat entries in order to allow
+            the depiction of a more useful, at
+            times involved diagram to communicate
+            what's being modified."
+        b.  "Two separate codenames: chat_NNN and
+            the short label, not one combined name."
+    B.  Response
+        a.  Added prompt.mdc F.4: consider recent
+            and related chat entries for richer
+            diagram context.
+        b.  Updated prompt.mdc H: two separate
+            codenames (chat_NNN + short_label)
+            instead of one combined name.
+        c.  file:///Users/pauldsmith/Desktop/pops/paul/chat_log_svg/144.svg_context_rule.svg
+    C.  Codenames
+        a.  None.
+
+145.  TITLE SETTLE JUMP FIX – 2026-02-19 12:15:00 PM
+    A.  Prompt
+        a.  "When returning from deck view or
+            expanded view to project view, the
+            'Projects' title animates from horizon
+            to top center, but then adjusts to the
+            left once it arrives. Likewise the
+            other two deck titles come from horizon
+            to above their decks but then jump to a
+            slightly different location. Fix the
+            jump."
+    B.  Response
+        a.  Two causes found:
+            1.  view_apply's rAF called
+                title_rect_overlay_show during
+                transitions, snapping titles to
+                final positions one frame before
+                the animation started (flash).
+            2.  transition_complete_run rebuilt the
+                title overlay (new DOM elements at
+                0,0), then re-positioned in a rAF,
+                causing a one-frame jump.
+        b.  Fixes:
+            1.  Added skipTitleUpdate option to
+                view_apply. All transition callers
+                pass it so view_apply does not
+                touch titles during animations.
+            2.  Removed title_rect_overlay_build and
+                title_rect_overlay_show from
+                transition_complete_run. Animation
+                finish handler already applies
+                correct final states. Only re-cache
+                measurements for next transition.
+        c.  file:///Users/pauldsmith/Desktop/pops/paul/chat_log_svg/145.title_settle_jump_fix.svg
+    C.  Codenames
+        a.  chat_145, title_settle_jump_fix.
+        b.  transition_complete_run, view_apply,
+            transition_project_deck_run,
+            transition_project_expanded_run.
+
+chat_146  svg_nav_arrow -- 2026-02-19 01:30:00 AM
+    A.  Prompt
+        a.  "On the current.html page have a left
+            arrow and a right arrow that moves you
+            to earlier versions of the SVG or later
+            versions and in addition to those right
+            and left arrows have a like double right
+            arrow that takes you to current."
+    B.  Response
+        a.  Added prev/next/latest navigation
+            buttons to current.html. Hardcoded SVG
+            file list (131-145) since file:// cannot
+            list directories. Shows position label.
+        b.  file:///Users/pauldsmith/Desktop/pops/paul/chat_log_svg/146.svg_nav_arrow.svg
+    C.  Codenames
+        a.  chat_146, svg_nav_arrow.
+        b.  None (HTML-only change, no app code).
+
+chat_147  title_natural_width_fix -- 2026-02-19 01:35:00 AM
+    A.  Prompt
+        a.  "OK, that's better but now the transition
+            back to project view the project title
+            jumps and the other two deck titles jump
+            but the good news is the selected deck
+            title goes right where it's supposed to
+            when going to project view from either
+            deck view or expanded view."
+    B.  Response
+        a.  Root cause: title_rect_cache_build
+            measured overlay element widths via
+            getBoundingClientRect while elements
+            were at scale(0) (horizon), returning
+            width 0. Centering math used 0 for
+            page title and non-active deck titles,
+            placing them off-center.
+        b.  Fix: cache natural widths in
+            title_rect_natural at overlay build
+            time (before any transforms applied).
+            title_state_list_get now uses
+            title_rect_natural for all centering
+            math. Removed unreliable overlay
+            measurement from title_rect_cache_build.
+        c.  Active deck title was unaffected because
+            it used a live getBoundingClientRect at
+            scale(1), which returned correct width.
+            Now also uses title_rect_natural for
+            consistency.
+        d.  file:///Users/pauldsmith/Desktop/pops/paul/chat_log_svg/147.title_natural_width_fix.svg
+    C.  Codenames
+        a.  chat_147, title_natural_width_fix.
+        b.  title_rect_overlay_build,
+            title_rect_cache_build,
+            title_state_list_get.
+
+chat_148  transition_flash_fix -- 2026-02-19 01:45:00 AM
+    A.  Prompt
+        a.  "Returning from deck view to project
+            view, there's an immediate flash before
+            any of the objects have started to move.
+            It might be a flash or a momentary jump
+            of where things are."
+    B.  Response
+        a.  Root cause: view_apply was called
+            without skipCardRectUpdate when
+            returning to project view. Its internal
+            rAF called view_framework_show with
+            project-view states one frame before
+            the transition's rAF set cards back to
+            fromStates and started the animation.
+        b.  Fix: all transition callers now pass
+            skipCardRectUpdate: true to view_apply
+            for both directions. When going to
+            project, the transition calls
+            view_project_stack_set and
+            title_rect_cache_build synchronously
+            (before the animation rAFs), then
+            view_framework_show(fromStates) to hold
+            cards at their from positions.
+        c.  Same fix applied to
+            transition_project_expanded_run.
+        d.  file:///Users/pauldsmith/Desktop/pops/paul/chat_log_svg/148.transition_flash_fix.svg
+    C.  Codenames
+        a.  chat_148, transition_flash_fix.
+        b.  transition_project_deck_run,
+            transition_project_expanded_run,
+            view_apply.
+
+
+chat_149  chat_header_format -- 2026-02-19 01:55:00 AM
+    A.  Prompt
+        a.  "Update prompt.mdc and update chat log
+            so the topmost entry is chat_NNN and
+            then the snake case of the title and
+            then the date and time that the chat
+            entry was entered."
+    B.  Response
+        a.  Updated prompt.mdc C.3-4: header format
+            changed from `N.  LABEL` to
+            `chat_NNN  short_label`. Number codename
+            first, then lowercase snake_case label,
+            then date/time.
+        b.  Applied new format to entry 148 and
+            this entry (149).
+        c.  file:///Users/pauldsmith/Desktop/pops/paul/chat_log_svg/149.chat_header_format.svg
+    C.  Codenames
+        a.  chat_149, chat_header_format.
+        b.  None (rule-only change).
+
+chat_150  deck_title_edit -- 2026-02-19 02:06:00 AM
+    A.  Prompt
+        a.  "If I double click on a deck title
+            either in project view where the title
+            is above the deck or in deck view or
+            expanded view where the deck title is
+            at the top center of the page, let me
+            edit the text of the name of that deck."
+    B.  Response
+        a.  Added deck_title_edit_get and
+            deck_title_edit_save for localStorage
+            persistence of deck title edits via
+            DECK_TITLE_KEY.
+        b.  Applied stored titles in
+            deck_data_render after normalize so
+            edits survive reload.
+        c.  Added deck_title_edit_setup: dblclick
+            on .title-rect[data-title-type=deck]
+            makes element contenteditable with
+            just the title text (no number prefix).
+            On blur: saves, restores prefix,
+            updates decksData, real .deck-title
+            element, pageTitle, and recaches
+            natural widths.
+        d.  Fixed timestamps on entries 146-149
+            to use actual local time.
+        e.  file:///Users/pauldsmith/Desktop/pops/paul/chat_log_svg/150.deck_title_edit.svg
+    C.  Codenames
+        a.  chat_150, deck_title_edit.
+        b.  deck_title_edit_get (new),
+            deck_title_edit_save (new),
+            deck_title_edit_setup (new),
+            deck_data_render.
+
+chat_151  deck_title_click_fix -- 2026-02-19 02:12:00 AM
+    A.  Prompt
+        a.  "It's correctly letting me edit when in
+            project view, but in deck view when I
+            double click the deck title it returns
+            me to project view instead of letting
+            me edit the deck title."
+    B.  Response
+        a.  A click listener on document checked if
+            clicks were near pageTitle's bounding
+            rect and called view_set("project") in
+            deck/expanded view. The deck title
+            overlay sits at the same position, so
+            single-click navigated away before
+            dblclick could fire.
+        b.  Added early return when click target is
+            .title-rect[data-title-type=deck] so
+            deck title clicks don't trigger
+            navigation. Dblclick now fires for
+            editing. Back button still works for
+            navigation.
+        c.  file:///Users/pauldsmith/Desktop/pops/paul/chat_log_svg/151.deck_title_click_fix.svg
+    C.  Codenames
+        a.  chat_151, deck_title_click_fix.
+        b.  deck_title_edit_setup.
+
+chat_152  architecture_diagram -- 2026-02-19 10:28:00 AM
+    A.  Prompt
+        a.  "Tell me a good diagram of the
+            architecture of this webpage not the
+            user experience but the underlying
+            architectural elements that make the
+            features possible."
+    B.  Response
+        a.  Created comprehensive SVG showing all
+            8 subsystems: data layer, DOM layers,
+            state management, transition system,
+            click dispatch, spatial persistence,
+            edit system, view system.
+        b.  Includes cross-system connections,
+            3 key patterns (dual-DOM overlay,
+            transition protocol, persistence
+            model), and beyond-the-horizon
+            principle.
+        c.  file:///Users/pauldsmith/Desktop/pops/paul/chat_log_svg/152.architecture_diagram.svg
+    C.  Codenames
+        a.  chat_152, architecture_diagram.
+        b.  None (diagram only, no code change).
+
+chat_153  architecture_detail -- 2026-02-19 10:45:34 AM
+    A.  Prompt
+        a.  "OK, I would modify the way the
+            architecture diagram you generated in
+            chat 152. I wanna make it just focus
+            on the top half you have those eight
+            sections. I'd like you to create a
+            diagram with only those eight sections
+            but tell me more about what's going on
+            in those eight sections and use
+            rectangles inside those eight
+            rectangles to tell me more about
+            what's being done inside those eight
+            main architectural systems."
+    B.  Response
+        a.  Created detailed 920x870 SVG with all
+            8 subsystems expanded. Each subsystem
+            has 5 inner rectangles showing
+            sub-components with function names
+            and descriptions.
+        b.  file:///Users/pauldsmith/Desktop/pops/paul/chat_log_svg/153.architecture_detail.svg
+    C.  Codenames
+        a.  chat_153, architecture_detail.
+        b.  None (diagram only, no code change).
+
+chat_154  architecture_organic -- 2026-02-19 03:02:45 PM
+    A.  Prompt
+        a.  "I don't have any sense of
+            proportionality or parallels or
+            functionality or proximity of meaning
+            because this is such a regular diagram.
+            I'd like the architecture to somehow
+            speak to the arrangement, the size, the
+            number of boxes, etc."
+        b.  "Also can you have current.html point
+            to the most recent SVG file. Get rid of
+            current.svg and the duplication."
+    B.  Response
+        a.  Created organic 920x790 SVG. Transition
+            System is biggest (430x295), Click and
+            Spatial are smallest. Three rows: Input/
+            Orchestration/Engine, State, Foundation.
+            Flow arrows show data path. Box size
+            proportional to complexity.
+        b.  Eliminated current.svg. current.html now
+            shows last entry in svgFiles[]. Updated
+            prompt.mdc rule F.7 accordingly.
+        c.  file:///Users/pauldsmith/Desktop/pops/paul/chat_log_svg/154.architecture_organic.svg
+    C.  Codenames
+        a.  chat_154, architecture_organic.
+        b.  None (diagram + tooling, no app code).
+
+chat_155  architecture_lean -- 2026-02-19 03:09:37 PM
+    A.  Prompt
+        a.  "Cut the amount of text on that
+            diagram in half."
+        b.  "Also there are some words outside of
+            the rectangles along the left edge but
+            they're covered up by some of the
+            rectangles."
+    B.  Response
+        a.  Cut every inner box to label + 1 line.
+            Moved row labels to render after boxes
+            and placed in gaps between rows.
+        b.  file:///Users/pauldsmith/Desktop/pops/paul/chat_log_svg/155.architecture_lean.svg
+    C.  Codenames
+        a.  chat_155, architecture_lean.
+        b.  None (diagram only).
+
+chat_156  merge_spatial_state -- 2026-02-19 11:13:14 PM
+    A.  Prompt
+        a.  "Given this arch, what would be an
+            improvement. Another system? Combining
+            two? Breaking apart one? What would
+            be worth changing at a high level?"
+        b.  "Make a diagram describing the thought."
+    B.  Response
+        a.  Proposed merging Spatial Persistence
+            into State Management. The recurring
+            bug class (chats 145-151) was State
+            and Spatial diverging on positions.
+            One owner for desired + rendered
+            positions eliminates the gap.
+        b.  file:///Users/pauldsmith/Desktop/pops/paul/chat_log_svg/156.merge_spatial_state.svg
+    C.  Codenames
+        a.  chat_156, merge_spatial_state.
+        b.  None (diagram only, no code change).
+
+chat_157  spatial_registry_define -- 2026-02-24 10:27:05 AM
+    A.  Prompt
+        a.  "index.html:2380 Uncaught ReferenceError:
+            spatial_registry_update is not defined
+            at view_framework_show (index.html:2380:11)
+            ... index.html:2546 Uncaught ReferenceError:
+            spatial_registry is not defined
+            at title_registry_update ..."
+    B.  Response
+        a.  Added missing definitions: var
+            spatial_registry = {} global,
+            function spatial_registry_update,
+            function spatial_contract_validate.
+            All three were referenced but never
+            declared.
+        b.  file:///Users/pauldsmith/Desktop/pops/paul/chat_log_svg/157.spatial_registry_define.svg
+    C.  Codenames
+        a.  chat_157, spatial_registry_define.
+        b.  spatial_registry, spatial_registry_update,
+            spatial_contract_validate (existing).
+
+chat_158  current_html_rule -- 2026-02-24 10:34:04 AM
+    A.  Prompt
+        a.  "update paul/chat_log_svg/current.html,
+            and make sure that happens each prompt
+            process -- put it in the prompt mdc
+            file."
+    B.  Response
+        a.  Added entries 157 + 158 to svgFiles[]
+            in current.html. Added rule C.9 to
+            MEMORY.md so Claude Code sessions
+            always append to current.html after
+            creating each SVG. prompt.mdc already
+            had this at F.7.
+        b.  file:///Users/pauldsmith/Desktop/pops/paul/chat_log_svg/158.current_html_rule.svg
+    C.  Codenames
+        a.  chat_158, current_html_rule.
+        b.  None new.
+
+chat_159  item_move_cursor_fix -- 2026-02-24 10:42:53 AM
+    A.  Prompt
+        a.  "when I use the arrow to move an item
+            up or down, make sure the i-beam/
+            text-selection moves with the item"
+    B.  Response
+        a.  Set contentEditable = false on old span
+            before calling move, so blur handler
+            early-returns and cannot write text to
+            the wrong post-swap index. Deferred
+            focus + cursor restore to
+            requestAnimationFrame so browser paints
+            the new element before i-beam placement.
+        b.  file:///Users/pauldsmith/Desktop/pops/paul/chat_log_svg/159.item_move_cursor_fix.svg
+    C.  Codenames
+        a.  chat_159, item_move_cursor_fix.
+        b.  item_move, item_edit_setup (existing).
+
+chat_160  current_html_simplify -- 2026-02-24 10:53:28 AM
+    A.  Prompt
+        a.  "change the current.html page to refer
+            to the most recent svg by name. remove
+            the duplicate svg thing. just have the
+            html page point to the latest svg. and
+            get the autoreload working"
+    B.  Response
+        a.  Replaced 185-line viewer (svgFiles array,
+            nav buttons, toggle) with 45-line page:
+            single currentFile variable, label,
+            auto-reload every 3s. Updated prompt.mdc
+            F.7 and MEMORY.md C.9 to say "update
+            currentFile" instead of "append to
+            svgFiles."
+        b.  file:///Users/pauldsmith/Desktop/pops/paul/chat_log_svg/160.current_html_simplify.svg
+    C.  Codenames
+        a.  chat_160, current_html_simplify.
+        b.  None new.
+
+chat_161  current_html_nav_restore -- 2026-02-24 10:59:13 AM
+    A.  Prompt
+        a.  "keep the damn prev and next and current
+            buttons! just get rid of duplicated
+            current svg file."
+    B.  Response
+        a.  Restored prev/next/latest nav and
+            svgFiles array. Kept auto-reload at 3s
+            always on. Removed toggle button. Rules
+            reverted to "append to svgFiles."
+        b.  file:///Users/pauldsmith/Desktop/pops/paul/chat_log_svg/161.current_html_nav_restore.svg
+    C.  Codenames
+        a.  chat_161, current_html_nav_restore.
+        b.  None new.
+
+chat_162  reload_toggle_restore -- 2026-02-24 11:02:06 AM
+    A.  Prompt
+        a.  "and add the autoreload button back
+            too."
+    B.  Response
+        a.  Restored reload on/off toggle button
+            with CSS and click handler from the
+            original current.html.
+        b.  file:///Users/pauldsmith/Desktop/pops/paul/chat_log_svg/162.reload_toggle_restore.svg
+    C.  Codenames
+        a.  chat_162, reload_toggle_restore.
+        b.  None new.
+
+chat_163  item_move_swap_fix -- 2026-02-24 11:14:23 AM
+    A.  Prompt
+        a.  "using arrows to move up move the line
+            up 2 steps. moving down messes up and
+            overwrites a line below it."
+    B.  Response
+        a.  Three bugs in item_move_swap: (1) upward
+            scan grabbed sibling above the neighbor,
+            doubling the other block — removed scan
+            entirely. (2) Edit oldToNew formulas
+            were swapped between up/down — fixed
+            both. (3) newIdx for move-down used
+            otherStart+otherLen instead of
+            ourStart+otherLen — fixed.
+        b.  file:///Users/pauldsmith/Desktop/pops/paul/chat_log_svg/163.item_move_swap_fix.svg
+    C.  Codenames
+        a.  chat_163, item_move_swap_fix.
+        b.  item_move_swap (existing).
+
+chat_164  reload_full_page -- 2026-02-24 11:17:02 AM
+    A.  Prompt
+        a.  "get the current page to actually reload
+            every 5 seconds when the button is
+            turned on"
+    B.  Response
+        a.  Changed from setInterval img.src swap
+            (ignored by file://) to location.reload
+            every 5s. Toggle state stored in
+            localStorage so on/off survives the
+            reload cycle.
+        b.  file:///Users/pauldsmith/Desktop/pops/paul/chat_log_svg/164.reload_full_page.svg
+    C.  Codenames
+        a.  chat_164, reload_full_page.
+        b.  None new.
+
+chat_165  single_click_edit -- 2026-02-24 11:26:12 AM
+    A.  Prompt
+        a.  "let me single click on the text of an
+            item to place the i-beam (or drag and
+            select text)"
+    B.  Response
+        a.  Changed both item and textSpan listeners
+            from dblclick to mousedown. Removed
+            preventDefault on textSpan so browser
+            handles caret placement and drag-select
+            natively. contentEditable set to true
+            on mousedown so editing starts
+            immediately.
+        b.  file:///Users/pauldsmith/Desktop/pops/paul/chat_log_svg/165.single_click_edit.svg
+    C.  Codenames
+        a.  chat_165, single_click_edit.
+        b.  item_edit_setup (existing).
+
+chat_166  ctrl_shift_indent -- 2026-02-24 11:37:56 AM
+    A.  Prompt
+        a.  "make the shift-control clicking
+            right/left indent and outdent the item,
+            like the tab/shift tab does as well.
+            it now selects the text, but we can
+            drop that part."
+    B.  Response
+        a.  Added Ctrl+Shift+ArrowLeft (outdent)
+            and Ctrl+Shift+ArrowRight (indent)
+            handler. Reuses item_indent, same as
+            Tab/Shift+Tab. Cursor position
+            preserved after rebuild.
+        b.  file:///Users/pauldsmith/Desktop/pops/paul/chat_log_svg/166.ctrl_shift_indent.svg
+    C.  Codenames
+        a.  chat_166, ctrl_shift_indent.
+        b.  item_edit_setup, item_indent (existing).
+
+chat_167  edit_state_persist -- 2026-02-24 12:09:36 PM
+    A.  Prompt
+        a.  "The first time I automatically or
+            manually reload the page the text I
+            have remains selected, but if I
+            manually reload the page twice in a
+            row, that selection is lost"
+    B.  Response
+        a.  Removed edit_state_clear() that ran
+            right after restoring. It raced with
+            async selectionchange: clear ran sync,
+            re-save hadn't fired yet, so rapid
+            reload found empty localStorage.
+        b.  file:///Users/pauldsmith/Desktop/pops/paul/chat_log_svg/167.edit_state_persist.svg
+    C.  Codenames
+        a.  chat_167, edit_state_persist.
+        b.  edit_state_save, edit_state_clear
+            (existing).
+
+chat_168  deck_text_download -- 2026-02-24 12:14:48 PM
+    A.  Prompt
+        a.  "Remove the folder up and down arrow
+            buttons in the top left ... Replace
+            them with one down arrow button that
+            downloads a text file of all of the
+            decks and all of the cards with line
+            breaks and indentation to make it
+            clear what's what?"
+    B.  Response
+        a.  Removed ↑ reload button and its JS
+            binding. Replaced ↓ export button with
+            export_text_save: downloads decks.txt
+            with deck titles, card titles indented
+            4 spaces, items indented 8+, sections
+            in brackets, levels indented further.
+        b.  file:///Users/pauldsmith/Desktop/pops/paul/chat_log_svg/168.deck_text_download.svg
+    C.  Codenames
+        a.  chat_168, deck_text_download (new).
+        b.  export_text_save (new),
+            export_file_save, export_data_get
+            (existing).
+
+chat_169  json_save_read_revert -- 2026-02-24 12:39:37 PM
+    A.  Prompt
+        a.  "OK, then let's revert to the old JSON
+            save and the old JSON read mechanism
+            and have a down arrow for the save an
+            up arrow for the read and put the data
+            in adjacent format that it can reread
+            and can populate the three or more
+            decks."
+    B.  Response
+        a.  Replaced 📂 + ↓ text-download with
+            ↓ JSON save (export_file_save) and
+            ↑ JSON load (deck_data_file_load via
+            file picker). Format supports any
+            number of decks.
+        b.  file:///Users/pauldsmith/Desktop/pops/paul/chat_log_svg/169.json_save_read_revert.svg
+    C.  Codenames
+        a.  chat_169, json_save_read_revert (new).
+        b.  export_file_save, deck_data_file_load,
+            deck_data_loadFileBtn (existing).
+
+chat_170  svg_text_size_rule -- 2026-02-24 01:42:09 PM
+    A.  Prompt
+        a.  "update the markdown config prompt
+            file to insist that the text on the
+            SVG be smaller because it
+            consistently is too big and bleeds
+            outside of the bounding rectangles
+            sometimes contains"
+    B.  Response
+        a.  Replaced single vague hint in F.5
+            with new sub-rule F.6 (a-e):
+            10-11px max in boxes, ~7px/char
+            width math, 80% box-width gate,
+            13px title cap, assume-50%-larger
+            mental test. Renumbered F.7, F.8.
+        b.  file:///Users/pauldsmith/Desktop/pops/paul/chat_log_svg/170.svg_text_size_rule.svg
+    C.  Codenames
+        a.  chat_170, svg_text_size_rule (new).
+
+chat_171  card_title_click_fix -- 2026-03-11 10:54:50 AM
+    A.  Prompt
+        a.  "it is difficult to edit the 3rd
+            card of the 3rd desk. I could
+            double click the other card's
+            titles, no problem,"
+    B.  Response
+        a.  Fixed click_target_resolve to
+            include .card-text-title in the
+            content selector. Previously
+            title clicks fell through to
+            card-body, triggering a promote
+            animation that moved the card
+            away before the dblclick fired.
+        b.  file:///Users/pauldsmith/Desktop/pops/paul/chat_log_svg/171.card_title_click_fix.svg
+    C.  Codenames
+        a.  chat_171, card_title_click_fix
+            (new).
+        b.  click_target_resolve (existing).
+
+chat_172  paste_sentence_split -- 2026-03-11 11:07:14 AM
+    A.  Prompt
+        a.  "make it so if I paste a paragraph
+            into a card, it will separate it
+            into individual sentences, once
+            per item."
+    B.  Response
+        a.  Added paste handler to card text
+            items. Splits on sentence-ending
+            punctuation (.!?) into separate
+            items. First sentence goes into
+            current item; rest inserted as new
+            items inheriting indent level.
+            Single sentences paste normally.
+        b.  file:///Users/pauldsmith/Desktop/pops/paul/chat_log_svg/172.paste_sentence_split.svg
+    C.  Codenames
+        a.  chat_172, paste_sentence_split,
+            item_paste_split (new).
+        b.  item_insert, item_level_get,
+            item_text_rebuild (existing).
+
+chat_173  deck_size_increase -- 2026-03-11 11:16:20 AM
+    A.  Prompt
+        a.  "in the deck mode, increase the size
+            of the card to take more of the
+            margin to its sides and bottom.
+            don't move it up any."
+        b.  "remove the B thing from the bottom
+            right corner"
+    B.  Response
+        a.  Increased DECK_VIEW_SCALE from 0.90
+            to 0.98, widened max-width from 96vw
+            to 99vw, and anchored card to top of
+            viewport instead of centering.
+            Removed page-link-box "B" anchor.
+        b.  file:///Users/pauldsmith/Desktop/pops/paul/chat_log_svg/173.deck_size_increase.svg
+    C.  Codenames
+        a.  chat_173, deck_size_increase (new).
+        b.  deck_stack_layout_get,
+            DECK_VIEW_SCALE (existing).
+
+chat_174  deck_top_pin_fix -- 2026-03-11 11:17:45 AM
+    A.  Prompt
+        a.  "you moved it up. don't! btw what
+            are the three modes I defined
+            called?"
+    B.  Response
+        a.  Fixed deck_stack_layout_get to pin
+            the card top to the old 0.9-scale
+            centered position. Card now grows
+            down and sideways only.
+        b.  Three modes: project (grid overview),
+            deck (stacked cards), expanded
+            (fanned out).
+        c.  file:///Users/pauldsmith/Desktop/pops/paul/chat_log_svg/174.deck_top_pin_fix.svg
+    C.  Codenames
+        a.  chat_174, deck_top_pin_fix (new).
+        b.  deck_stack_layout_get (existing).
+
+chat_175  card_text_edit_resolved -- 2026-03-11 11:25:13 AM
+    A.  Prompt
+        a.  "I can't click on the 3rd card main
+            text. I can select the text but it
+            does not let me edit"
+        b.  "its ok now"
+    B.  Response
+        a.  Issue resolved by prior deck size
+            increase (chat_173/174). Larger
+            card scale improved hit targets.
+        b.  file:///Users/pauldsmith/Desktop/pops/paul/chat_log_svg/175.card_text_edit_resolved.svg
+    C.  Codenames
+        a.  chat_175, card_text_edit_resolved
+            (new).
+
 ------------------
 
 ##  NEXT PROMPT
-    A.  Symmetric spec coverage per view
-        1.  Give Project view and Expanded view the same
-            treatment as Deck view in spec_01: user actions,
-            code paths, key functions.
-        2.  Create spec_03 project_view and spec_04 expanded_view
-        3.  Ensure §2 User actions mirrors structure across
-            all three views.
-    B.  Promote animation
-        1.  Animate card rects when promote runs in deck
-            view: from current positions to new positions.
-        2.  Duration ~300–500ms; ease-out.
-    C.  Tab vs cardTitle save fix
-        1.  Audit tab blur/input handlers: tab edits may
-            call saveEditedCardTitle; verify tabLabel vs
-            cardTitle usage.
-        2.  Ensure tab and card title stay in sync.
+    A.  Test paste splitting
+        a.  Copy a multi-sentence paragraph and
+            paste into a card item. Verify each
+            sentence becomes its own item.
+    B.  Fine-tune deck card position
+        a.  Adjust vertical offset or scale if
+            card feels too tight at top or
+            bottom after size increase.
+    C.  Merge spatial into state
+        a.  Move spatial_registry into state mgmt.
+            Make from-state always = last rendered.
+            Remove cross-system validation.
