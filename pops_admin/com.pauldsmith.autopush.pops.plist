@@ -2,17 +2,22 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-  <key>Label</key>
-  <string>com.pauldsmith.autopush.pops</string>
+  <key>Label</key><string>com.pauldsmith.autopush.pops</string>
   <key>ProgramArguments</key>
-  <array>
-    <string>/Users/pauldsmith/claude_cowork/pops/pops_admin/auto_push_pops.sh</string>
-  </array>
+  <array><string>/Users/pauldsmith/claude_cowork/pops/pops_admin/auto_push_pops.sh</string></array>
   <key>WatchPaths</key>
   <array>
     <string>/Users/pauldsmith/claude_cowork/pops</string>
+    <string>/Users/pauldsmith/claude_cowork/pops/cursor_rules_backup</string>
+    <string>/Users/pauldsmith/claude_cowork/pops/node_modules</string>
+    <string>/Users/pauldsmith/claude_cowork/pops/paul</string>
+    <string>/Users/pauldsmith/claude_cowork/pops/png</string>
+    <string>/Users/pauldsmith/claude_cowork/pops/pops_admin</string>
   </array>
-  <key>ThrottleInterval</key>
-  <integer>10</integer>
+  <key>ThrottleInterval</key><integer>5</integer>
+  <key>StartInterval</key><integer>300</integer>
+  <key>RunAtLoad</key><true/>
+  <key>StandardOutPath</key><string>/tmp/autopush_pops.log</string>
+  <key>StandardErrorPath</key><string>/tmp/autopush_pops_err.log</string>
 </dict>
 </plist>
